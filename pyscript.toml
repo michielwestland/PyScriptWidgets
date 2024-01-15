@@ -4,5 +4,8 @@ packages = [
     "asyncio",
 ]
 
-[files]
-"./extra.py" = ""
+[[fetch]]
+files = [
+    "extra.py",
+    "widgets.py",
+]

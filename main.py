@@ -1,23 +1,23 @@
 import asyncio
 import extra
 from datetime import datetime
-from js import console, document, sessionStorage, fetch, JSON, window
-from pyodide.ffi import create_proxy
+from js import console, document, sessionStorage, fetch, JSON, window # type: ignore
+from widgets import PButton, PEdit
 
 async def main():
     time = ""
     root = document.getElementById("root")
 
-    txIn = document.createElement("input")
-    txIn.setAttribute("placeholder", "press this button -->") # attribute
-    txIn.setAttribute("style", "width: 500px") # css
-    root.appendChild(txIn)
+    txIn = PEdit("")
+    txIn.setPlaceholder("press this button -->")
+    txIn.setWidth(500)
+    root.appendChild(txIn._elem)
+
     extra.dump(txIn)
 
-    btn = document.createElement("button")
-    btn.appendChild(document.createTextNode("Press me!")) # text
+    btn = PButton("Press me!")
     async def btn_click(*args): # event handler
-        btn.setAttribute("style", "color: red")
+        btn.setColor("red")
         console.log(repr(args))
         time = str(datetime.now())
 
@@ -25,16 +25,16 @@ async def main():
         data = await response.json()
         time = time + " " + JSON.stringify(data)
 
-        sessionStorage.setItem("now", time) # serialize the class tree using JSON.stringify(data)
-        txIn.value = "Now is: " + time
+        sessionStorage.setItem("now", time) #TODO serialize the class tree using JSON.stringify(data)
+        txIn.setValue("Now is: " + time)
 
-    btn.addEventListener("click", create_proxy(btn_click)) # event
-    root.appendChild(btn)
+    btn.onClick(btn_click)
+    root.appendChild(btn._elem)
 
-    t = sessionStorage.getItem("now") # de-serialize the class tree using JSON.parse(data)
+    t = sessionStorage.getItem("now") #TODO de-serialize the class tree using JSON.parse(data)
     if t != None:
         time = t
-        txIn.value = "Loaded: " + time
+        txIn.setValue("Loaded: " + time)
 
 if __name__ == "__main__":
     asyncio.ensure_future(main())
