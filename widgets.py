@@ -9,14 +9,16 @@ class PWidget:
     def __init__(self, tag):
         self._elem = document.createElement(tag)
 
-class PPanel(PWidget): 
+    def save(self):
+        pass #TODO save object graph to low ascii string
 
-    def __init__(self, rootElementId: str = None):
-        super().__init__("div")
-        if rootElementId != None:
-            document.getElementById(rootElementId).appendChild(self._elem)
-        #TODO get/insert/replace/remove individual children
-        #TODO Html grid layout
+    def load(base64_text):
+        pass #TODO load object graph and construct DOM
+
+class PParentWidget: 
+    
+    def __init__(self, tag):
+        self._elem = document.createElement(tag)
 
     _children = []
 
@@ -32,6 +34,15 @@ class PPanel(PWidget):
         self._elem.appendChild(child._elem)
         self._children.append(child)
         return self
+
+class PPanel(PParentWidget): 
+
+    def __init__(self, rootElementId: str = None):
+        super().__init__("div")
+        if rootElementId != None:
+            document.getElementById(rootElementId).appendChild(self._elem)
+        #TODO get/insert/replace/remove individual children
+        #TODO Html grid layout
 
 class PLabel(PWidget): 
     
