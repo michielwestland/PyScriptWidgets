@@ -11,10 +11,27 @@ class PWidget:
 
 class PPanel(PWidget): 
 
-    def __init__(self):
+    def __init__(self, rootElementId: str = None):
         super().__init__("div")
+        if rootElementId != None:
+            document.getElementById(rootElementId).appendChild(self._elem)
+        #TODO get/insert/replace/remove individual children
         #TODO Html grid layout
-        #TODO List items, add, remove, get/set children
+
+    _children = []
+
+    def getChildren(self):
+        return self._children
+
+    def removeAllChildren(self):
+        self._elem.replaceChildren()
+        self._children.clear()
+        return self
+
+    def addChild(self, child):
+        self._elem.appendChild(child._elem)
+        self._children.append(child)
+        return self
 
 class PLabel(PWidget): 
     
@@ -33,6 +50,7 @@ class PLabel(PWidget):
         if self._text != text:
             self._text = text
             self._elem.replaceChildren(document.createTextNode(self._text))
+        return self
 
 class PButton(PWidget): 
 
@@ -51,6 +69,7 @@ class PButton(PWidget):
         if self._text != text:
             self._text = text
             self._elem.replaceChildren(document.createTextNode(self._text))
+        return self
 
     _color = ""
     
@@ -63,6 +82,7 @@ class PButton(PWidget):
         if self._color != color:
             self._color = color
             self._elem.setAttribute("style", f"color: {self._color}")
+        return self
 
     _clickHandler = None
     _clickHandlerProxy = None
@@ -74,6 +94,7 @@ class PButton(PWidget):
             self._clickHandler = clickHandler
             self._clickHandlerProxy = create_proxy(self._clickHandler)
             self._elem.addEventListener("click", self._clickHandlerProxy)
+        return self
 
 class PEdit(PWidget): 
 
@@ -87,6 +108,7 @@ class PEdit(PWidget):
     
     def setValue(self, value):
         self._elem.value = value
+        return self
 
     _placeholder = ""
     
@@ -99,6 +121,7 @@ class PEdit(PWidget):
         if self._placeholder != placeholder:
             self._placeholder = placeholder
             self._elem.setAttribute("placeholder", self._placeholder)
+        return self
 
     _width = 100
     
@@ -112,3 +135,4 @@ class PEdit(PWidget):
             self._width = width
             self._elem.setAttribute("style", f"width: {self._width}px")
         #TODO All style attributes in separate dictionary, and render in a generic way
+        return self
