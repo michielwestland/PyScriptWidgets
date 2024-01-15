@@ -1,0 +1,8 @@
+name = "PyScriptGuiClasses"
+
+packages = [
+    "asyncio",
+]
+
+[files]
+"./extra.py" = ""

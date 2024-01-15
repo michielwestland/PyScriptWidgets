@@ -1,14 +1,8 @@
 import asyncio
+import extra
 from datetime import datetime
 from js import console, document, sessionStorage, fetch, JSON, window
 from pyodide.ffi import create_proxy
-from pyscript import display
-
-def dump(obj):
-    display(repr(obj))
-    for attr in dir(obj):
-        if attr.startswith("v"):
-            display(attr + " = " + repr(getattr(obj, attr)))
 
 async def main():
     time = ""
@@ -18,7 +12,7 @@ async def main():
     txIn.setAttribute("placeholder", "press this button -->") # attribute
     txIn.setAttribute("style", "width: 500px") # css
     root.appendChild(txIn)
-    dump(txIn)
+    extra.dump(txIn)
 
     btn = document.createElement("button")
     btn.appendChild(document.createTextNode("Press me!")) # text
@@ -27,7 +21,7 @@ async def main():
         console.log(repr(args))
         time = str(datetime.now())
 
-        response = await fetch("pyscript.json", {"method": "GET"}) # webservice request
+        response = await fetch("data.json", {"method": "GET"}) # webservice request
         data = await response.json()
         time = time + " " + JSON.stringify(data)
 
