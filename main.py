@@ -10,6 +10,7 @@ def dump(obj):
             display(attr + " = " + repr(getattr(obj, attr)))
 
 def main():
+    time = ""
     root = document.getElementById("root")
 
     txIn = document.createElement("input")
@@ -18,17 +19,14 @@ def main():
     root.appendChild(txIn)
     dump(txIn)
 
-    time = ""
-
-    def action(*args):
+    btn = document.createElement("button")
+    btn.appendChild(document.createTextNode("Press me!")) # text
+    def btn_click(*args):
         console.log(repr(args))
         time = str(datetime.now())
         sessionStorage.setItem("now", time) # serialize the class tree using JSON.stringify(data)
         txIn.value = "Now is: " + time
-
-    btn = document.createElement("button")
-    btn.appendChild(document.createTextNode("Press me!")) # text
-    btn.addEventListener("click", create_proxy(action)) # event
+    btn.addEventListener("click", create_proxy(btn_click)) # event
     btn.setAttribute("style", "color: red")
     root.appendChild(btn)
 
