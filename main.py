@@ -5,8 +5,6 @@ from js import console, sessionStorage, fetch, JSON # type: ignore
 from widgets import PPanel, PEdit, PButton, PLabel
 
 async def main():
-    time = ""
-
     root = PPanel("root").addChild(PLabel("Label"))
 
     txIn = PEdit("").setPlaceholder("press this button -->") \
@@ -29,9 +27,8 @@ async def main():
     btn.onClick(btn_click)
     root.addChild(btn)
 
-    t = sessionStorage.getItem("now") #TODO de-serialize the class tree using JSON.parse(data)
-    if t != None:
-        time = t
+    time = sessionStorage.getItem("now") #TODO de-serialize the class tree using JSON.parse(data)
+    if time != None:
         txIn.setValue("Loaded: " + time)
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 from js import document # type: ignore
 from pyodide.ffi import create_proxy # type: ignore
+import extra
 
 # DOM documentation:
 # https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
@@ -7,18 +8,28 @@ from pyodide.ffi import create_proxy # type: ignore
 class PWidget: 
     
     def __init__(self, tag):
-        self._elem = document.createElement(tag)
+        self._tag = tag
+        self._elem = document.createElement(self._tag)
+
+    @classmethod
+    def loadClass(cls, dict):
+        #TODO load object graph and construct DOM for all widgets
+        return cls(dict["tag"])
+    
+    def load(self, dict):
+        #TODO load object graph and construct DOM for all widgets
+        self._tag = dict["tag"]
 
     def save(self):
-        pass #TODO save object graph to low ascii string
+        #TODO save object graph to base64 string for all widgets
+        return { 
+            "tag": self._tag 
+        }
 
-    def load(base64_text):
-        pass #TODO load object graph and construct DOM
-
-class PParentWidget: 
+class PParentWidget(PWidget): 
     
     def __init__(self, tag):
-        self._elem = document.createElement(tag)
+        super().__init__(tag)
 
     _children = []
 
@@ -34,6 +45,19 @@ class PParentWidget:
         self._elem.appendChild(child._elem)
         self._children.append(child)
         return self
+
+    @classmethod
+    def loadClass(cls, dict):
+        return cls(dict["tag"])
+    
+    def load(self, dict):
+        super().load(dict)
+        #... self._children = dict["children"]
+
+    def save(self):
+        dict = super().save()
+        dict["children"] = [c.save() for c in self._children]
+        return dict
 
 class PPanel(PParentWidget): 
 
