@@ -3,31 +3,28 @@ from js import console, document, sessionStorage, fetch, JSON, window
 from pyodide.ffi import create_proxy
 from pyscript import display
 
-txIn = None
-time = ""
-
 def dump(obj):
-    display("=" * 80)
     display(repr(obj))
     for attr in dir(obj):
-        display(attr + " = " + repr(getattr(obj, attr)))
-
-def action(*args):
-    #console.log(repr(args))
-    global time
-    time = str(datetime.now())
-    sessionStorage.setItem("now", time) # store the class tree using JSON.stringify(data)
-    txIn.value = "Now is: " + time
+        if attr.startswith("v"):
+            display(attr + " = " + repr(getattr(obj, attr)))
 
 def main():
     root = document.getElementById("root")
 
-    global txIn
     txIn = document.createElement("input")
     txIn.setAttribute("placeholder", "press this button -->") # attribute
     txIn.setAttribute("style", "width: 300px")
     root.appendChild(txIn)
-    #dump(txIn)
+    dump(txIn)
+
+    time = ""
+
+    def action(*args):
+        console.log(repr(args))
+        time = str(datetime.now())
+        sessionStorage.setItem("now", time) # serialize the class tree using JSON.stringify(data)
+        txIn.value = "Now is: " + time
 
     btn = document.createElement("button")
     btn.appendChild(document.createTextNode("Press me!")) # text
@@ -35,7 +32,7 @@ def main():
     btn.setAttribute("style", "color: red")
     root.appendChild(btn)
 
-    t = sessionStorage.getItem("now") # load the class tree using JSON.parse(data)
+    t = sessionStorage.getItem("now") # de-serialize the class tree using JSON.parse(data)
     if t != None:
         time = t
         txIn.value = "Loaded: " + time
