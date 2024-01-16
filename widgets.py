@@ -11,27 +11,32 @@ class PWidget:
         self._tag = tag
         self._elem = document.createElement(self._tag)
 
-    @classmethod
-    def loadClass(cls, dict):
-        #TODO load object graph and construct DOM for all widgets
-        return cls(dict["tag"])
-    
-    def load(self, dict):
-        #TODO load object graph and construct DOM for all widgets
-        self._tag = dict["tag"]
+    def backupState(self):
+        pass
 
-    def save(self):
-        #TODO save object graph to base64 string for all widgets
-        return { 
-            "tag": self._tag 
-        }
+    def _deleteState(self, state):
+        del state["_elem"]
+        
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        self._deleteState(state)
+        return state
+
+    def _insertState(self):
+        self._elem = document.createElement(self._tag)
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._insertState()
+
+    def restoreState(self):
+        pass
 
 class PParentWidget(PWidget): 
     
     def __init__(self, tag):
         super().__init__(tag)
-
-    _children = []
+        self._children = []
 
     def getChildren(self):
         return self._children
@@ -46,35 +51,39 @@ class PParentWidget(PWidget):
         self._children.append(child)
         return self
 
-    @classmethod
-    def loadClass(cls, dict):
-        return cls(dict["tag"])
+    def backupState(self):
+        super().backupState()
+        for c in self._children:
+            c.backupState()
     
-    def load(self, dict):
-        super().load(dict)
-        #... self._children = dict["children"]
-
-    def save(self):
-        dict = super().save()
-        dict["children"] = [c.save() for c in self._children]
-        return dict
-
+    def restoreState(self):
+        super().restoreState()
+        for c in self._children: #TODO Waarom is _children na een page refresh leeg?
+            c.restoreState()
+        for c in self._children:
+            self._elem.appendChild(c._elem)
+        
 class PPanel(PParentWidget): 
+    #TODO get/insert/replace/remove individual children
+    #TODO Html grid layout
 
     def __init__(self, rootElementId: str = None):
         super().__init__("div")
-        if rootElementId != None:
-            document.getElementById(rootElementId).appendChild(self._elem)
-        #TODO get/insert/replace/remove individual children
-        #TODO Html grid layout
+        self._rootElementId = rootElementId
+        if self._rootElementId != None:
+            document.getElementById(self._rootElementId).appendChild(self._elem)
+
+    def restoreState(self):
+        super().restoreState()
+        if self._rootElementId != None:
+            document.getElementById(self._rootElementId).appendChild(self._elem)
 
 class PLabel(PWidget): 
     
     def __init__(self, text):
         super().__init__("span")
+        self._text = ""
         self.setText(text)
-
-    _text = ""
 
     def getText(self):
         return self._text
@@ -86,15 +95,21 @@ class PLabel(PWidget):
             self._text = text
             self._elem.replaceChildren(document.createTextNode(self._text))
         return self
+
+    def restoreState(self):
+        super().restoreState()
+        self._elem.replaceChildren(document.createTextNode(self._text))
 
 class PButton(PWidget): 
 
     def __init__(self, text):
         super().__init__("button")
+        self._text = ""
+        self._color = ""
+        self._clickHandler = None
+        self._clickHandlerProxy = None
         self.setText(text)
 
-    _text = ""
-    
     def getText(self):
         return self._text
     
@@ -106,8 +121,6 @@ class PButton(PWidget):
             self._elem.replaceChildren(document.createTextNode(self._text))
         return self
 
-    _color = ""
-    
     def getColor(self):
         return self._color
 
@@ -119,9 +132,6 @@ class PButton(PWidget):
             self._elem.setAttribute("style", f"color: {self._color}")
         return self
 
-    _clickHandler = None
-    _clickHandlerProxy = None
-
     def onClick(self, clickHandler):
         if self._clickHandler != clickHandler:
             if self._clickHandlerProxy != None:
@@ -131,11 +141,33 @@ class PButton(PWidget):
             self._elem.addEventListener("click", self._clickHandlerProxy)
         return self
 
+    def _deleteState(self, state):
+        super()._deleteState(state)
+        # See: https://stackoverflow.com/questions/2345944/exclude-objects-field-from-pickling-in-python
+        # 
+        # 2pyodide.asm.js:9 Uncaught (in promise) PythonError: Traceback (most recent call last):
+        #   File "<exec>", line 69, in btn_click
+        #   File "/home/pyodide/extra.py", line 9, in obj2txt
+        #     raw_bytes = pickle.dumps(obj)
+        #                 ^^^^^^^^^^^^^^^^^
+        # TypeError: cannot pickle 'pyodide.ffi.JsProxy' object
+        del state["_clickHandlerProxy"]
+
+    def restoreState(self):
+        super().restoreState()
+        self._elem.replaceChildren(document.createTextNode(self._text))
+        self._elem.setAttribute("style", f"color: {self._color}")
+        self._clickHandlerProxy = create_proxy(self._clickHandler)
+        self._elem.addEventListener("click", self._clickHandlerProxy)
+
 class PEdit(PWidget): 
 
     def __init__(self, value):
         super().__init__("input")
         self._elem.setAttribute("type", "text")
+        self._value = ""
+        self._placeholder = ""
+        self._width = 0
         self.setValue(value)
     
     def getValue(self):
@@ -144,8 +176,6 @@ class PEdit(PWidget):
     def setValue(self, value):
         self._elem.value = value
         return self
-
-    _placeholder = ""
     
     def getPlaceholder(self):
         return self._placeholder
@@ -158,8 +188,6 @@ class PEdit(PWidget):
             self._elem.setAttribute("placeholder", self._placeholder)
         return self
 
-    _width = 100
-    
     def getWidth(self):
         return self._width
 
@@ -171,3 +199,17 @@ class PEdit(PWidget):
             self._elem.setAttribute("style", f"width: {self._width}px")
         #TODO All style attributes in separate dictionary, and render in a generic way
         return self
+
+    def backupState(self):
+        super().backupState()
+        self._value = self._elem.value
+
+    def _insertState(self):
+        super()._insertState()
+        self._elem.setAttribute("type", "text")
+
+    def restoreState(self):
+        super().restoreState()
+        self._elem.value = self._value
+        self._elem.setAttribute("placeholder", self._placeholder)
+        self._elem.setAttribute("style", f"width: {self._width}px")
