@@ -1,16 +1,42 @@
-import uuid
+import base64
+import pickle
 from js import document # type: ignore
 from pyodide.ffi import create_proxy # type: ignore
+from pyscript import display
 
-# DOM documentation:
-# https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
+_lastUniqueId = 0
 
+def generateUniqueId():
+    global _lastUniqueId
+    _lastUniqueId = _lastUniqueId + 1
+    return str(_lastUniqueId)
+
+def ensureUniqueIdBeyond(id):
+    global _lastUniqueId
+    i = int(id)
+    if _lastUniqueId < i:
+        _lastUniqueId = i
+
+# Pickle: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
+def serializeWidgetsToBase64(obj):
+    return base64.b64encode(pickle.dumps(obj)).decode("utf-8")
+    
+def deserializeWidgetsFromBase64(txt):
+    return pickle.loads(base64.b64decode(txt.encode("utf-8")))
+
+def dump(obj):
+    display(repr(obj))
+    for attr in dir(obj):
+        if not attr.startswith("__"):
+            display(attr + " = " + repr(getattr(obj, attr)))
+
+# DOM: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
 class PWidget: 
     
     def __init__(self, tag):
         self._tag = tag
         self._parent = None
-        self._id = str(uuid.uuid4()) #TODO Find a more memory efficient algorithm, after dom restore continue from last/maximum counter value
+        self._id = generateUniqueId()
         self._elem = document.createElement(self._tag)
         self._elem.id = self._id
 
@@ -47,7 +73,7 @@ class PWidget:
         self._insertState()
 
     def restoreState(self):
-        pass
+        ensureUniqueIdBeyond(self._id)
 
 class PParentWidget(PWidget): 
     
