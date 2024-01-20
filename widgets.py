@@ -1,6 +1,6 @@
+import uuid
 from js import document # type: ignore
 from pyodide.ffi import create_proxy # type: ignore
-import extra
 
 # DOM documentation:
 # https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
@@ -9,14 +9,30 @@ class PWidget:
     
     def __init__(self, tag):
         self._tag = tag
+        self._parent = None
+        self._id = str(uuid.uuid4()) #TODO Find a more memory efficient algorithm
         self._elem = document.createElement(self._tag)
+        self._elem.id = self._id
+
+    def getParent(self):
+        return self._parent
+
+    def findId(self, id):
+        if self._id == id: 
+            return self
+        return None
+    
+    def findTarget(self, event):
+        return self.findId(event.target.id)
 
     def backupState(self):
         pass
 
     def _deleteState(self, state):
+        if "_parent" in state.keys(): # Could be None for the root (app) widget
+            del state["_parent"]
         del state["_elem"]
-        
+
     def __getstate__(self):
         state = self.__dict__.copy()
         self._deleteState(state)
@@ -24,6 +40,7 @@ class PWidget:
 
     def _insertState(self):
         self._elem = document.createElement(self._tag)
+        self._elem.id = self._id
 
     def __setstate__(self, state):
         self.__dict__.update(state)
@@ -38,15 +55,27 @@ class PParentWidget(PWidget):
         super().__init__(tag)
         self._children = []
 
+    def findId(self, id):
+        if self._id == id: 
+            return self
+        for c in self._children:
+            f = c.findId(id)
+            if f != None:
+                return f
+        return None
+
     def getChildren(self):
         return self._children
 
     def removeAllChildren(self):
         self._elem.replaceChildren()
+        for c in self._children:
+            c._parent = None
         self._children.clear()
         return self
 
     def addChild(self, child):
+        child._parent = self
         self._elem.appendChild(child._elem)
         self._children.append(child)
         return self
@@ -58,13 +87,15 @@ class PParentWidget(PWidget):
     
     def restoreState(self):
         super().restoreState()
-        for c in self._children: #TODO Waarom is _children na een page refresh leeg?
+        for c in self._children:
             c.restoreState()
         for c in self._children:
+            c._parent = self
             self._elem.appendChild(c._elem)
         
 class PPanel(PParentWidget): 
-    #TODO get/insert/replace/remove individual children
+    #TODO insert / replace / remove individual children
+    
     #TODO Html grid layout
 
     def __init__(self, rootElementId: str = None):
@@ -87,7 +118,7 @@ class PLabel(PWidget):
 
     def getText(self):
         return self._text
-    
+
     def setText(self, text):
         if text == None:
             text = ""
@@ -112,7 +143,7 @@ class PButton(PWidget):
 
     def getText(self):
         return self._text
-    
+
     def setText(self, text):
         if text == None:
             text = ""
@@ -143,14 +174,8 @@ class PButton(PWidget):
 
     def _deleteState(self, state):
         super()._deleteState(state)
-        # See: https://stackoverflow.com/questions/2345944/exclude-objects-field-from-pickling-in-python
-        # 
-        # 2pyodide.asm.js:9 Uncaught (in promise) PythonError: Traceback (most recent call last):
-        #   File "<exec>", line 69, in btn_click
-        #   File "/home/pyodide/extra.py", line 9, in obj2txt
-        #     raw_bytes = pickle.dumps(obj)
-        #                 ^^^^^^^^^^^^^^^^^
         # TypeError: cannot pickle 'pyodide.ffi.JsProxy' object
+        # See: https://stackoverflow.com/questions/2345944/exclude-objects-field-from-pickling-in-python
         del state["_clickHandlerProxy"]
 
     def restoreState(self):
@@ -197,7 +222,7 @@ class PEdit(PWidget):
         if self._width != width:
             self._width = width
             self._elem.setAttribute("style", f"width: {self._width}px")
-        #TODO All style attributes in separate dictionary, and render in a generic way
+        #TODO Collect style attributes in separate dictionary, and render in a generic way in the one html style element
         return self
 
     def backupState(self):
