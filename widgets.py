@@ -124,16 +124,22 @@ class PPanel(PParentWidget):
     
     #TODO Html grid layout
 
-    def __init__(self, rootElementId: str = None):
+    def __init__(self):
         super().__init__("div")
+
+class PApplication(PPanel):
+
+    def __init__(self):
+        super().__init__()
+        self._rootElementId = None
+
+    def bindToDom(self, rootElementId):
         self._rootElementId = rootElementId
-        if self._rootElementId != None:
-            document.getElementById(self._rootElementId).appendChild(self._elem)
+        document.getElementById(self._rootElementId).appendChild(self._elem)
 
     def restoreState(self):
         super().restoreState()
-        if self._rootElementId != None:
-            document.getElementById(self._rootElementId).appendChild(self._elem)
+        document.getElementById(self._rootElementId).appendChild(self._elem)
 
 class PLabel(PWidget): 
     

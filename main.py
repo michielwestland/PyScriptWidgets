@@ -1,7 +1,7 @@
 from datetime import datetime
-from js import console, window, sessionStorage, fetch, JSON # type: ignore
+from js import console, fetch, JSON, sessionStorage, window # type: ignore
 from pyodide.ffi import create_proxy # type: ignore
-from widgets import PPanel, PEdit, PButton, PLabel, serializeWidgetsToBase64, deserializeWidgetsFromBase64
+from widgets import PApplication, PEdit, PButton, PLabel, serializeWidgetsToBase64, deserializeWidgetsFromBase64
 
 app = None
 
@@ -16,10 +16,10 @@ async def btn_click(event):
     
     pnl.edt.setValue("Now is: " + time)
 
-class App(PPanel):
+class App(PApplication):
 
-    def __init__(self, rootElementId):
-        super().__init__(rootElementId)
+    def __init__(self):
+        super().__init__()
 
         lbl = PLabel("Label")
         self.addChild(lbl)
@@ -41,7 +41,8 @@ def main():
     global app
     state = sessionStorage.getItem("state")
     if state == None:
-        app = App("root")
+        app = App()
+        app.bindToDom("root")
     else:
         app = deserializeWidgetsFromBase64(state)
         app.restoreState()

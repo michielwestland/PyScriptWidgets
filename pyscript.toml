@@ -6,6 +6,5 @@ packages = [
 
 [[fetch]]
 files = [
-    "extra.py",
     "widgets.py",
 ]
