@@ -1,7 +1,7 @@
 import asyncio
 import extra
 from datetime import datetime
-from js import window, sessionStorage, fetch, JSON # type: ignore
+from js import console, window, sessionStorage, fetch, JSON # type: ignore
 from pyodide.ffi import create_proxy # type: ignore
 from widgets import PPanel, PEdit, PButton, PLabel
 
@@ -32,6 +32,8 @@ class App(PPanel):
         self.btn = PButton("Press me!").setColor("blue").onClick(btn_click)
         self.addChild(self.btn)
 
+#TODO maak een method of iets dat je een component in design modus kan zetten, dat na unpickle to de __init__ wordt gedaan, maar voor beperkt aantal kinderen ofzo.
+
 async def window_beforeunload(*args):
     app.backupState()
     domState = extra.obj2txt(app)
@@ -45,6 +47,7 @@ async def main():
     else:
         app = extra.txt2obj(domState)
         app.restoreState()
+        console.log("Application state restored from local sessionStorage")
     window.addEventListener("beforeunload", create_proxy(window_beforeunload))
 
 if __name__ == "__main__":

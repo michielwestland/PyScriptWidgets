@@ -10,7 +10,7 @@ class PWidget:
     def __init__(self, tag):
         self._tag = tag
         self._parent = None
-        self._id = str(uuid.uuid4()) #TODO Find a more memory efficient algorithm
+        self._id = str(uuid.uuid4()) #TODO Find a more memory efficient algorithm, after dom restore continue from last/maximum counter value
         self._elem = document.createElement(self._tag)
         self._elem.id = self._id
 
