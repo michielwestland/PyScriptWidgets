@@ -1,42 +1,45 @@
 import base64
 import pickle
-from js import document # type: ignore
+from js import console, document # type: ignore
 from pyodide.ffi import create_proxy # type: ignore
-from pyscript import display
 
-_lastUniqueId = 0
-
-def generateUniqueId():
-    global _lastUniqueId
-    _lastUniqueId = _lastUniqueId + 1
-    return str(_lastUniqueId)
-
-def ensureUniqueIdBeyond(id):
-    global _lastUniqueId
-    i = int(id)
-    if _lastUniqueId < i:
-        _lastUniqueId = i
+def findEventTarget(application, event):
+    return application.findId(event.target.id)
 
 # Pickle: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
-def serializeWidgetsToBase64(obj):
-    return base64.b64encode(pickle.dumps(obj)).decode("utf-8")
+def serializeWidgetsToBase64(application):
+    application.backupState()
+    return base64.b64encode(pickle.dumps(application)).decode("utf-8")
     
-def deserializeWidgetsFromBase64(txt):
-    return pickle.loads(base64.b64decode(txt.encode("utf-8")))
+def deserializeWidgetsFromBase64(sessionStorageData):
+    application = pickle.loads(base64.b64decode(sessionStorageData.encode("utf-8")))
+    application.restoreState()
+    return application
 
-def dump(obj):
-    display(repr(obj))
+def debugObject(obj):
+    console.debug(repr(obj))
     for attr in dir(obj):
         if not attr.startswith("__"):
-            display(attr + " = " + repr(getattr(obj, attr)))
+            console.debug(attr + " = " + repr(getattr(obj, attr)))
 
 # DOM: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
 class PWidget: 
-    
+        
+    _lastUniqueId = 0
+
+    def _generateUniqueId(self):
+        PWidget._lastUniqueId = PWidget._lastUniqueId + 1
+        return str(PWidget._lastUniqueId)
+
+    def _ensureUniqueIdBeyond(self, id):
+        i = int(id)
+        if PWidget._lastUniqueId < i:
+            PWidget._lastUniqueId = i
+
     def __init__(self, tag):
         self._tag = tag
         self._parent = None
-        self._id = generateUniqueId()
+        self._id = self._generateUniqueId()
         self._elem = document.createElement(self._tag)
         self._elem.id = self._id
 
@@ -47,9 +50,6 @@ class PWidget:
         if self._id == id: 
             return self
         return None
-    
-    def findTarget(self, event):
-        return self.findId(event.target.id)
 
     def backupState(self):
         pass
@@ -73,7 +73,7 @@ class PWidget:
         self._insertState()
 
     def restoreState(self):
-        ensureUniqueIdBeyond(self._id)
+        self._ensureUniqueIdBeyond(self._id)
 
 class PParentWidget(PWidget): 
     
