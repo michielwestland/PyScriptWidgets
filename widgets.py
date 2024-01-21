@@ -3,6 +3,10 @@ import pickle
 from js import console, document, sessionStorage, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
+_mainWidget = None
+
+_STATE_KEY = "widget_state"
+
 def debugObject(obj):
     console.debug(repr(obj))
     for attr in dir(obj):
@@ -19,12 +23,8 @@ def _deserializeWidgetsFromBase64(stateData):
     mainWidget.restoreState()
     return mainWidget
 
-_mainWidget = None
-
 def findEventTarget(event):
     return _mainWidget.findId(event.target.id)
-
-_STATE_KEY = "state"
 
 def _window_beforeunload(event):
     state = _serializeWidgetsToBase64(_mainWidget)
@@ -60,9 +60,11 @@ class PWidget:
         self._tag = tag
         self._parent = None
         self._id = self._generateUniqueId()
-        # DOM: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
+        # DOM manipulation: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
         self._elem = document.createElement(self._tag)
         self._elem.id = self._id
+        # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
+        self._elem.classList.add("PWidget")
 
     def getParent(self):
         return self._parent
@@ -102,6 +104,7 @@ class PParentWidget(PWidget):
     
     def __init__(self, tag):
         super().__init__(tag)
+        self._elem.classList.add("PParentWidget")
         self._children = []
 
     def findId(self, id):
@@ -145,15 +148,17 @@ class PParentWidget(PWidget):
 class PPanel(PParentWidget): 
     #TODO insert / replace / remove individual children
     
-    #TODO Html grid layout
+    #TODO Html grid layout: https://www.w3schools.com/css/css_grid.asp
 
     def __init__(self):
         super().__init__("div")
+        self._elem.classList.add("PPanel")
 
 class PLabel(PWidget): 
     
     def __init__(self, text):
         super().__init__("span")
+        self._elem.classList.add("PLabel")
         self._text = ""
         self.setText(text)
 
@@ -176,6 +181,7 @@ class PButton(PWidget):
 
     def __init__(self, text):
         super().__init__("button")
+        self._elem.classList.add("PButton")
         self._text = ""
         self._color = ""
         self._clickHandler = None
@@ -200,7 +206,7 @@ class PButton(PWidget):
             color = "black"
         if self._color != color:
             self._color = color
-            self._elem.setAttribute("style", f"color: {self._color}")
+            self._elem.style.color = self._color
         return self
 
     def onClick(self, clickHandler):
@@ -215,7 +221,7 @@ class PButton(PWidget):
     def restoreState(self):
         super().restoreState()
         self._elem.replaceChildren(document.createTextNode(self._text))
-        self._elem.setAttribute("style", f"color: {self._color}")
+        self._elem.style.color = self._color
         if self._clickHandler != None:
             add_event_listener(self._elem, "click", self._clickHandler)
 
@@ -223,6 +229,7 @@ class PEdit(PWidget):
 
     def __init__(self, value):
         super().__init__("input")
+        self._elem.classList.add("PEdit")
         self._elem.setAttribute("type", "text")
         self._value = ""
         self._placeholder = ""
@@ -255,8 +262,8 @@ class PEdit(PWidget):
             width = 100
         if self._width != width:
             self._width = width
-            self._elem.setAttribute("style", f"width: {self._width}px")
-        #TODO Collect style attributes in separate dictionary, and render in a generic way in the one html style element
+            # See: https://www.w3schools.com/jsref/prop_html_style.asp / https://www.w3schools.com/jsref/dom_obj_style.asp
+            self._elem.style.width = str(self._width) + "px"
         return self
 
     def backupState(self):
@@ -271,4 +278,4 @@ class PEdit(PWidget):
         super().restoreState()
         self._elem.value = self._value
         self._elem.setAttribute("placeholder", self._placeholder)
-        self._elem.setAttribute("style", f"width: {self._width}px")
+        self._elem.style.width = str(self._width) + "px"
