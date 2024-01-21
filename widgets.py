@@ -1,7 +1,7 @@
 import base64
 import pickle
 from js import console, document, sessionStorage, window # type: ignore
-from pyodide.ffi import create_proxy # type: ignore
+from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
 def debugObject(obj):
     console.debug(repr(obj))
@@ -11,6 +11,7 @@ def debugObject(obj):
 
 def _serializeWidgetsToBase64(mainWidget):
     mainWidget.backupState()
+    # See: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
     return base64.b64encode(pickle.dumps(mainWidget)).decode("utf-8")
     
 def _deserializeWidgetsFromBase64(stateData):
@@ -30,6 +31,7 @@ def _window_beforeunload(event):
     sessionStorage.setItem(_STATE_KEY, state)
 
 def bindToDom(MainWidgetClass, rootElementId): 
+    # What is the impact of this? https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
     global _mainWidget
     state = sessionStorage.getItem(_STATE_KEY)
     if state == None:
@@ -38,9 +40,9 @@ def bindToDom(MainWidgetClass, rootElementId):
         _mainWidget = _deserializeWidgetsFromBase64(state)
         console.log("Application state restored from browser session storage")
     document.getElementById(rootElementId).appendChild(_mainWidget._elem)
-    window.addEventListener("beforeunload", create_proxy(_window_beforeunload))
+    # See: https://jeff.glass/post/pyscript-why-create-proxy/
+    add_event_listener(window, "beforeunload", _window_beforeunload)
 
-# DOM: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
 class PWidget: 
         
     _lastUniqueId = 0
@@ -58,6 +60,7 @@ class PWidget:
         self._tag = tag
         self._parent = None
         self._id = self._generateUniqueId()
+        # DOM: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
         self._elem = document.createElement(self._tag)
         self._elem.id = self._id
 
@@ -75,6 +78,8 @@ class PWidget:
     def _deleteState(self, state):
         if "_parent" in state.keys(): # Parent could be None for the main widget
             del state["_parent"]
+        # TypeError: cannot pickle 'pyodide.ffi.JsProxy' object
+        # See: https://stackoverflow.com/questions/2345944/exclude-objects-field-from-pickling-in-python
         del state["_elem"]
 
     def __getstate__(self):
@@ -174,7 +179,6 @@ class PButton(PWidget):
         self._text = ""
         self._color = ""
         self._clickHandler = None
-        self._clickHandlerProxy = None
         self.setText(text)
 
     def getText(self):
@@ -201,25 +205,19 @@ class PButton(PWidget):
 
     def onClick(self, clickHandler):
         if self._clickHandler != clickHandler:
-            if self._clickHandlerProxy != None:
-                self._elem.removeEventListener("click", self._clickHandlerProxy)
+            if self._clickHandler != None:
+                remove_event_listener(self._elem, "click", self._clickHandler)
             self._clickHandler = clickHandler
-            self._clickHandlerProxy = create_proxy(self._clickHandler)
-            self._elem.addEventListener("click", self._clickHandlerProxy)
+            if self._clickHandler != None:
+                add_event_listener(self._elem, "click", self._clickHandler)
         return self
-
-    def _deleteState(self, state):
-        super()._deleteState(state)
-        # TypeError: cannot pickle 'pyodide.ffi.JsProxy' object
-        # See: https://stackoverflow.com/questions/2345944/exclude-objects-field-from-pickling-in-python
-        del state["_clickHandlerProxy"]
 
     def restoreState(self):
         super().restoreState()
         self._elem.replaceChildren(document.createTextNode(self._text))
         self._elem.setAttribute("style", f"color: {self._color}")
-        self._clickHandlerProxy = create_proxy(self._clickHandler)
-        self._elem.addEventListener("click", self._clickHandlerProxy)
+        if self._clickHandler != None:
+            add_event_listener(self._elem, "click", self._clickHandler)
 
 class PEdit(PWidget): 
 

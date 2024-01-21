@@ -30,7 +30,7 @@ class Main(PPanel):
     def restoreState(self):
         super().restoreState()
         
-        # Hier kan je iets uitproberen i.c.m. live server
+        # Hier kan je iets uitproberen na page refresh i.c.m. live server
         self.btn.setColor("green")
 
 if __name__ == "__main__":
