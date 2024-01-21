@@ -75,7 +75,7 @@ class PWidget:
         return None
 
     def backupState(self):
-        pass
+        self._classlist = self._elem.getAttribute("class")
 
     def _deleteState(self, state):
         if "_parent" in state.keys(): # Parent could be None for the main widget
@@ -99,6 +99,7 @@ class PWidget:
 
     def restoreState(self):
         self._ensureUniqueIdBeyond(self._id)
+        self._elem.setAttribute("class", self._classlist)
 
 class PParentWidget(PWidget): 
     
