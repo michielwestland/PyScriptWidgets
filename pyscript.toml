@@ -7,4 +7,5 @@ packages = [
 [[fetch]]
 files = [
     "widgets.py",
+    "todo.py",
 ]

@@ -101,11 +101,11 @@ class PWidget:
         self._ensureUniqueIdBeyond(self._id)
         self._elem.setAttribute("class", self._classlist)
 
-class PParentWidget(PWidget): 
+class PCompoundWidget(PWidget):
     
     def __init__(self, tag):
         super().__init__(tag)
-        self._elem.classList.add("PParentWidget")
+        self._elem.classList.add("PCompoundWidget")
         self._children = []
 
     def findId(self, id):
@@ -133,6 +133,12 @@ class PParentWidget(PWidget):
         self._children.append(child)
         return self
 
+    def removeChild(self, child):
+        child._parent = None
+        self._elem.removeChild(child._elem)
+        self._children.remove(child)
+        return self
+
     #TODO insert / replace / remove individual children
 
     def backupState(self):
@@ -148,7 +154,7 @@ class PParentWidget(PWidget):
             c._parent = self
             self._elem.appendChild(c._elem)
         
-class PPanel(PParentWidget): 
+class PPanel(PCompoundWidget): 
     
     #TODO Html grid layout: https://www.w3schools.com/css/css_grid.asp
 

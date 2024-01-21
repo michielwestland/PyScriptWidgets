@@ -1,6 +1,7 @@
 from datetime import datetime
 from js import fetch, JSON # type: ignore
 from widgets import PPanel, PEdit, PButton, PLabel, bindToDom, findEventTarget
+from todo import TodoPanel
 
 async def btn_click(event): 
     pnl = findEventTarget(event).getParent()
@@ -26,6 +27,9 @@ class Main(PPanel):
 
         self.btn = PButton("Press me!").setColor("blue").onClick(btn_click)
         self.addChild(self.btn)
+
+        self.todoPnl = TodoPanel()
+        self.addChild(self.todoPnl)
 
     def restoreState(self):
         super().restoreState()
