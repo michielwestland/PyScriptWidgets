@@ -1,26 +1,44 @@
 import base64
 import pickle
-from js import console, document # type: ignore
+from js import console, document, sessionStorage, window # type: ignore
 from pyodide.ffi import create_proxy # type: ignore
-
-def findEventTarget(application, event):
-    return application.findId(event.target.id)
-
-# Pickle: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
-def serializeWidgetsToBase64(application):
-    application.backupState()
-    return base64.b64encode(pickle.dumps(application)).decode("utf-8")
-    
-def deserializeWidgetsFromBase64(sessionStorageData):
-    application = pickle.loads(base64.b64decode(sessionStorageData.encode("utf-8")))
-    application.restoreState()
-    return application
 
 def debugObject(obj):
     console.debug(repr(obj))
     for attr in dir(obj):
         if not attr.startswith("__"):
             console.debug(attr + " = " + repr(getattr(obj, attr)))
+
+def _serializeWidgetsToBase64(mainWidget):
+    mainWidget.backupState()
+    return base64.b64encode(pickle.dumps(mainWidget)).decode("utf-8")
+    
+def _deserializeWidgetsFromBase64(stateData):
+    mainWidget = pickle.loads(base64.b64decode(stateData.encode("utf-8")))
+    mainWidget.restoreState()
+    return mainWidget
+
+_mainWidget = None
+
+def findEventTarget(event):
+    return _mainWidget.findId(event.target.id)
+
+_STATE_KEY = "state"
+
+def _window_beforeunload(event):
+    state = _serializeWidgetsToBase64(_mainWidget)
+    sessionStorage.setItem(_STATE_KEY, state)
+
+def bindToDom(MainWidgetClass, rootElementId): 
+    global _mainWidget
+    state = sessionStorage.getItem(_STATE_KEY)
+    if state == None:
+        _mainWidget = MainWidgetClass()
+    else:
+        _mainWidget = _deserializeWidgetsFromBase64(state)
+        console.log("Application state restored from browser session storage")
+    document.getElementById(rootElementId).appendChild(_mainWidget._elem)
+    window.addEventListener("beforeunload", create_proxy(_window_beforeunload))
 
 # DOM: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
 class PWidget: 
@@ -55,7 +73,7 @@ class PWidget:
         pass
 
     def _deleteState(self, state):
-        if "_parent" in state.keys(): # Could be None for the root (app) widget
+        if "_parent" in state.keys(): # Parent could be None for the main widget
             del state["_parent"]
         del state["_elem"]
 
@@ -126,20 +144,6 @@ class PPanel(PParentWidget):
 
     def __init__(self):
         super().__init__("div")
-
-class PApplication(PPanel):
-
-    def __init__(self):
-        super().__init__()
-        self._rootElementId = None
-
-    def bindToDom(self, rootElementId):
-        self._rootElementId = rootElementId
-        document.getElementById(self._rootElementId).appendChild(self._elem)
-
-    def restoreState(self):
-        super().restoreState()
-        document.getElementById(self._rootElementId).appendChild(self._elem)
 
 class PLabel(PWidget): 
     

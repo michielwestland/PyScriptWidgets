@@ -1,12 +1,9 @@
 from datetime import datetime
-from js import console, fetch, JSON, sessionStorage, window # type: ignore
-from pyodide.ffi import create_proxy # type: ignore
-from widgets import PApplication, PEdit, PButton, PLabel, findEventTarget, serializeWidgetsToBase64, deserializeWidgetsFromBase64
-
-app = None
+from js import fetch, JSON # type: ignore
+from widgets import PPanel, PEdit, PButton, PLabel, bindToDom, findEventTarget
 
 async def btn_click(event): 
-    pnl = findEventTarget(app, event).getParent()
+    pnl = findEventTarget(event).getParent()
     pnl.btn.setColor("red")
     time = str(datetime.now())
     
@@ -16,7 +13,7 @@ async def btn_click(event):
     
     pnl.edt.setValue("Now is: " + time)
 
-class App(PApplication):
+class Main(PPanel):
 
     def __init__(self):
         super().__init__()
@@ -30,26 +27,11 @@ class App(PApplication):
         self.btn = PButton("Press me!").setColor("blue").onClick(btn_click)
         self.addChild(self.btn)
 
-    def tryOutAfterRestore(self): 
+    def restoreState(self):
+        super().restoreState()
+        
+        # Hier kan je iets uitproberen i.c.m. live server
         self.btn.setColor("green")
 
-#TODO Maak onderscheid tussen design attributen die je (niet/soms) wilt backuppen en runtime attributen die je altijd backupt
-
-def window_beforeunload(event):
-    state = serializeWidgetsToBase64(app)
-    sessionStorage.setItem("state", state)
-
-def main():
-    global app
-    state = sessionStorage.getItem("state")
-    if state == None:
-        app = App()
-        app.bindToDom("root")
-    else:
-        app = deserializeWidgetsFromBase64(state)
-        app.tryOutAfterRestore()
-        console.log("Application state restored from browser session storage")
-    window.addEventListener("beforeunload", create_proxy(window_beforeunload))
-
 if __name__ == "__main__":
-    main()
+    bindToDom(Main, "root")
