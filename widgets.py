@@ -3,6 +3,8 @@ import pickle
 from js import console, document, sessionStorage, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
+#TODO Create a component that is a compound component, that has literal html/css (reference to external file) and named slots for the children.
+
 _mainWidget = None
 
 _STATE_KEY = "widget_state"
@@ -120,6 +122,12 @@ class PCompoundWidget(PWidget):
     def getChildren(self):
         return self._children
 
+    def removeChild(self, child):
+        child._parent = None
+        self._elem.removeChild(child._elem)
+        self._children.remove(child)
+        return self
+
     def removeAllChildren(self):
         self._elem.replaceChildren()
         for c in self._children:
@@ -133,10 +141,9 @@ class PCompoundWidget(PWidget):
         self._children.append(child)
         return self
 
-    def removeChild(self, child):
-        child._parent = None
-        self._elem.removeChild(child._elem)
-        self._children.remove(child)
+    def addChildren(self, children):
+        for c in children:
+            self.addChild(c)
         return self
 
     #TODO insert / replace / remove individual children
