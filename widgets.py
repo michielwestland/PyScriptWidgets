@@ -133,6 +133,8 @@ class PParentWidget(PWidget):
         self._children.append(child)
         return self
 
+    #TODO insert / replace / remove individual children
+
     def backupState(self):
         super().backupState()
         for c in self._children:
@@ -147,13 +149,28 @@ class PParentWidget(PWidget):
             self._elem.appendChild(c._elem)
         
 class PPanel(PParentWidget): 
-    #TODO insert / replace / remove individual children
     
     #TODO Html grid layout: https://www.w3schools.com/css/css_grid.asp
 
-    def __init__(self):
+    def __init__(self, vertical):
         super().__init__("div")
         self._elem.classList.add("PPanel")
+        self._elem.style.display = "flex"
+        self._vertical = False
+        self.setVertical(vertical)
+
+    def isVertical(self):
+        return self._vertical
+    
+    def setVertical(self, vertical):
+        if self._vertical != vertical:
+            self._vertical = vertical
+            self._elem.style.flexDirection = "column" if self._vertical else "row"
+
+    def restoreState(self):
+        super().restoreState()
+        self._elem.style.display = "flex"
+        self._elem.style.flexDirection = "column" if self._vertical else "row"
 
 class PLabel(PWidget): 
     

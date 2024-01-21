@@ -16,7 +16,7 @@ async def btn_click(event):
 class Main(PPanel):
 
     def __init__(self):
-        super().__init__()
+        super().__init__(False)
 
         lbl = PLabel("Label")
         self.addChild(lbl)
