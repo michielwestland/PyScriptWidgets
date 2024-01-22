@@ -28,6 +28,9 @@ def _deserializeWidgetsFromBase64(stateData):
 def findEventTarget(event):
     return _mainWidget.findId(event.target.id)
 
+def findMainWidget():
+    return _mainWidget
+
 def _window_beforeunload(event):
     state = _serializeWidgetsToBase64(_mainWidget)
     sessionStorage.setItem(_STATE_KEY, state)
