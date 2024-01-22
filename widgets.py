@@ -67,6 +67,7 @@ class PWidget:
         self._elem.id = self._id
         # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
         self._elem.classList.add("PWidget")
+        self._elem.classList.add("ui")
 
     def getParent(self):
         return self._parent
@@ -168,7 +169,6 @@ class PPanel(PCompoundWidget):
     def __init__(self, vertical):
         super().__init__("div")
         self._elem.classList.add("PPanel")
-        self._elem.style.display = "flex"
         self._vertical = False
         self.setVertical(vertical)
 
@@ -182,7 +182,6 @@ class PPanel(PCompoundWidget):
 
     def restoreState(self):
         super().restoreState()
-        self._elem.style.display = "flex"
         self._elem.style.flexDirection = "column" if self._vertical else "row"
 
 class PLabel(PWidget): 
@@ -213,6 +212,7 @@ class PButton(PWidget):
     def __init__(self, text):
         super().__init__("button")
         self._elem.classList.add("PButton")
+        self._elem.classList.add("button")
         self._text = ""
         self._color = ""
         self._clickHandler = None
@@ -259,19 +259,24 @@ class PButton(PWidget):
 class PEdit(PWidget): 
 
     def __init__(self, value):
-        super().__init__("input")
+        super().__init__("div")
         self._elem.classList.add("PEdit")
-        self._elem.setAttribute("type", "text")
+        self._elem.classList.add("input")
+        self._elem_input = document.createElement("input")
+        self._elem_input.setAttribute("type", "text")
+        self._elem.appendChild(self._elem_input)
         self._value = ""
         self._placeholder = ""
         self._width = 0
         self.setValue(value)
+        self.setPlaceholder("")
+        self.setWidth(100)
     
     def getValue(self):
-        return self._elem.value
+        return self._elem_input.value
     
     def setValue(self, value):
-        self._elem.value = value
+        self._elem_input.value = value
         return self
     
     def getPlaceholder(self):
@@ -282,7 +287,7 @@ class PEdit(PWidget):
             placeholder = ""
         if self._placeholder != placeholder:
             self._placeholder = placeholder
-            self._elem.setAttribute("placeholder", self._placeholder)
+            self._elem_input.setAttribute("placeholder", self._placeholder)
         return self
 
     def getWidth(self):
@@ -299,14 +304,20 @@ class PEdit(PWidget):
 
     def backupState(self):
         super().backupState()
-        self._value = self._elem.value
+        self._value = self._elem_input.value
+
+    def _deleteState(self, state):
+        super()._deleteState(state)
+        del state["_elem_input"]
 
     def _insertState(self):
         super()._insertState()
-        self._elem.setAttribute("type", "text")
+        self._elem_input = document.createElement("input")
+        self._elem_input.setAttribute("type", "text")
+        self._elem.appendChild(self._elem_input)
 
     def restoreState(self):
         super().restoreState()
-        self._elem.value = self._value
-        self._elem.setAttribute("placeholder", self._placeholder)
+        self._elem_input.value = self._value
+        self._elem_input.setAttribute("placeholder", self._placeholder)
         self._elem.style.width = str(self._width) + "px"
