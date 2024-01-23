@@ -3,8 +3,6 @@ import pickle
 from js import console, document, sessionStorage, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
-#TODO Create a component that is a compound component, that has literal html/css (reference to external file) and named slots for the children.
-
 _mainWidget = None
 
 _STATE_KEY = "widget_state"
@@ -150,7 +148,7 @@ class PCompoundWidget(PWidget):
             self.addChild(c)
         return self
 
-    #TODO insert / replace / remove individual children
+    #TODO Insert / replace / remove individual children by index
 
     def backupState(self):
         super().backupState()
@@ -217,9 +215,12 @@ class PButton(PWidget):
         self._elem.classList.add("PButton")
         self._elem.classList.add("button")
         self._text = ""
+        self._icon = ""
         self._color = ""
         self._clickHandler = None
         self.setText(text)
+        self.setIcon("")
+        self.setColor("black")
 
     def getText(self):
         return self._text
@@ -229,7 +230,34 @@ class PButton(PWidget):
             text = ""
         if self._text != text:
             self._text = text
-            self._elem.replaceChildren(document.createTextNode(self._text))
+            self._elem.replaceChildren()
+            if len(self._icon) > 0:
+                e = document.createElement("i")
+                for c in self._icon.split():
+                    e.classList.add(c)
+                self._elem.appendChild(e)
+            s = " " if len(self._icon) > 0 and len(self._text) > 0 else ""
+            if len(s + self._text) > 0:
+                self._elem.appendChild(document.createTextNode(s + self._text))
+        return self
+
+    def getIcon(self):
+        return self._icon
+
+    def setIcon(self, icon):
+        if icon == None:
+            icon = ""
+        if self._icon != icon:
+            self._icon = icon
+            self._elem.replaceChildren()
+            if len(self._icon) > 0:
+                e = document.createElement("i")
+                for c in self._icon.split():
+                    e.classList.add(c)
+                self._elem.appendChild(e)
+            s = " " if len(self._icon) > 0 and len(self._text) > 0 else ""
+            if len(s + self._text) > 0:
+                self._elem.appendChild(document.createTextNode(s + self._text))
         return self
 
     def getColor(self):
@@ -254,7 +282,15 @@ class PButton(PWidget):
 
     def restoreState(self):
         super().restoreState()
-        self._elem.replaceChildren(document.createTextNode(self._text))
+        self._elem.replaceChildren()
+        if len(self._icon) > 0:
+            e = document.createElement("i")
+            for c in self._icon.split():
+                e.classList.add(c)
+            self._elem.appendChild(e)
+        s = " " if len(self._icon) > 0 and len(self._text) > 0 else ""
+        if len(s + self._text) > 0:
+            self._elem.appendChild(document.createTextNode(s + self._text))
         self._elem.style.color = self._color
         if self._clickHandler != None:
             add_event_listener(self._elem, "click", self._clickHandler)

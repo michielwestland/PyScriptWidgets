@@ -25,8 +25,7 @@ class TodoItem(PPanel):
     def __init__(self, todoTxt):
         super().__init__(False)
         self.lbl = PLabel(todoTxt)
-        #TODO Use font-awesome unicode bin icon: https://stackoverflow.com/questions/17254339/font-awesome-unicode 
-        self.deleteBtn = PButton("Delete").onClick(delete_btn_click)
+        self.deleteBtn = PButton("Delete").setIcon("fa-regular fa-trash-can").onClick(delete_btn_click)
         self.addChildren([self.deleteBtn, self.lbl])
 
 class TodoList(PPanel):
