@@ -1,4 +1,4 @@
-# PyScript GUI Classes
+# PyScriptWidgets
 Client side GUI class library for building web applications with PyScript
 
 
