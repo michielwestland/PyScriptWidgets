@@ -20,13 +20,11 @@ Font Awesome Free [brands, solid]: https://fontawesome.com/license/free (Font Aw
 
 ## Create virtual environment
 ```
-python -m venv venv
+python -m venv .venv
 
-venv/Scripts/Activate.ps1
+.venv/Scripts/Activate.ps1
 
 python.exe -m pip install --upgrade pip
-
-pip install -r requirements.txt
 ```
 
 ## Set execution policy if needed
@@ -37,9 +35,11 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 
 ## Install packages 
 ```
-pip install pyscript
+pip install <package-name>
 
 pip freeze > requirements.txt
+
+pip install -r requirements.txt
 ```
 
 ## Standalone server
