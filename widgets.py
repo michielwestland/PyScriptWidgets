@@ -230,7 +230,7 @@ class PButton(PWidget):
             text = ""
         if self._text != text:
             self._text = text
-            self._elem.replaceChildren()
+            self._elem.replaceChildren() #TODO Put identical code blocks in render<Name> functions.
             if len(self._icon) > 0:
                 e = document.createElement("i")
                 for c in self._icon.split():
@@ -249,7 +249,7 @@ class PButton(PWidget):
             icon = ""
         if self._icon != icon:
             self._icon = icon
-            self._elem.replaceChildren()
+            self._elem.replaceChildren() #TODO Put identical code blocks in render<Name> functions.
             if len(self._icon) > 0:
                 e = document.createElement("i")
                 for c in self._icon.split():
@@ -282,7 +282,7 @@ class PButton(PWidget):
 
     def restoreState(self):
         super().restoreState()
-        self._elem.replaceChildren()
+        self._elem.replaceChildren() #TODO Put identical code blocks in render<Name> functions.
         if len(self._icon) > 0:
             e = document.createElement("i")
             for c in self._icon.split():
