@@ -2,6 +2,7 @@ name = "PyScriptWidgets"
 
 packages = [
     "asyncio",
+    "pyparsing",
 ]
 
 [[fetch]]
