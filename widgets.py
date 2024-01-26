@@ -148,8 +148,6 @@ class PCompoundWidget(PWidget):
             self.addChild(c)
         return self
 
-    #TODO Insert / replace / remove individual children by index
-
     def backupState(self):
         super().backupState()
         for c in self._children:
@@ -170,8 +168,11 @@ class PPanel(PCompoundWidget):
     def __init__(self, vertical):
         super().__init__("div")
         self._elem.classList.add("PPanel")
-        self._vertical = False
-        self.setVertical(vertical)
+        self._vertical = vertical
+        self._renderVertical()
+
+    def _renderVertical(self):
+        self._elem.style.flexDirection = "column" if self._vertical else "row"
 
     def isVertical(self):
         return self._vertical
@@ -179,34 +180,36 @@ class PPanel(PCompoundWidget):
     def setVertical(self, vertical):
         if self._vertical != vertical:
             self._vertical = vertical
-            self._elem.style.flexDirection = "column" if self._vertical else "row"
+            self._renderVertical()
+        return self
 
     def restoreState(self):
         super().restoreState()
-        self._elem.style.flexDirection = "column" if self._vertical else "row"
+        self._renderVertical()
 
 class PLabel(PWidget): 
     
     def __init__(self, text):
         super().__init__("span")
         self._elem.classList.add("PLabel")
-        self._text = ""
-        self.setText(text)
+        self._text = text
+        self._renderText()
+
+    def _renderText(self):
+        self._elem.replaceChildren(document.createTextNode(self._text))
 
     def getText(self):
         return self._text
 
     def setText(self, text):
-        if text == None:
-            text = ""
         if self._text != text:
             self._text = text
-            self._elem.replaceChildren(document.createTextNode(self._text))
+            self._renderText()
         return self
 
     def restoreState(self):
         super().restoreState()
-        self._elem.replaceChildren(document.createTextNode(self._text))
+        self._renderText()
 
 class PButton(PWidget): 
 
@@ -214,75 +217,16 @@ class PButton(PWidget):
         super().__init__("button")
         self._elem.classList.add("PButton")
         self._elem.classList.add("button")
-        self._text = ""
+        self._text = text
         self._icon = ""
-        self._color = ""
+        self._renderTextIcon()
+        self._color = "black"
+        self._renderColor()
         self._clickHandler = None
-        self.setText(text)
-        self.setIcon("")
-        self.setColor("black")
+        self._renderClickHandler()
 
-    def getText(self):
-        return self._text
-
-    def setText(self, text):
-        if text == None:
-            text = ""
-        if self._text != text:
-            self._text = text
-            self._elem.replaceChildren() #TODO Put identical code blocks in render<Name> functions.
-            if len(self._icon) > 0:
-                e = document.createElement("i")
-                for c in self._icon.split():
-                    e.classList.add(c)
-                self._elem.appendChild(e)
-            s = " " if len(self._icon) > 0 and len(self._text) > 0 else ""
-            if len(s + self._text) > 0:
-                self._elem.appendChild(document.createTextNode(s + self._text))
-        return self
-
-    def getIcon(self):
-        return self._icon
-
-    def setIcon(self, icon):
-        if icon == None:
-            icon = ""
-        if self._icon != icon:
-            self._icon = icon
-            self._elem.replaceChildren() #TODO Put identical code blocks in render<Name> functions.
-            if len(self._icon) > 0:
-                e = document.createElement("i")
-                for c in self._icon.split():
-                    e.classList.add(c)
-                self._elem.appendChild(e)
-            s = " " if len(self._icon) > 0 and len(self._text) > 0 else ""
-            if len(s + self._text) > 0:
-                self._elem.appendChild(document.createTextNode(s + self._text))
-        return self
-
-    def getColor(self):
-        return self._color
-
-    def setColor(self, color):
-        if color == None:
-            color = "black"
-        if self._color != color:
-            self._color = color
-            self._elem.style.color = self._color
-        return self
-
-    def onClick(self, clickHandler):
-        if self._clickHandler != clickHandler:
-            if self._clickHandler != None:
-                remove_event_listener(self._elem, "click", self._clickHandler)
-            self._clickHandler = clickHandler
-            if self._clickHandler != None:
-                add_event_listener(self._elem, "click", self._clickHandler)
-        return self
-
-    def restoreState(self):
-        super().restoreState()
-        self._elem.replaceChildren() #TODO Put identical code blocks in render<Name> functions.
+    def _renderTextIcon(self):
+        self._elem.replaceChildren()
         if len(self._icon) > 0:
             e = document.createElement("i")
             for c in self._icon.split():
@@ -291,9 +235,54 @@ class PButton(PWidget):
         s = " " if len(self._icon) > 0 and len(self._text) > 0 else ""
         if len(s + self._text) > 0:
             self._elem.appendChild(document.createTextNode(s + self._text))
+
+    def getText(self):
+        return self._text
+
+    def setText(self, text):
+        if self._text != text:
+            self._text = text
+            self._renderTextIcon()
+        return self
+
+    def getIcon(self):
+        return self._icon
+
+    def setIcon(self, icon):
+        if self._icon != icon:
+            self._icon = icon
+            self._renderTextIcon()
+        return self
+
+    def _renderColor(self):
         self._elem.style.color = self._color
+
+    def getColor(self):
+        return self._color
+
+    def setColor(self, color):
+        if self._color != color:
+            self._color = color
+            self._renderColor()
+        return self
+
+    def _renderClickHandler(self):
         if self._clickHandler != None:
             add_event_listener(self._elem, "click", self._clickHandler)
+
+    def onClick(self, clickHandler):
+        if self._clickHandler != clickHandler:
+            if self._clickHandler != None:
+                remove_event_listener(self._elem, "click", self._clickHandler)
+            self._clickHandler = clickHandler
+            self._renderClickHandler()
+        return self
+
+    def restoreState(self):
+        super().restoreState()
+        self._renderTextIcon()
+        self._renderColor()
+        self._renderClickHandler()
 
 class PEdit(PWidget): 
 
@@ -301,16 +290,13 @@ class PEdit(PWidget):
         super().__init__("div")
         self._elem.classList.add("PEdit")
         self._elem.classList.add("input")
-        self._elem_input = document.createElement("input")
-        self._elem_input.setAttribute("type", "text")
-        self._elem.appendChild(self._elem_input)
-        self._value = ""
-        self._placeholder = ""
-        self._width = 0
+        self._insertInnerInput()
         self.setValue(value)
-        self.setPlaceholder("")
-        self.setWidth(100)
-    
+        self._placeholder = ""
+        self._renderPlaceholder()
+        self._width = 100
+        self._renderWidth()
+
     def getValue(self):
         return self._elem_input.value
     
@@ -318,27 +304,29 @@ class PEdit(PWidget):
         self._elem_input.value = value
         return self
     
+    def _renderPlaceholder(self):
+        self._elem_input.setAttribute("placeholder", self._placeholder)
+
     def getPlaceholder(self):
         return self._placeholder
 
     def setPlaceholder(self, placeholder):
-        if placeholder == None:
-            placeholder = ""
         if self._placeholder != placeholder:
             self._placeholder = placeholder
-            self._elem_input.setAttribute("placeholder", self._placeholder)
+            self._renderPlaceholder()
         return self
+
+    def _renderWidth(self):
+        # See: https://www.w3schools.com/jsref/prop_html_style.asp / https://www.w3schools.com/jsref/dom_obj_style.asp
+        self._elem.style.width = str(self._width) + "px"
 
     def getWidth(self):
         return self._width
 
     def setWidth(self, width):
-        if width == None:
-            width = 100
         if self._width != width:
             self._width = width
-            # See: https://www.w3schools.com/jsref/prop_html_style.asp / https://www.w3schools.com/jsref/dom_obj_style.asp
-            self._elem.style.width = str(self._width) + "px"
+            self._renderWidth()
         return self
 
     def backupState(self):
@@ -349,14 +337,17 @@ class PEdit(PWidget):
         super()._deleteState(state)
         del state["_elem_input"]
 
-    def _insertState(self):
-        super()._insertState()
+    def _insertInnerInput(self):
         self._elem_input = document.createElement("input")
         self._elem_input.setAttribute("type", "text")
         self._elem.appendChild(self._elem_input)
 
+    def _insertState(self):
+        super()._insertState()
+        self._insertInnerInput()
+    
     def restoreState(self):
         super().restoreState()
         self._elem_input.value = self._value
-        self._elem_input.setAttribute("placeholder", self._placeholder)
-        self._elem.style.width = str(self._width) + "px"
+        self._renderPlaceholder()
+        self._renderWidth()
