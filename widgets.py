@@ -208,8 +208,13 @@ class PPanel(PCompoundWidget):
     def __init__(self, vertical):
         super().__init__("div")
         self._elem.classList.add("PPanel")
+        self._renderDisplay()
         self._vertical = vertical
         self._renderVertical()
+
+    def _renderDisplay(self):
+        # See: https://flexbox.malven.co
+        self._elem.style.display = "flex"
 
     def _renderVertical(self):
         self._elem.style.flexDirection = "column" if self._vertical else "row"
@@ -225,6 +230,7 @@ class PPanel(PCompoundWidget):
 
     def restoreState(self):
         super().restoreState()
+        self._renderDisplay()
         self._renderVertical()
 
 class PGrid(PCompoundWidget): 
@@ -232,12 +238,17 @@ class PGrid(PCompoundWidget):
     def __init__(self):
         super().__init__("div")
         self._elem.classList.add("PGrid")
+        self._renderDisplay()
         self._columns = []
         self._renderColumns()
         self._rows = []
         self._renderRows()
         self._areas = ""
         self._renderAreas()
+
+    def _renderDisplay(self):
+        # See: https://grid.malven.co
+        self._elem.style.display = "grid"
 
     def _renderColumns(self):
         self._elem.style.gridTemplateColumns = " ".join(self._columns)
@@ -294,6 +305,7 @@ class PGrid(PCompoundWidget):
 
     def restoreState(self):
         super().restoreState()
+        self._renderDisplay()
         self._renderColumns()
         self._renderRows()
         self._renderAreas()

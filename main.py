@@ -25,7 +25,7 @@ class Main(PPanel):
         self.btn = PButton("Press me!").setColor("blue").onClick(btn_click)
 
         self.grd = PGrid().setMargin(10).setGap(5)
-        self.grd.setRows(["20px", "20px", "50px"])
+        self.grd.setRows(["30px", "30px", "60px"])
         self.grd.setColumns(["100px", "150px", "100px", "150px"])
         self.grd.setAreas([
             [PLabel("Code")       , PEdit("<code>"), PLabel("Number"), PEdit("<number>")], 
