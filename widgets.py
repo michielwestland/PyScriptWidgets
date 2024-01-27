@@ -157,13 +157,12 @@ class PCompoundWidget(PWidget):
         super().restoreState()
         for c in self._children:
             c.restoreState()
-        for c in self._children:
             c._parent = self
             self._elem.appendChild(c._elem)
         
 class PPanel(PCompoundWidget): 
     
-    #TODO Html grid layout: https://www.w3schools.com/css/css_grid.asp
+    #TODO Html grid layout: https://www.w3schools.com/css/css_grid.asp, zie ook plaatje, kanmet de unieke ids. 2D array child componenten. 
 
     def __init__(self, vertical):
         super().__init__("div")

@@ -31,6 +31,7 @@ class Main(PPanel):
         self.todoPnl = TodoPanel()
         self.addChild(self.todoPnl)
 
+    #TODO Toch weer een afterrestorelivereload method maken om code uit te proberen i.c.m. live reload
     def restoreState(self):
         super().restoreState()
         
