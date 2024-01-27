@@ -3,38 +3,48 @@ import pickle
 from js import console, document, sessionStorage, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
+# Private global reference to the root widget
 _mainWidget = None
 
+# Constants
 _STATE_KEY = "widget_state"
+_ID_PREFIX = "e"
+_UTF_8 = "utf-8"
 
+# Debug utiliies
 def debugObject(obj):
+    """Print object attributes to the debug console"""
     console.debug(repr(obj))
     for attr in dir(obj):
         if not attr.startswith("__"):
             console.debug(attr + " = " + repr(getattr(obj, attr)))
 
+# Global subroutines for (de)serializing the widget tree, when the page (un)loads
 def _serializeWidgetsToBase64(mainWidget):
     mainWidget.backupState()
     # See: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
-    return base64.b64encode(pickle.dumps(mainWidget)).decode("utf-8")
+    return base64.b64encode(pickle.dumps(mainWidget)).decode(_UTF_8)
     
 def _deserializeWidgetsFromBase64(stateData):
-    mainWidget = pickle.loads(base64.b64decode(stateData.encode("utf-8")))
+    mainWidget = pickle.loads(base64.b64decode(stateData.encode(_UTF_8)))
     mainWidget.restoreState()
     return mainWidget
 
+# Global functions to get references to widgets in event handlers
 def findEventTarget(event):
     return _mainWidget.findId(event.target.id)
 
 def findMainWidget():
     return _mainWidget
 
+# Store the widget state
 def _window_beforeunload(event):
     state = _serializeWidgetsToBase64(_mainWidget)
     sessionStorage.setItem(_STATE_KEY, state)
 
+# Create or load the widget state and bind to the browser DOM
 def bindToDom(MainWidgetClass, rootElementId): 
-    # What is the impact of this? https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
+    # What is the impact of: https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
     global _mainWidget
     state = sessionStorage.getItem(_STATE_KEY)
     if state == None:
@@ -53,10 +63,10 @@ class PWidget:
 
     def _generateUniqueId(self):
         PWidget._lastUniqueId = PWidget._lastUniqueId + 1
-        return "e" + str(PWidget._lastUniqueId)
+        return _ID_PREFIX + str(PWidget._lastUniqueId)
 
     def _ensureUniqueIdBeyond(self, id):
-        i = int(id[1:])
+        i = int(id[len(_ID_PREFIX):])
         if PWidget._lastUniqueId < i:
             PWidget._lastUniqueId = i
 
@@ -68,7 +78,6 @@ class PWidget:
         self._elem = document.createElement(self._tag)
         self._renderIdGridArea()
         # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
-        self._elem.classList.add("PWidget")
         self._elem.classList.add("ui")
 
     def _renderIdGridArea(self):
@@ -117,7 +126,6 @@ class PCompoundWidget(PWidget):
     
     def __init__(self, tag):
         super().__init__(tag)
-        self._elem.classList.add("PCompoundWidget")
         self._children = []
         self._gap = 0
         self._renderGap()
@@ -207,7 +215,6 @@ class PPanel(PCompoundWidget):
     
     def __init__(self, vertical):
         super().__init__("div")
-        self._elem.classList.add("PPanel")
         self._renderDisplay()
         self._vertical = vertical
         self._renderVertical()
@@ -237,7 +244,6 @@ class PGrid(PCompoundWidget):
     
     def __init__(self):
         super().__init__("div")
-        self._elem.classList.add("PGrid")
         self._renderDisplay()
         self._columns = []
         self._renderColumns()
@@ -314,7 +320,6 @@ class PLabel(PWidget):
     
     def __init__(self, text):
         super().__init__("label")
-        self._elem.classList.add("PLabel")
         self._text = text
         self._renderText()
 
@@ -338,7 +343,6 @@ class PButton(PWidget):
 
     def __init__(self, text):
         super().__init__("button")
-        self._elem.classList.add("PButton")
         self._elem.classList.add("button")
         self._text = text
         self._icon = ""
@@ -411,7 +415,6 @@ class PEdit(PWidget):
 
     def __init__(self, value):
         super().__init__("div")
-        self._elem.classList.add("PEdit")
         self._elem.classList.add("input")
         self._insertInnerInput()
         self.setValue(value)
