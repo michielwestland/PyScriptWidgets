@@ -1,10 +1,12 @@
 from datetime import datetime
 from js import fetch, JSON # type: ignore
-from widgets import PPanel, PEdit, PButton, PLabel, bindToDom, findEventTarget
+from widgets import PPanel, PGrid, PEdit, PButton, PLabel, bindToDom, findEventTarget
 from todo import TodoPanel
 
 async def btn_click(event): 
-    pnl = findEventTarget(event).getParent()
+    grd = findEventTarget(event).getParent()
+    pnl = grd.getParent()
+    
     pnl.btn.setColor("red")
     time = str(datetime.now())
     
@@ -17,16 +19,20 @@ async def btn_click(event):
 class Main(PPanel):
 
     def __init__(self):
-        super().__init__(False)
+        super().__init__(True)
 
-        lbl = PLabel("Label")
-        self.addChild(lbl)
-
-        self.edt = PEdit("").setPlaceholder("press this button -->").setWidth(500)
-        self.addChild(self.edt)
-
+        self.edt = PEdit("").setPlaceholder("press the button...").setWidth(400)
         self.btn = PButton("Press me!").setColor("blue").onClick(btn_click)
-        self.addChild(self.btn)
+
+        self.grd = PGrid().setMargin(10).setGap(5)
+        self.grd.setRows(["20px", "20px", "50px"])
+        self.grd.setColumns(["100px", "150px", "100px", "150px"])
+        self.grd.setAreas([
+            [PLabel("Code")       , PEdit("<code>"), PLabel("Number"), PEdit("<number>")], 
+            [PLabel("Description"), self.edt       , self.edt        , self.edt         ], 
+            [None                 , None           , self.btn        , self.btn         ]
+        ])
+        self.addChild(self.grd)
 
         self.todoPnl = TodoPanel()
         self.addChild(self.todoPnl)

@@ -31,10 +31,12 @@ class TodoItem(PPanel):
 class TodoList(PPanel):
     def __init__(self):
         super().__init__(True)
+        self.setGap(5)
 
 class TodoPanel(PPanel):
     def __init__(self):
         super().__init__(True)
+        self.setMargin(20)
         self.frm = TodoForm()
         self.lst = TodoList()
         self.addChildren([

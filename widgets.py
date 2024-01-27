@@ -53,10 +53,10 @@ class PWidget:
 
     def _generateUniqueId(self):
         PWidget._lastUniqueId = PWidget._lastUniqueId + 1
-        return str(PWidget._lastUniqueId)
+        return "e" + str(PWidget._lastUniqueId)
 
     def _ensureUniqueIdBeyond(self, id):
-        i = int(id)
+        i = int(id[1:])
         if PWidget._lastUniqueId < i:
             PWidget._lastUniqueId = i
 
@@ -66,10 +66,14 @@ class PWidget:
         self._id = self._generateUniqueId()
         # DOM manipulation: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
         self._elem = document.createElement(self._tag)
-        self._elem.id = self._id
+        self._renderIdGridArea()
         # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
         self._elem.classList.add("PWidget")
         self._elem.classList.add("ui")
+
+    def _renderIdGridArea(self):
+        self._elem.id = self._id
+        self._elem.style.gridArea = self._id
 
     def getParent(self):
         return self._parent
@@ -96,7 +100,7 @@ class PWidget:
 
     def _insertState(self):
         self._elem = document.createElement(self._tag)
-        self._elem.id = self._id
+        self._renderIdGridArea()
 
     def __setstate__(self, state):
         self.__dict__.update(state)
@@ -115,6 +119,10 @@ class PCompoundWidget(PWidget):
         super().__init__(tag)
         self._elem.classList.add("PCompoundWidget")
         self._children = []
+        self._gap = 0
+        self._renderGap()
+        self._margin = 0
+        self._renderMargin()
 
     def findId(self, id):
         if self._id == id: 
@@ -152,6 +160,30 @@ class PCompoundWidget(PWidget):
             self.addChild(c)
         return self
 
+    def _renderGap(self):
+        self._elem.style.gap = str(self._gap) + "px"
+
+    def getGap(self):
+        return self._gap
+    
+    def setGap(self, gap):
+        if self._gap != gap:
+            self._gap = gap
+            self._renderGap()
+        return self
+
+    def _renderMargin(self):
+        self._elem.style.margin = str(self._margin) + "px"
+
+    def getMargin(self):
+        return self._margin
+    
+    def setMargin(self, margin):
+        if self._margin != margin:
+            self._margin = margin
+            self._renderMargin()
+        return self
+
     def backupState(self):
         super().backupState()
         for c in self._children:
@@ -163,6 +195,8 @@ class PCompoundWidget(PWidget):
             c.restoreState()
             c._parent = self
             self._elem.appendChild(c._elem)
+        self._renderGap()
+        self._renderMargin()
     
     def afterPageLoad(self):
         super().afterPageLoad()
@@ -171,8 +205,6 @@ class PCompoundWidget(PWidget):
 
 class PPanel(PCompoundWidget): 
     
-    #TODO Html grid layout: https://www.w3schools.com/css/css_grid.asp, zie ook plaatje, kanmet de unieke ids. 2D array child componenten. 
-
     def __init__(self, vertical):
         super().__init__("div")
         self._elem.classList.add("PPanel")
@@ -195,10 +227,81 @@ class PPanel(PCompoundWidget):
         super().restoreState()
         self._renderVertical()
 
+class PGrid(PCompoundWidget): 
+    
+    def __init__(self):
+        super().__init__("div")
+        self._elem.classList.add("PGrid")
+        self._columns = []
+        self._renderColumns()
+        self._rows = []
+        self._renderRows()
+        self._areas = ""
+        self._renderAreas()
+
+    def _renderColumns(self):
+        self._elem.style.gridTemplateColumns = " ".join(self._columns)
+
+    def getColumns(self):
+        return self._columns
+    
+    def setColumns(self, columns):
+        if self._columns != columns:
+            self._columns = columns
+            self._renderColumns()
+        return self
+
+    def _renderRows(self):
+        self._elem.style.gridTemplateRows = " ".join(self._rows)
+
+    def getRows(self):
+        return self._rows
+    
+    def setRows(self, rows):
+        if self._rows != rows:
+            self._rows = rows
+            self._renderRows()
+        return self
+
+    def _renderAreas(self):
+        self._elem.style.gridTemplateAreas = self._areas
+
+    # Read only property, no getAreas() method
+    def setAreas(self, areas):
+        #See: https://www.w3schools.com/css/css_grid.asp
+        #See: https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
+        self.removeAllChildren()
+        
+        self._areas = ""
+        for line in areas:
+            
+            areaRow = ""
+            for c in line:
+                if c == None:
+                    areaRow += " ."
+                else:
+                    if not (c in self.getChildren()):
+                        self.addChild(c)
+                    areaRow += " " + c._id
+            
+            if len(areaRow) > 0:
+                areaRow = areaRow[1:]
+            self._areas += " " + "\"" + areaRow + "\""
+
+        if len(self._areas) > 0:
+            self._areas = self._areas[1:]
+        self._renderAreas()
+
+    def restoreState(self):
+        super().restoreState()
+        self._renderColumns()
+        self._renderRows()
+        self._renderAreas()
+
 class PLabel(PWidget): 
     
     def __init__(self, text):
-        super().__init__("span")
+        super().__init__("label")
         self._elem.classList.add("PLabel")
         self._text = text
         self._renderText()
@@ -265,7 +368,7 @@ class PButton(PWidget):
     def _renderColor(self):
         self._elem.style.color = self._color
 
-    def getColor(self):
+    def getColor(self): #TODO Move to widget class
         return self._color
 
     def setColor(self, color):
@@ -302,7 +405,7 @@ class PEdit(PWidget):
         self.setValue(value)
         self._placeholder = ""
         self._renderPlaceholder()
-        self._width = 100
+        self._width = 100 #TODO Move to widget class, also make height attribute
         self._renderWidth()
 
     def getValue(self):
