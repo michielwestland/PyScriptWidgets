@@ -45,6 +45,7 @@ def bindToDom(MainWidgetClass, rootElementId):
     document.getElementById(rootElementId).appendChild(_mainWidget._elem)
     # See: https://jeff.glass/post/pyscript-why-create-proxy/
     add_event_listener(window, "beforeunload", _window_beforeunload)
+    _mainWidget.afterPageLoad()
 
 class PWidget: 
         
@@ -105,6 +106,9 @@ class PWidget:
         self._ensureUniqueIdBeyond(self._id)
         self._elem.setAttribute("class", self._classlist)
 
+    def afterPageLoad(self):
+        pass
+
 class PCompoundWidget(PWidget):
     
     def __init__(self, tag):
@@ -159,7 +163,12 @@ class PCompoundWidget(PWidget):
             c.restoreState()
             c._parent = self
             self._elem.appendChild(c._elem)
-        
+    
+    def afterPageLoad(self):
+        super().afterPageLoad()
+        for c in self._children:
+            c.afterPageLoad()
+
 class PPanel(PCompoundWidget): 
     
     #TODO Html grid layout: https://www.w3schools.com/css/css_grid.asp, zie ook plaatje, kanmet de unieke ids. 2D array child componenten. 

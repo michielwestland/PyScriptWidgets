@@ -31,12 +31,10 @@ class Main(PPanel):
         self.todoPnl = TodoPanel()
         self.addChild(self.todoPnl)
 
-    #TODO Toch weer een afterrestorelivereload method maken om code uit te proberen i.c.m. live reload
-    def restoreState(self):
-        super().restoreState()
-        
-        # Hier kan je iets uitproberen na page refresh i.c.m. live server
-        self.btn.setColor("green")
+    def afterPageLoad(self):
+        super().afterPageLoad()
+        # Hier kan je code uitproberen na page refresh i.c.m. LiveServer
+        #self.btn.setColor("green")
 
 if __name__ == "__main__":
     bindToDom(Main, "root")
