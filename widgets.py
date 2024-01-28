@@ -3,8 +3,6 @@ import pickle
 from js import console, document, sessionStorage, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
-#TODO Heb je in een js event ook het soort handler? Onclick, onchange, etc. Maak globale handler functie en roep dan de juiste widget event handler aan. 
-
 #TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput
 
 #TODO Add form widget that wraps labels/inputs with div for error state and shows error messages: https://semantic-ui.com/collections/form.html

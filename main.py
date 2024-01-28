@@ -1,28 +1,14 @@
 from datetime import datetime
 from js import fetch, JSON # type: ignore
-from widgets import PPanel, PGrid, PTextInput, PButton, PLabel, bindToDom, findEventTarget
+from widgets import PPanel, PGrid, PTextInput, PButton, PLabel, bindToDom
 from todo import TodoPanel
-
-async def btn_click(event): 
-    grd = findEventTarget(event).getParent()
-    pnl = grd.getParent()
-    
-    pnl.btn.setColor("red")
-    time = str(datetime.now())
-    
-    response = await fetch("data.json", {"method": "GET"})
-    data = await response.json()
-    time = time + " " + JSON.stringify(data)
-    
-    pnl.inp.setValue("Now is: " + time)
 
 class Main(PPanel):
 
     def __init__(self):
         super().__init__(True)
-
         self.inp = PTextInput("").setPlaceholder("press the button...")
-        self.btn = PButton("Press me!").setColor("blue").onClick(btn_click)
+        self.btn = PButton("Press me!").setColor("blue").onClick(self.btnClick)
 
         self.grd = PGrid().setMargin(10).setGap(5)
         self.grd.setRows(["30px", "30px", "60px"])
@@ -36,6 +22,12 @@ class Main(PPanel):
 
         self.todoPnl = TodoPanel()
         self.addChild(self.todoPnl)
+
+    async def btnClick(self, event): 
+        self.btn.setColor("red")
+        response = await fetch("data.json", {"method": "GET"})
+        data = await response.json()
+        self.inp.setValue("Now is: " + str(datetime.now()) + " " + JSON.stringify(data))
 
     def afterPageLoad(self):
         super().afterPageLoad()
