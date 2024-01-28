@@ -1,13 +1,13 @@
 from datetime import datetime
-from widgets import PPanel, PLabel, PEdit, PButton, findEventTarget
+from widgets import PPanel, PLabel, PTextInput, PButton, findEventTarget
 
 def add_btn_click(event):
     pnl = findEventTarget(event).getParent().getParent()
-    text = pnl.frm.edt.getValue()
+    text = pnl.frm.inp.getValue()
     if len(text) == 0:
         text = "<" + str(datetime.now()) + ">"
     pnl.lst.addChild(TodoItem(text))
-    pnl.frm.edt.setValue("")
+    pnl.frm.inp.setValue("")
 
 def delete_btn_click(event):
     item = findEventTarget(event).getParent()
@@ -17,9 +17,9 @@ def delete_btn_click(event):
 class TodoForm(PPanel):
     def __init__(self):
         super().__init__(False)
-        self.edt = PEdit("").setPlaceholder("<new todo>").setWidth(300)
+        self.inp = PTextInput("").setPlaceholder("<new todo>").setWidth(300)
         self.addBtn = PButton("Add").onClick(add_btn_click)
-        self.addChildren([self.edt, self.addBtn])
+        self.addChildren([self.inp, self.addBtn])
 
 class TodoItem(PPanel):
     def __init__(self, todoTxt):

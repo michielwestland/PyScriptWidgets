@@ -7,7 +7,8 @@ Development:
 - Python: https://www.python.org (PSF license agreement)
 - VSCode: https://code.visualstudio.com/docs/python/python-tutorial (Microsoft product license + MIT license)
 - Python vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.python (Microsoft Pylance license + MIT license)
-- LiveServer vscode extension: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer (MIT license)
+- Live Server vscode extension: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer (MIT license)
+- Live Preview vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server
 
 Runtime:
 - PyScript: https://pyscript.net (Apache license 2.0)
@@ -44,8 +45,14 @@ python -m http.server 8000 --bind localhost
 http://localhost:8000/index.html
 ```
 
-LiveServer:
+Live Server:
 ```
 [Go Live]
 http://127.0.0.1:5500/
+```
+
+Live Preview:
+```
+[Preview]
+http://127.0.0.1:3000/index.html
 ```

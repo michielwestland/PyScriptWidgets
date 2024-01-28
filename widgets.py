@@ -3,6 +3,8 @@ import pickle
 from js import console, document, sessionStorage, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
+#TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput
+
 # Private global reference to the root widget
 _mainWidget = None
 
@@ -411,7 +413,7 @@ class PButton(PWidget):
         self._renderColor()
         self._renderClickHandler()
 
-class PEdit(PWidget): 
+class PTextInput(PWidget): 
 
     def __init__(self, value):
         super().__init__("div")
