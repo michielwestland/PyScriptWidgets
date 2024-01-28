@@ -125,6 +125,7 @@ class PWidget:
     def restoreState(self):
         self._ensureUniqueIdBeyond(self._id)
         self._elem.setAttribute("class", self._classlist)
+        
         self._renderColor()
 
     def afterPageLoad(self):
@@ -201,6 +202,7 @@ class PCompoundWidget(PWidget):
             c.restoreState()
             c._parent = self
             self._elem.appendChild(c._elem)
+
         self._renderGap()
         self._renderMargin()
     
@@ -245,6 +247,7 @@ class PPanel(PCompoundWidget):
 
     def restoreState(self):
         super().restoreState()
+
         self._renderVertical()
 
     # Property: Vertical
@@ -278,6 +281,7 @@ class PGrid(PCompoundWidget):
     def restoreState(self):
         super().restoreState()
         self._renderDisplay()
+
         self._renderColumns()
         self._renderRows()
         self._renderAreas()
@@ -351,6 +355,7 @@ class PLabel(PWidget):
 
     def restoreState(self):
         super().restoreState()
+
         self._renderText()
 
     # Property: Text
@@ -380,6 +385,7 @@ class PButton(PWidget):
 
     def restoreState(self):
         super().restoreState()
+
         self._renderTextIcon()
         self._renderClick()
 
@@ -460,7 +466,8 @@ class PTextInput(PWidget):
     
     def restoreState(self):
         super().restoreState()
-        self._elem_input.value = self._value
+        self.setValue(self._value)
+        
         self._renderPlaceholder()
         self._renderWidth() #TODO Move to widget class, also make height attribute
 
@@ -468,7 +475,8 @@ class PTextInput(PWidget):
         return self._elem_input.value
     
     def setValue(self, value):
-        self._elem_input.value = value
+        if self._elem_input.value != value:
+            self._elem_input.value = value
         return self
     
     # Property: Placeholder
