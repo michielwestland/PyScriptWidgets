@@ -4,6 +4,7 @@ from widgets import PPanel, PLabel, PTextInput, PButton, findEventTarget
 class TodoForm(PPanel):
     def __init__(self):
         super().__init__(False)
+        self.setGap(5)
         self.inp = PTextInput("").setPlaceholder("<new todo>")
         self.addBtn = PButton("Add").onClick(self.addBtnClick)
         self.addChildren([self.inp, self.addBtn])
@@ -18,6 +19,7 @@ class TodoForm(PPanel):
 class TodoItem(PPanel):
     def __init__(self, todoTxt):
         super().__init__(False)
+        self.setGap(5)
         self.lbl = PLabel(todoTxt)
         self.deleteBtn = PButton("Delete").setIcon("fa-solid fa-trash-can").onClick(self.deleteBtnClick)
         self.addChildren([self.deleteBtn, self.lbl])
@@ -33,7 +35,7 @@ class TodoList(PPanel):
 class TodoPanel(PPanel):
     def __init__(self):
         super().__init__(True)
-        self.setMargin(20)
+        self.setMargin(5)
         self.frm = TodoForm()
         self.lst = TodoList()
         self.addChildren([
