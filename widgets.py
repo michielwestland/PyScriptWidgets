@@ -5,6 +5,8 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput
 
+#TODO Add form widget that wraps labels/inputs with div for error state and shows error messages: https://semantic-ui.com/collections/form.html
+
 # Private global reference to the root widget
 _mainWidget = None
 
@@ -82,6 +84,9 @@ class PWidget:
         # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
         self._elem.classList.add("ui")
 
+        self._color = "inherit"
+        self._renderColor()
+
     def _renderIdGridArea(self):
         self._elem.id = self._id
         self._elem.style.gridArea = self._id
@@ -120,19 +125,34 @@ class PWidget:
     def restoreState(self):
         self._ensureUniqueIdBeyond(self._id)
         self._elem.setAttribute("class", self._classlist)
+        self._renderColor()
 
     def afterPageLoad(self):
         pass
+
+    # Property: Color
+    def _renderColor(self):
+        self._elem.style.color = self._color
+
+    def getColor(self):
+        return self._color
+
+    def setColor(self, color):
+        if self._color != color:
+            self._color = color
+            self._renderColor()
+        return self
 
 class PCompoundWidget(PWidget):
     
     def __init__(self, tag):
         super().__init__(tag)
         self._children = []
-        self._gap = 0
-        self._renderGap()
+
         self._margin = 0
         self._renderMargin()
+        self._gap = 0
+        self._renderGap()
 
     def findId(self, id):
         if self._id == id: 
@@ -170,30 +190,6 @@ class PCompoundWidget(PWidget):
             self.addChild(c)
         return self
 
-    def _renderGap(self):
-        self._elem.style.gap = str(self._gap) + "px"
-
-    def getGap(self):
-        return self._gap
-    
-    def setGap(self, gap):
-        if self._gap != gap:
-            self._gap = gap
-            self._renderGap()
-        return self
-
-    def _renderMargin(self):
-        self._elem.style.margin = str(self._margin) + "px"
-
-    def getMargin(self):
-        return self._margin
-    
-    def setMargin(self, margin):
-        if self._margin != margin:
-            self._margin = margin
-            self._renderMargin()
-        return self
-
     def backupState(self):
         super().backupState()
         for c in self._children:
@@ -213,19 +209,48 @@ class PCompoundWidget(PWidget):
         for c in self._children:
             c.afterPageLoad()
 
+    # Property: Margin
+    def _renderMargin(self):
+        self._elem.style.margin = str(self._margin) + "px"
+
+    def getMargin(self):
+        return self._margin
+    
+    def setMargin(self, margin):
+        if self._margin != margin:
+            self._margin = margin
+            self._renderMargin()
+        return self
+
+    # Property: Gap
+    def _renderGap(self):
+        self._elem.style.gap = str(self._gap) + "px"
+
+    def getGap(self):
+        return self._gap
+    
+    def setGap(self, gap):
+        if self._gap != gap:
+            self._gap = gap
+            self._renderGap()
+        return self
+
 class PPanel(PCompoundWidget): 
     
     def __init__(self, vertical):
         super().__init__("div")
-        self._renderDisplay()
+        
         self._vertical = vertical
         self._renderVertical()
 
-    def _renderDisplay(self):
+    def restoreState(self):
+        super().restoreState()
+        self._renderVertical()
+
+    # Property: Vertical
+    def _renderVertical(self):
         # See: https://flexbox.malven.co
         self._elem.style.display = "flex"
-
-    def _renderVertical(self):
         self._elem.style.flexDirection = "column" if self._vertical else "row"
 
     def isVertical(self):
@@ -237,16 +262,12 @@ class PPanel(PCompoundWidget):
             self._renderVertical()
         return self
 
-    def restoreState(self):
-        super().restoreState()
-        self._renderDisplay()
-        self._renderVertical()
-
 class PGrid(PCompoundWidget): 
     
     def __init__(self):
         super().__init__("div")
         self._renderDisplay()
+        
         self._columns = []
         self._renderColumns()
         self._rows = []
@@ -254,10 +275,18 @@ class PGrid(PCompoundWidget):
         self._areas = ""
         self._renderAreas()
 
+    def restoreState(self):
+        super().restoreState()
+        self._renderDisplay()
+        self._renderColumns()
+        self._renderRows()
+        self._renderAreas()
+
     def _renderDisplay(self):
         # See: https://grid.malven.co
         self._elem.style.display = "grid"
 
+    # Property: Columns
     def _renderColumns(self):
         self._elem.style.gridTemplateColumns = " ".join(self._columns)
 
@@ -270,6 +299,7 @@ class PGrid(PCompoundWidget):
             self._renderColumns()
         return self
 
+    # Property: Rows
     def _renderRows(self):
         self._elem.style.gridTemplateRows = " ".join(self._rows)
 
@@ -282,10 +312,10 @@ class PGrid(PCompoundWidget):
             self._renderRows()
         return self
 
+    # Property: Areas (readonly)
     def _renderAreas(self):
         self._elem.style.gridTemplateAreas = self._areas
 
-    # Read only property, no getAreas() method
     def setAreas(self, areas):
         #See: https://www.w3schools.com/css/css_grid.asp
         #See: https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
@@ -311,20 +341,19 @@ class PGrid(PCompoundWidget):
             self._areas = self._areas[1:]
         self._renderAreas()
 
-    def restoreState(self):
-        super().restoreState()
-        self._renderDisplay()
-        self._renderColumns()
-        self._renderRows()
-        self._renderAreas()
-
 class PLabel(PWidget): 
     
     def __init__(self, text):
         super().__init__("label")
+
         self._text = text
         self._renderText()
 
+    def restoreState(self):
+        super().restoreState()
+        self._renderText()
+
+    # Property: Text
     def _renderText(self):
         self._elem.replaceChildren(document.createTextNode(self._text))
 
@@ -337,23 +366,24 @@ class PLabel(PWidget):
             self._renderText()
         return self
 
-    def restoreState(self):
-        super().restoreState()
-        self._renderText()
-
 class PButton(PWidget): 
 
     def __init__(self, text):
         super().__init__("button")
         self._elem.classList.add("button")
+
         self._text = text
         self._icon = ""
         self._renderTextIcon()
-        self._color = "black"
-        self._renderColor()
-        self._clickHandler = None
-        self._renderClickHandler()
+        self._click = None
+        self._renderClick()
 
+    def restoreState(self):
+        super().restoreState()
+        self._renderTextIcon()
+        self._renderClick()
+
+    # Property: Text
     def _renderTextIcon(self):
         self._elem.replaceChildren()
         if len(self._icon) > 0:
@@ -374,6 +404,7 @@ class PButton(PWidget):
             self._renderTextIcon()
         return self
 
+    # Property: Icon
     def getIcon(self):
         return self._icon
 
@@ -383,35 +414,18 @@ class PButton(PWidget):
             self._renderTextIcon()
         return self
 
-    def _renderColor(self):
-        self._elem.style.color = self._color
+    def _renderClick(self):
+        if self._click != None:
+            add_event_listener(self._elem, "click", self._click)
 
-    def getColor(self): #TODO Move to widget class
-        return self._color
-
-    def setColor(self, color):
-        if self._color != color:
-            self._color = color
-            self._renderColor()
+    # Property: Click
+    def onClick(self, click):
+        if self._click != click:
+            if self._click != None:
+                remove_event_listener(self._elem, "click", self._click)
+            self._click = click
+            self._renderClick()
         return self
-
-    def _renderClickHandler(self):
-        if self._clickHandler != None:
-            add_event_listener(self._elem, "click", self._clickHandler)
-
-    def onClick(self, clickHandler):
-        if self._clickHandler != clickHandler:
-            if self._clickHandler != None:
-                remove_event_listener(self._elem, "click", self._clickHandler)
-            self._clickHandler = clickHandler
-            self._renderClickHandler()
-        return self
-
-    def restoreState(self):
-        super().restoreState()
-        self._renderTextIcon()
-        self._renderColor()
-        self._renderClickHandler()
 
 class PTextInput(PWidget): 
 
@@ -419,43 +433,13 @@ class PTextInput(PWidget):
         super().__init__("div")
         self._elem.classList.add("input")
         self._insertInnerInput()
+        
         self.setValue(value)
+        
         self._placeholder = ""
         self._renderPlaceholder()
         self._width = 100 #TODO Move to widget class, also make height attribute
         self._renderWidth()
-
-    def getValue(self):
-        return self._elem_input.value
-    
-    def setValue(self, value):
-        self._elem_input.value = value
-        return self
-    
-    def _renderPlaceholder(self):
-        self._elem_input.setAttribute("placeholder", self._placeholder)
-
-    def getPlaceholder(self):
-        return self._placeholder
-
-    def setPlaceholder(self, placeholder):
-        if self._placeholder != placeholder:
-            self._placeholder = placeholder
-            self._renderPlaceholder()
-        return self
-
-    def _renderWidth(self):
-        # See: https://www.w3schools.com/jsref/prop_html_style.asp / https://www.w3schools.com/jsref/dom_obj_style.asp
-        self._elem.style.width = str(self._width) + "px"
-
-    def getWidth(self):
-        return self._width
-
-    def setWidth(self, width):
-        if self._width != width:
-            self._width = width
-            self._renderWidth()
-        return self
 
     def backupState(self):
         super().backupState()
@@ -478,4 +462,38 @@ class PTextInput(PWidget):
         super().restoreState()
         self._elem_input.value = self._value
         self._renderPlaceholder()
-        self._renderWidth()
+        self._renderWidth() #TODO Move to widget class, also make height attribute
+
+    def getValue(self):
+        return self._elem_input.value
+    
+    def setValue(self, value):
+        self._elem_input.value = value
+        return self
+    
+    # Property: Placeholder
+    def _renderPlaceholder(self):
+        self._elem_input.setAttribute("placeholder", self._placeholder)
+
+    def getPlaceholder(self):
+        return self._placeholder
+
+    def setPlaceholder(self, placeholder):
+        if self._placeholder != placeholder:
+            self._placeholder = placeholder
+            self._renderPlaceholder()
+        return self
+
+    # Property: Width
+    def _renderWidth(self): #TODO Move to widget class, also make height attribute
+        # See: https://www.w3schools.com/jsref/prop_html_style.asp / https://www.w3schools.com/jsref/dom_obj_style.asp
+        self._elem.style.width = str(self._width) + "px"
+
+    def getWidth(self):
+        return self._width
+
+    def setWidth(self, width):
+        if self._width != width:
+            self._width = width
+            self._renderWidth()
+        return self
