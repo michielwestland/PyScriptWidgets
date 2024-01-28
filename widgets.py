@@ -3,6 +3,8 @@ import pickle
 from js import console, document, sessionStorage, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
+#TODO Heb je in een js event ook het soort handler? Onclick, onchange, etc. Maak globale handler functie en roep dan de juiste widget event handler aan. 
+
 #TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput
 
 #TODO Add form widget that wraps labels/inputs with div for error state and shows error messages: https://semantic-ui.com/collections/form.html
@@ -13,6 +15,7 @@ _mainWidget = None
 # Constants
 _STATE_KEY = "widget_state"
 _ID_PREFIX = "e"
+_ID_SUPPLEMENT = "."
 _UTF_8 = "utf-8"
 
 # Debug utiliies
@@ -36,7 +39,11 @@ def _deserializeWidgetsFromBase64(stateData):
 
 # Global functions to get references to widgets in event handlers
 def findEventTarget(event):
-    return _mainWidget.findId(event.target.id)
+    id = event.target.id
+    i = id.find(_ID_SUPPLEMENT)
+    if i >= 0: # Remove id supplement
+        id = id[:i]
+    return _mainWidget.findId(id)
 
 def findMainWidget():
     return _mainWidget
@@ -80,14 +87,14 @@ class PWidget:
         self._id = self._generateUniqueId()
         # DOM manipulation: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
         self._elem = document.createElement(self._tag)
-        self._renderIdGridArea()
+        self._insertIdGridArea()
         # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
         self._elem.classList.add("ui")
 
         self._color = "inherit"
         self._renderColor()
 
-    def _renderIdGridArea(self):
+    def _insertIdGridArea(self):
         self._elem.id = self._id
         self._elem.style.gridArea = self._id
 
@@ -116,7 +123,7 @@ class PWidget:
 
     def _insertState(self):
         self._elem = document.createElement(self._tag)
-        self._renderIdGridArea()
+        self._insertIdGridArea()
 
     def __setstate__(self, state):
         self.__dict__.update(state)
@@ -394,6 +401,7 @@ class PButton(PWidget):
         self._elem.replaceChildren()
         if len(self._icon) > 0:
             e = document.createElement("i")
+            e.id = self._id + _ID_SUPPLEMENT + "i"
             for c in self._icon.split():
                 e.classList.add(c)
             self._elem.appendChild(e)
@@ -438,7 +446,7 @@ class PTextInput(PWidget):
     def __init__(self, value):
         super().__init__("div")
         self._elem.classList.add("input")
-        self._insertInnerInput()
+        self._insertInput()
         
         self.setValue(value)
         
@@ -453,14 +461,15 @@ class PTextInput(PWidget):
         super()._deleteState(state)
         del state["_elem_input"]
 
-    def _insertInnerInput(self):
+    def _insertInput(self):
         self._elem_input = document.createElement("input")
+        self._elem_input.id = self._id + _ID_SUPPLEMENT + "input"
         self._elem_input.setAttribute("type", "text")
         self._elem.appendChild(self._elem_input)
 
     def _insertState(self):
         super()._insertState()
-        self._insertInnerInput()
+        self._insertInput()
     
     def restoreState(self):
         super().restoreState()
