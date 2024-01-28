@@ -17,7 +17,7 @@ def delete_btn_click(event):
 class TodoForm(PPanel):
     def __init__(self):
         super().__init__(False)
-        self.inp = PTextInput("").setPlaceholder("<new todo>").setWidth(300)
+        self.inp = PTextInput("").setPlaceholder("<new todo>")
         self.addBtn = PButton("Add").onClick(add_btn_click)
         self.addChildren([self.inp, self.addBtn])
 

@@ -444,8 +444,6 @@ class PTextInput(PWidget):
         
         self._placeholder = ""
         self._renderPlaceholder()
-        self._width = 100 #TODO Move to widget class, also make height attribute
-        self._renderWidth()
 
     def backupState(self):
         super().backupState()
@@ -467,9 +465,8 @@ class PTextInput(PWidget):
     def restoreState(self):
         super().restoreState()
         self.setValue(self._value)
-        
+
         self._renderPlaceholder()
-        self._renderWidth() #TODO Move to widget class, also make height attribute
 
     def getValue(self):
         return self._elem_input.value
@@ -490,18 +487,4 @@ class PTextInput(PWidget):
         if self._placeholder != placeholder:
             self._placeholder = placeholder
             self._renderPlaceholder()
-        return self
-
-    # Property: Width
-    def _renderWidth(self): #TODO Move to widget class, also make height attribute
-        # See: https://www.w3schools.com/jsref/prop_html_style.asp / https://www.w3schools.com/jsref/dom_obj_style.asp
-        self._elem.style.width = str(self._width) + "px"
-
-    def getWidth(self):
-        return self._width
-
-    def setWidth(self, width):
-        if self._width != width:
-            self._width = width
-            self._renderWidth()
         return self

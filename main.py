@@ -21,7 +21,7 @@ class Main(PPanel):
     def __init__(self):
         super().__init__(True)
 
-        self.inp = PTextInput("").setPlaceholder("press the button...").setWidth(400)
+        self.inp = PTextInput("").setPlaceholder("press the button...")
         self.btn = PButton("Press me!").setColor("blue").onClick(btn_click)
 
         self.grd = PGrid().setMargin(10).setGap(5)
