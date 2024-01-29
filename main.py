@@ -15,8 +15,8 @@ class Main(PPanel):
         self.grd.setColumns(["100px", "150px", "100px", "150px"])
         self.grd.setAreas([
             [PLabel("Code")       , PTextInput("<code>"), PLabel("Number"), PTextInput("<number>")], 
-            [PLabel("Description"), self.inp            , self.inp        , self.inp         ], 
-            [None                 , None                , self.btn        , self.btn         ]
+            [PLabel("Description"), self.inp            , self.inp        , self.inp              ], 
+            [None                 , None                , self.btn        , self.btn              ]
         ])
         self.addChild(self.grd)
 
