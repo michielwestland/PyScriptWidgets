@@ -5,6 +5,8 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput
 
+#TODO Add a resize listener to the browser window. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
+
 #TODO Add form widget that wraps labels/inputs with div for error state and shows error messages: https://semantic-ui.com/collections/form.html
 
 # Private global reference to the root widget
@@ -29,7 +31,9 @@ def _serializeWidgetsToBase64(mainWidget):
     mainWidget.backupState()
     # See: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
     return base64.b64encode(pickle.dumps(mainWidget)).decode(_UTF_8)
-    
+
+#TODO Add a hash-signature to the stored data, and verify on load. Encrypt/decrypt the stored binary data. 
+
 def _deserializeWidgetsFromBase64(stateData):
     mainWidget = pickle.loads(base64.b64decode(stateData.encode(_UTF_8)))
     mainWidget.restoreState()
@@ -259,6 +263,7 @@ class PPanel(PCompoundWidget):
     def _renderVertical(self):
         # See: https://flexbox.malven.co
         self._elem.style.display = "flex"
+        self._elem.style.flexWrap = "wrap"
         self._elem.style.flexDirection = "column" if self._vertical else "row"
 
     def isVertical(self):
