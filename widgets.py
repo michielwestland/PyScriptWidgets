@@ -299,6 +299,7 @@ class PGrid(PCompoundWidget):
     def _renderDisplay(self):
         # See: https://grid.malven.co
         self._elem.style.display = "grid"
+        self._elem.style.alignItems = "baseline"
 
     # Property: Columns
     def _renderColumns(self):

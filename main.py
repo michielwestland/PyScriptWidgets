@@ -10,9 +10,9 @@ class Main(PPanel):
         self.inp = PTextInput("").setPlaceholder("press the button...")
         self.btn = PButton("Press me!").setColor("blue").onClick(self.btnClick)
 
-        self.grd = PGrid().setMargin(10).setGap(5)
-        self.grd.setRows(["30px", "30px", "60px"])
-        self.grd.setColumns(["100px", "150px", "100px", "150px"])
+        self.grd = PGrid().setMargin(6).setGap(6)
+        self.grd.setRows(["36px", "36px", "72px"])
+        self.grd.setColumns(["100px", "200px", "100px", "200px"])
         self.grd.setAreas([
             [PLabel("Code")       , PTextInput("<code>"), PLabel("Number"), PTextInput("<number>")], 
             [PLabel("Description"), self.inp            , self.inp        , self.inp              ], 
