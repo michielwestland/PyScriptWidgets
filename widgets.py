@@ -9,6 +9,16 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Add form widget that wraps labels/inputs with div for error state and shows error messages: https://semantic-ui.com/collections/form.html
 
+#TODO Label met setFor en getFor mbv de find functie op id 
+
+#TODO TextInput comp met onchange handler, regexp masker, required en readonly field
+
+#TODO Onresize eventhandler op main component, via het js window resize event. 
+
+#TODO In index.html de body margin naar 0px.
+
+#TODO Op de panel en grid nog een setBorder van ?px.
+
 # Private global reference to the root widget
 _mainWidget = None
 
