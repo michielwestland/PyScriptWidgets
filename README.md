@@ -45,6 +45,15 @@ python -m http.server 8000 --bind localhost
 http://localhost:8000/index.html
 ```
 
+Press [F1] or [Ctrl+Shift+P] and type:
+```
+>Live Server: Open With Live Server
+```
+or:
+```
+>Live Preview: Start server
+```
+
 Live Server:
 ```
 [Go Live]

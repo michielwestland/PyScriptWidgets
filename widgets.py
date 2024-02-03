@@ -1,6 +1,8 @@
 import base64
 import pickle
-from js import console, document, sessionStorage, window # type: ignore
+from js import console, sessionStorage # type: ignore
+# Prefer pyscript import over more basic js import for the document and window objects
+from pyscript import document, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
 #TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput
