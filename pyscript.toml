@@ -5,8 +5,8 @@ packages = [
     "pyparsing",
 ]
 
-[[fetch]]
-files = [
-    "widgets.py",
-    "todo.py",
-]
+[files]
+"/widgets.py" = "./widgets.py"
+"/todo.py" = "./todo.py"
+
+# See: https://pyscript.github.io/docs/2024.1.3/user-guide/configuration/#files

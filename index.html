@@ -4,6 +4,7 @@
     <title>PyScriptWidgets</title>
 
     <script>
+        var savedDocumentTitle = document.title;
         var startTimeMillis = Date.now();
     </script>
 
@@ -35,7 +36,7 @@
 </head>
 <body>
     <div id="root"></div>
-   
+
     <script type="py" src="./main.py" config="./pyscript.toml" async></script>
 
     <script type="py">
@@ -43,7 +44,13 @@
         import js
         from pyscript import document
         delta = (js.Date.now() - js.startTimeMillis) / 1000
-        document.title = document.title + f" (load {delta:.1f}s)"
+        document.title = js.savedDocumentTitle + f" (load {delta:.1f}s)"
+    </script>
+
+    <script>
+        setTimeout(function() {
+            document.title = savedDocumentTitle;
+        }, 10 * 1000);
     </script>
 </body>
 </html>

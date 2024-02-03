@@ -7,17 +7,13 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput
 
-#TODO Add a resize listener to the browser window. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
+#TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
 #TODO Add form widget that wraps labels/inputs with div for error state and shows error messages: https://semantic-ui.com/collections/form.html
 
 #TODO Label met setFor en getFor mbv de find functie op id 
 
 #TODO TextInput comp met onchange handler, regexp masker, required en readonly field
-
-#TODO Onresize eventhandler op main component, via het js window resize event. 
-
-#TODO In index.html de body margin naar 0px.
 
 #TODO Op de panel en grid nog een setBorder van ?px.
 
