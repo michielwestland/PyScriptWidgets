@@ -33,7 +33,7 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 ## Install packages
 Only use pure Python packages, with file names ending in ...-py3-none-any.whl
 ```
-pip install pyparsing
+pip install <name>
 pip freeze > requirements.txt
 pip install -r requirements.txt
 ```

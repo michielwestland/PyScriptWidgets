@@ -1,5 +1,5 @@
 from datetime import datetime
-from widgets import PPanel, PLabel, PTextInput, PButton, findEventTarget
+from widgets import PPanel, PLabel, PTextInput, PButton
 
 class TodoForm(PPanel):
     def __init__(self):
