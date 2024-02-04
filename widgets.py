@@ -13,9 +13,11 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Label met setFor en getFor mbv de find functie op id 
 
-#TODO TextInput comp met onchange handler, regexp masker, required en readonly field
+#TODO TextInput comp met onchange handler, regexp masker, required en readonly field. Ook een request focus method.
 
-#TODO Op de panel en grid nog een setBorder van ?px.
+#TODO Op widget base class nog een setVisible/isVisible property
+
+#TODO Op de panel en grid nog een setBorder met border color en width in pixels].
 
 # Private global reference to the root widget
 _mainWidget = None
@@ -453,6 +455,8 @@ class PButton(PWidget):
             self._renderClick()
         return self
 
+#TODO Extract generic functionality to commmon input base class PInputWidget
+    
 class PTextInput(PWidget): 
 
     def __init__(self, value):
