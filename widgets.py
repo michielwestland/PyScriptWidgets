@@ -75,7 +75,7 @@ def bindToDom(MainWidgetClass, rootElementId):
     else:
         _mainWidget = _deserializeWidgetsFromBase64(state)
         console.log("Application state restored from browser session storage")
-    document.getElementById(rootElementId).appendChild(_mainWidget._elem)
+    document.getElementById(rootElementId).replaceChildren(_mainWidget._elem)
     # See: https://jeff.glass/post/pyscript-why-create-proxy/
     add_event_listener(window, "beforeunload", _window_beforeunload)
     _mainWidget.afterPageLoad()
@@ -455,7 +455,7 @@ class PButton(PWidget):
             self._renderClick()
         return self
 
-#TODO Extract generic functionality to commmon input base class PInputWidget
+#TODO Extract generic functionality to common input base class PInputWidget
     
 class PTextInput(PWidget): 
 
