@@ -3,6 +3,9 @@ from js import fetch, JSON # type: ignore
 from widgets import PPanel, PGrid, PTextInput, PButton, PLabel, bindToDom
 from todo import TodoPanel
 
+# Set the base url when deploying to: https://michielwestland.github.io/PyScriptWidgets
+BASE_URL = "."
+
 class Main(PPanel):
 
     def __init__(self):
@@ -25,7 +28,7 @@ class Main(PPanel):
 
     async def btnClick(self, event): 
         self.btn.setColor("red")
-        response = await fetch("https://michielwestland.github.io/PyScriptWidgets/data.json", {"method": "GET"})
+        response = await fetch("./data.json", {"method": "GET"})
         data = await response.json()
         self.inp.setValue("Now is: " + str(datetime.now()) + " " + JSON.stringify(data))
 
