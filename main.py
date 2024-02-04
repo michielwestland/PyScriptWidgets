@@ -25,7 +25,7 @@ class Main(PPanel):
 
     async def btnClick(self, event): 
         self.btn.setColor("red")
-        response = await fetch("/PyScriptWidgets/data.json", {"method": "GET"})
+        response = await fetch("https://michielwestland.github.io/PyScriptWidgets/data.json", {"method": "GET"})
         data = await response.json()
         self.inp.setValue("Now is: " + str(datetime.now()) + " " + JSON.stringify(data))
 
