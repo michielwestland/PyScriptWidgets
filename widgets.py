@@ -19,6 +19,8 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Op de panel en grid nog een setBorder met border color en width in pixels].
 
+#TODO Make a progressive web application (PWA)
+
 # Private global reference to the root widget
 _mainWidget = None
 
