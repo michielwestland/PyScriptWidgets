@@ -27,6 +27,10 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Add a screenprint to the README file.
 
+#TODO Translate all dutch language to english.
+
+#TODO Comment all the classes ans methods
+
 # Private global reference to the root widget
 _mainWidget = None
 
