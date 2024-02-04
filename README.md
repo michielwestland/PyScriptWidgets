@@ -1,6 +1,8 @@
 # PyScriptWidgets
 Client side GUI class (widget) library for building web applications with PyScript. 
 
+See demo website: https://michielwestland.github.io/PyScriptWidgets
+![Demo screenshot](demo-screenshot.png?raw=true "Demo screenshot")
 
 ## Thirdparty software
 Development:
@@ -16,6 +18,9 @@ Runtime:
 - Semantic UI: https://semantic-ui.com (MIT license)
 - jQuery: https://jquery.com (MIT license)
 - Font Awesome Free [brands, solid]: https://fontawesome.com/license/free (Font Awesome Free license)
+
+Logo:
+![Logo](logo.png?raw=true "Logo")
 
 ## Virtual environment
 ```
