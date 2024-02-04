@@ -21,6 +21,12 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Make a progressive web application (PWA)
 
+#TODO Add demo website www.michielwestland.nl
+
+#TODO Improve logo.png and display in README.md file
+
+#TODO Add a screenprint to the README file.
+
 # Private global reference to the root widget
 _mainWidget = None
 
