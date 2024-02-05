@@ -34,7 +34,7 @@ class Main(PPanel):
 
     def afterPageLoad(self):
         super().afterPageLoad()
-        # Hier kan je code uitproberen na page refresh i.c.m. Live Server/Live Preview
+        # Here, try out code after a page refresh with Live Server/Live Preview
         self.btn.setColor("green")
 
 if __name__ == "__main__":

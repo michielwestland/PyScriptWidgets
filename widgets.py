@@ -5,35 +5,27 @@ from js import console, sessionStorage # type: ignore
 from pyscript import document, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
-#TODO Gebruik semantic ui icons i.p.v. font awesome free. 
+#TODO Use Semantic UI icons instead of Fontawesome Free. 
 
-#TODO Maak een svg versie van het logo. 
+#TODO Create a SVG version of the logo. 
 
 #TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput. See: https://semantic-ui.com/kitchen-sink.html
 
 #TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
-#TODO Add form widget that wraps labels/inputs with div for error state and shows error messages: https://semantic-ui.com/collections/form.html
+#TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
 
-#TODO Label met setFor en getFor mbv de find functie op id 
+#TODO Label with setFor and getFor property using the find by id function. 
 
-#TODO TextInput comp met onchange handler, regexp masker, required en readonly field. Ook een request focus method.
+#TODO TextInput component with onchange handler, regexp mask, required and readonly field. Also a request focus method.
 
-#TODO Op widget base class nog een setVisible/isVisible property
+#TODO Add setVisible/isVisible property to the widget base class.
 
-#TODO Op de panel en grid nog een setBorder met border color en width in pixels].
+#TODO Add a set/getBorder property to panel and grid with color and width in pixels.
 
-#TODO Make a progressive web application (PWA)
+#TODO Make a progressive web application (PWA).
 
-#TODO Add demo website www.michielwestland.nl
-
-#TODO Improve logo.png and display in README.md file
-
-#TODO Add a screenprint to the README file.
-
-#TODO Translate all dutch language to english.
-
-#TODO Comment all the classes ans methods
+#TODO Comment all the classes and methods
 
 # Private global reference to the root widget
 _mainWidget = None
