@@ -21,7 +21,8 @@ class TodoItem(PPanel):
         super().__init__(False)
         self.setGap(5)
         self.lbl = PLabel(todoTxt)
-        self.deleteBtn = PButton("Delete").setIcon("fa-solid fa-trash-can").onClick(self.deleteBtnClick)
+        # See: https://semantic-ui.com/elements/icon.html
+        self.deleteBtn = PButton("Delete").setIcon("trash alternate icon").onClick(self.deleteBtnClick)
         self.addChildren([self.deleteBtn, self.lbl])
 
     def deleteBtnClick(self, event):

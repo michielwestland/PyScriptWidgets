@@ -17,7 +17,6 @@ Runtime:
 - Pyodide: https://pyodide.org/en/stable (MPL-2.0 license)
 - Semantic UI: https://semantic-ui.com (MIT license)
 - jQuery: https://jquery.com (MIT license)
-- Font Awesome Free [brands, solid]: https://fontawesome.com/license/free (Font Awesome Free license)
 
 Logo:
 ![Logo](logo.png?raw=true "Logo")

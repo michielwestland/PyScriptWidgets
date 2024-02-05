@@ -5,8 +5,6 @@ from js import console, sessionStorage # type: ignore
 from pyscript import document, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
-#TODO Use Semantic UI icons instead of Fontawesome Free. 
-
 #TODO Create a SVG version of the logo. 
 
 #TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput. See: https://semantic-ui.com/kitchen-sink.html
