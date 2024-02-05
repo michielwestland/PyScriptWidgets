@@ -5,8 +5,6 @@ from js import console, sessionStorage # type: ignore
 from pyscript import document, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
-#TODO Gebruik semantic ui spinner in index.html.
-
 #TODO Gebruik semantic ui icons i.p.v. font awesome free. 
 
 #TODO Maak een svg versie van het logo. 
