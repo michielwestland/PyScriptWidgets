@@ -22,7 +22,7 @@ class TodoItem(PPanel):
         self.setGap(5)
         self.lbl = PLabel(todoTxt)
         # See: https://semantic-ui.com/elements/icon.html
-        self.deleteBtn = PButton("Delete").setIcon("trash alternate icon").onClick(self.deleteBtnClick)
+        self.deleteBtn = PButton("Delete").setIcon("trash alternate").onClick(self.deleteBtnClick)
         self.addChildren([self.deleteBtn, self.lbl])
 
     def deleteBtnClick(self, event):

@@ -424,6 +424,7 @@ class PButton(PWidget):
             e.id = self._id + _ID_SUPPLEMENT + "i"
             for c in self._icon.split():
                 e.classList.add(c)
+            e.classList.add("icon")
             self._elem.appendChild(e)
         s = " " if len(self._icon) > 0 and len(self._text) > 0 else ""
         if len(s + self._text) > 0:
