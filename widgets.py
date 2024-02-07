@@ -7,7 +7,7 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Create a SVG version of the logo. 
 
-#TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput. See: https://semantic-ui.com/kitchen-sink.html
+#TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput, PModal. See: https://semantic-ui.com/kitchen-sink.html
 
 #TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
