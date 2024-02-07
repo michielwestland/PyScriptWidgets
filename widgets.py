@@ -51,6 +51,7 @@ def _serializeWidgetsToBase64(mainWidget):
 #TODO Add a hash-signature to the stored data, and verify on load. Encrypt/decrypt the stored binary data. 
 
 def _deserializeWidgetsFromBase64(stateData):
+    #TODO Compress and later uncompress the binary data.
     mainWidget = pickle.loads(base64.b64decode(stateData.encode(_UTF_8)))
     mainWidget.restoreState()
     return mainWidget
@@ -80,6 +81,7 @@ def bindToDom(MainWidgetClass, rootElementId):
         _mainWidget = MainWidgetClass()
     else:
         _mainWidget = _deserializeWidgetsFromBase64(state)
+        sessionStorage.removeItem(_STATE_KEY)
         console.log("Application state restored from browser session storage")
     document.getElementById(rootElementId).replaceChildren(_mainWidget._elem)
     # See: https://jeff.glass/post/pyscript-why-create-proxy/

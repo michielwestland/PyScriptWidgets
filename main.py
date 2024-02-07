@@ -14,6 +14,7 @@ class Main(PPanel):
         self.btn = PButton("Press me!").setColor("blue").onClick(self.btnClick)
 
         self.grd = PGrid().setMargin(6).setGap(6)
+        #TODO Can you use just integers, besides strings, and translate integer 999 to 999px internally?
         self.grd.setRows(["36px", "36px", "72px"])
         self.grd.setColumns(["100px", "200px", "100px", "200px"])
         self.grd.setAreas([
