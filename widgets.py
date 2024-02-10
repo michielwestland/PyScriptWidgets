@@ -547,41 +547,41 @@ class PDateInput(PInputWidget):
     pass
 
 class PCheckBox(PInputWidget):
-    #TODO Implement checkbox widget 
+    #TODO Implement checkbox widget, see: https://semantic-ui.com/modules/checkbox.html
     pass
 
 class PRadioGroup(PCompoundWidget):
-    #TODO Implement radiogroup widget 
+    #TODO Implement radiogroup widget, see: https://semantic-ui.com/modules/checkbox.html#radio 
     pass
 
 class PComboBox(PCompoundWidget):
-    #TODO Implement combobox widget 
+    #TODO Implement combobox widget, see: https://semantic-ui.com/modules/dropdown.html
     pass
 
 class PMenuitem(PWidget):
-    #TODO Implement menu item widget 
+    #TODO Implement menu item widget, see: https://semantic-ui.com/collections/menu.html
     pass
 
 class PMenu(PCompoundWidget):
-    #TODO Implement menu widget 
+    #TODO Implement menu widget, see: https://semantic-ui.com/collections/menu.html#menu
     pass
 
 class PMenuBar(PCompoundWidget):
-    #TODO Implement menu bar widget 
+    #TODO Implement menu bar widget, see: https://semantic-ui.com/collections/menu.html#sub-menu 
     pass
 
 class PTable(PCompoundWidget):
-    #TODO Implement table widget 
+    #TODO Implement table widget, see: https://semantic-ui.com/collections/table.html 
     pass
 
 class PTabPane(PCompoundWidget):
-    #TODO Implement tab pane widget 
+    #TODO Implement tab pane widget, see: https://semantic-ui.com/modules/tab.html 
     pass
 
-class PTextArea(PInputWidget):
+class PTextArea(PWidget):
     #TODO Implement text area widget 
     pass
 
 class PModal(PCompoundWidget):
-    #TODO Implement modal widget 
+    #TODO Implement modal widget, see: https://semantic-ui.com/modules/modal.html
     pass
