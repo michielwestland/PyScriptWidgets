@@ -327,6 +327,13 @@ class PGrid(PCompoundWidget):
         return self._columns
     
     def setColumns(self, columns):
+        for index, value in enumerate(columns):
+            try:
+                pixels = int(value)
+                columns[index] = str(pixels) + "px"
+            except ValueError:
+                pass # It was not an integer value
+        
         if self._columns != columns:
             self._columns = columns
             self._renderColumns()
@@ -340,6 +347,13 @@ class PGrid(PCompoundWidget):
         return self._rows
     
     def setRows(self, rows):
+        for index, value in enumerate(rows):
+            try:
+                pixels = int(value)
+                rows[index] = str(pixels) + "px"
+            except ValueError:
+                pass # It was not an integer value
+        
         if self._rows != rows:
             self._rows = rows
             self._renderRows()
