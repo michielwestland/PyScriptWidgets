@@ -7,8 +7,6 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Create a SVG version of the logo. 
 
-#TODO More widgets: PCheckBox, PComboBox, PMenu, PMenuitem, PMenuBar, PRadioGroup, PTable, PTabPane, PTextArea, PNumberInput, PDateInput, PModal. See: https://semantic-ui.com/kitchen-sink.html
-
 #TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
 #TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
@@ -415,7 +413,8 @@ class PLabel(PWidget):
         return self
 
 class PButton(PWidget): 
-
+    
+    #See: https://semantic-ui.com/kitchen-sink.html
     def __init__(self, text):
         super().__init__("button")
         self._elem.classList.add("button")
@@ -478,9 +477,11 @@ class PButton(PWidget):
             self._renderClick()
         return self
 
-#TODO Extract generic functionality to common input base class PInputWidget
+class PInputWidget(PWidget):
+    #TODO Extract generic input functionality to this common input base 
+    pass
     
-class PTextInput(PWidget): 
+class PTextInput(PInputWidget): 
 
     def __init__(self, value):
         super().__init__("div")
@@ -536,3 +537,51 @@ class PTextInput(PWidget):
             self._placeholder = placeholder
             self._renderPlaceholder()
         return self
+
+class PNumberInput(PInputWidget):
+    #TODO Implement number widget 
+    pass
+
+class PDateInput(PInputWidget):
+    #TODO Implement date widget 
+    pass
+
+class PCheckBox(PInputWidget):
+    #TODO Implement checkbox widget 
+    pass
+
+class PRadioGroup(PCompoundWidget):
+    #TODO Implement radiogroup widget 
+    pass
+
+class PComboBox(PCompoundWidget):
+    #TODO Implement combobox widget 
+    pass
+
+class PMenuitem(PWidget):
+    #TODO Implement menu item widget 
+    pass
+
+class PMenu(PCompoundWidget):
+    #TODO Implement menu widget 
+    pass
+
+class PMenuBar(PCompoundWidget):
+    #TODO Implement menu bar widget 
+    pass
+
+class PTable(PCompoundWidget):
+    #TODO Implement table widget 
+    pass
+
+class PTabPane(PCompoundWidget):
+    #TODO Implement tab pane widget 
+    pass
+
+class PTextArea(PInputWidget):
+    #TODO Implement text area widget 
+    pass
+
+class PModal(PCompoundWidget):
+    #TODO Implement modal widget 
+    pass
