@@ -393,11 +393,14 @@ class PLabel(PWidget):
 
         self._text = text
         self._renderText()
+        self._for = None
+        self._renderFor()
 
     def restoreState(self):
         super().restoreState()
 
         self._renderText()
+        self._renderFor()
 
     # Property: Text
     def _renderText(self):
@@ -410,6 +413,19 @@ class PLabel(PWidget):
         if self._text != text:
             self._text = text
             self._renderText()
+        return self
+
+    # Property: For
+    def _renderFor(self):
+        self._elem.htmlFor = self._for._id if self._for else None
+
+    def getFor(self):
+        return self._for
+
+    def setFor(self, forWidget):
+        if self._for != forWidget:
+            self._for = forWidget
+            self._renderFor()
         return self
 
 class PButton(PWidget): 
