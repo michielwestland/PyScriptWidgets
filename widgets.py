@@ -5,8 +5,6 @@ from js import console, sessionStorage # type: ignore
 from pyscript import document, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
-#TODO BUSY Documentation comments """...""" for all classes and methods
-
 #TODO Create a SVG version of the logo. 
 
 #TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
@@ -45,11 +43,9 @@ def _serializeWidgetsToBase64(mainWidget):
     # See: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
     return base64.b64encode(pickle.dumps(mainWidget)).decode(_UTF_8)
 
-#TODO Add a hash-signature to the stored data, and verify on load. Encrypt/decrypt the stored binary data. 
-
 def _deserializeWidgetsFromBase64(stateData):
     """Decode binary data from base64 and unpickle the widget tree"""
-    #TODO Compress and later uncompress the binary data.
+    #TODO Add a hash-signature to the stored data, and verify on load. Encrypt/decrypt and compress/uncompress the stored binary data. 
     mainWidget = pickle.loads(base64.b64decode(stateData.encode(_UTF_8)))
     mainWidget.restoreState()
     return mainWidget
@@ -116,7 +112,7 @@ class PWidget:
         self._insertIdGridArea()
         # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
         self._elem.classList.add("ui")
-
+        # Properties
         self._color = "inherit"
         self._renderColor()
 
@@ -129,40 +125,49 @@ class PWidget:
         return self._parent
 
     def findId(self, id):
+        """Find a reference to the widget with this id"""
         if self._id == id: 
             return self
         return None
 
     def backupState(self):
+        """Override this method to backup runtime DOM state to widget instance fields before pickling to session storage"""
         self._classlist = self._elem.getAttribute("class")
 
     def _deleteState(self, state):
-        if "_parent" in state.keys(): # Parent could be None for the main widget
+        """Override this method to delete state keys that cannot be pickled"""
+        # Parent could be None for the main widget, parent will be set when the widget is added as child to another widget
+        if "_parent" in state.keys(): 
             del state["_parent"]
         # TypeError: cannot pickle 'pyodide.ffi.JsProxy' object
         # See: https://stackoverflow.com/questions/2345944/exclude-objects-field-from-pickling-in-python
         del state["_elem"]
 
     def __getstate__(self):
+        """Magic method to get the object state when pickling"""
         state = self.__dict__.copy()
         self._deleteState(state)
         return state
 
     def _insertState(self):
+        """Override this method to insert state, for keys that could not be pickled"""
         self._elem = document.createElement(self._tag)
         self._insertIdGridArea()
 
     def __setstate__(self, state):
+        """Magic method to set the object state when unpickling"""
         self.__dict__.update(state)
         self._insertState()
 
     def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         self._ensureUniqueIdBeyond(self._id)
         self._elem.setAttribute("class", self._classlist)
-        
+        # Properties
         self._renderColor()
 
     def afterPageLoad(self):
+        """Override this method tot execute code after the page DOM has loaded"""
         pass
 
     # Property: Color
@@ -179,18 +184,21 @@ class PWidget:
         return self
 
 class PCompoundWidget(PWidget):
-    
+    """Abstract compound widget base class, that can have children"""
+
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
         super().__init__(tag)
+        # Children
         self._children = []
-
+        # Properties
         self._margin = 0
         self._renderMargin()
         self._gap = 0
         self._renderGap()
 
     def findId(self, id):
+        """Find a reference to the widget with this id, also search in children"""
         if self._id == id: 
             return self
         for c in self._children:
@@ -199,6 +207,7 @@ class PCompoundWidget(PWidget):
                 return f
         return None
 
+    # Children
     def getChildren(self):
         return self._children
 
@@ -227,17 +236,19 @@ class PCompoundWidget(PWidget):
         return self
 
     def backupState(self):
+        """Override this method to backup runtime DOM state to widget instance fields before pickling to session storage"""
         super().backupState()
         for c in self._children:
             c.backupState()
     
     def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
         for c in self._children:
             c.restoreState()
             c._parent = self
             self._elem.appendChild(c._elem)
-
+        # Properties
         self._renderGap()
         self._renderMargin()
     
@@ -273,17 +284,19 @@ class PCompoundWidget(PWidget):
         return self
 
 class PPanel(PCompoundWidget): 
+    """Panel widget class with flex layout"""
     
     def __init__(self, vertical):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
-        
+        # Properties
         self._vertical = vertical
         self._renderVertical()
 
     def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
-
+        # Properties
         self._renderVertical()
 
     # Property: Vertical
@@ -303,12 +316,13 @@ class PPanel(PCompoundWidget):
         return self
 
 class PGrid(PCompoundWidget): 
+    """Grid widget class with grid layout obviously"""
     
     def __init__(self):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._renderDisplay()
-        
+        # Properties
         self._columns = []
         self._renderColumns()
         self._rows = []
@@ -317,9 +331,10 @@ class PGrid(PCompoundWidget):
         self._renderAreas()
 
     def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
         self._renderDisplay()
-
+        # Properties
         self._renderColumns()
         self._renderRows()
         self._renderAreas()
@@ -399,19 +414,21 @@ class PGrid(PCompoundWidget):
         self._renderAreas()
 
 class PLabel(PWidget): 
+    """Label widget class"""
     
     def __init__(self, text):
         """Constructor, define tag and class attributes"""
         super().__init__("label")
-
+        # Properties
         self._text = text
         self._renderText()
         self._for = None
         self._renderFor()
 
     def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
-
+        # Properties
         self._renderText()
         self._renderFor()
 
@@ -442,13 +459,14 @@ class PLabel(PWidget):
         return self
 
 class PButton(PWidget): 
+    """Button widget class"""
     
     #See: https://semantic-ui.com/kitchen-sink.html
     def __init__(self, text):
         """Constructor, define tag and class attributes"""
         super().__init__("button")
         self._elem.classList.add("button")
-
+        # Properties
         self._text = text
         self._icon = ""
         self._renderTextIcon()
@@ -456,8 +474,9 @@ class PButton(PWidget):
         self._renderClick()
 
     def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
-
+        # Properties
         self._renderTextIcon()
         self._renderClick()
 
@@ -494,11 +513,11 @@ class PButton(PWidget):
             self._renderTextIcon()
         return self
 
+    # Property: Click
     def _renderClick(self):
         if self._click != None:
             add_event_listener(self._elem, "click", self._click)
 
-    # Property: Click
     def onClick(self, click):
         if self._click != click:
             if self._click != None:
@@ -508,27 +527,31 @@ class PButton(PWidget):
         return self
 
 class PInputWidget(PWidget):
+    """Abstract input widget class with value"""
     #TODO Extract generic input functionality to this common input base 
     pass
     
 class PTextInput(PInputWidget): 
+    """Text input widget class"""
 
     def __init__(self, value):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._elem.classList.add("input")
         self._insertInput()
-        
+        # Value
         self.setValue(value)
-        
+        # Properties
         self._placeholder = ""
         self._renderPlaceholder()
 
     def backupState(self):
+        """Override this method to backup runtime DOM state to widget instance fields before pickling to session storage"""
         super().backupState()
         self._value = self._elem_input.value
 
     def _deleteState(self, state):
+        """Override this method to delete state keys that cannot be pickled"""
         super()._deleteState(state)
         del state["_elem_input"]
 
@@ -539,15 +562,19 @@ class PTextInput(PInputWidget):
         self._elem.appendChild(self._elem_input)
 
     def _insertState(self):
+        """Override this method to insert state, for keys that could not be pickled"""
         super()._insertState()
         self._insertInput()
     
     def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
+        # Value
         self.setValue(self._value)
-
+        # Properties
         self._renderPlaceholder()
 
+    # Value
     def getValue(self):
         return self._elem_input.value
     
@@ -570,49 +597,49 @@ class PTextInput(PInputWidget):
         return self
 
 class PNumberInput(PInputWidget):
-    #TODO Implement number widget 
+    #TODO Implement number widget class
     pass
 
 class PDateInput(PInputWidget):
-    #TODO Implement date widget 
+    #TODO Implement date widget class
     pass
 
 class PCheckBox(PInputWidget):
-    #TODO Implement checkbox widget, see: https://semantic-ui.com/modules/checkbox.html
+    #TODO Implement checkbox widget class, see: https://semantic-ui.com/modules/checkbox.html
     pass
 
 class PRadioGroup(PCompoundWidget):
-    #TODO Implement radiogroup widget, see: https://semantic-ui.com/modules/checkbox.html#radio 
+    #TODO Implement radiogroup widget class, see: https://semantic-ui.com/modules/checkbox.html#radio 
     pass
 
 class PComboBox(PCompoundWidget):
-    #TODO Implement combobox widget, see: https://semantic-ui.com/modules/dropdown.html
+    #TODO Implement combobox widget class, see: https://semantic-ui.com/modules/dropdown.html
     pass
 
 class PMenuitem(PWidget):
-    #TODO Implement menu item widget, see: https://semantic-ui.com/collections/menu.html
+    #TODO Implement menu item widget class, see: https://semantic-ui.com/collections/menu.html
     pass
 
 class PMenu(PCompoundWidget):
-    #TODO Implement menu widget, see: https://semantic-ui.com/collections/menu.html#menu
+    #TODO Implement menu widget class, see: https://semantic-ui.com/collections/menu.html#menu
     pass
 
 class PMenuBar(PCompoundWidget):
-    #TODO Implement menu bar widget, see: https://semantic-ui.com/collections/menu.html#sub-menu 
+    #TODO Implement menu bar widget class, see: https://semantic-ui.com/collections/menu.html#sub-menu 
     pass
 
 class PTable(PCompoundWidget):
-    #TODO Implement table widget, see: https://semantic-ui.com/collections/table.html 
+    #TODO Implement table widget class, see: https://semantic-ui.com/collections/table.html 
     pass
 
 class PTabPane(PCompoundWidget):
-    #TODO Implement tab pane widget, see: https://semantic-ui.com/modules/tab.html 
+    #TODO Implement tab pane widget class, see: https://semantic-ui.com/modules/tab.html 
     pass
 
 class PTextArea(PWidget):
-    #TODO Implement text area widget 
+    #TODO Implement text area widget class 
     pass
 
 class PModal(PCompoundWidget):
-    #TODO Implement modal widget, see: https://semantic-ui.com/modules/modal.html
+    #TODO Implement modal widget class, see: https://semantic-ui.com/modules/modal.html
     pass
