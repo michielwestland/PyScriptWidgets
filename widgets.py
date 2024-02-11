@@ -5,13 +5,13 @@ from js import console, sessionStorage # type: ignore
 from pyscript import document, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
+#TODO BUSY Documentation comments """...""" for all classes and methods
+
 #TODO Create a SVG version of the logo. 
 
 #TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
 #TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
-
-#TODO Label with setFor and getFor property using the find by id function. 
 
 #TODO TextInput component with onchange handler, regexp mask, required and readonly field. Also a request focus method.
 
@@ -20,8 +20,6 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 #TODO Add a set/getBorder property to panel and grid with color and width in pixels.
 
 #TODO Make a progressive web application (PWA).
-
-#TODO Comment all the classes and methods
 
 # Private global reference to the root widget
 _mainWidget = None
@@ -42,6 +40,7 @@ def debugObject(obj):
 
 # Global subroutines for (de)serializing the widget tree, when the page (un)loads
 def _serializeWidgetsToBase64(mainWidget):
+    """Pickle the widget tree and encode binary data as base64"""
     mainWidget.backupState()
     # See: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
     return base64.b64encode(pickle.dumps(mainWidget)).decode(_UTF_8)
@@ -49,6 +48,7 @@ def _serializeWidgetsToBase64(mainWidget):
 #TODO Add a hash-signature to the stored data, and verify on load. Encrypt/decrypt the stored binary data. 
 
 def _deserializeWidgetsFromBase64(stateData):
+    """Decode binary data from base64 and unpickle the widget tree"""
     #TODO Compress and later uncompress the binary data.
     mainWidget = pickle.loads(base64.b64decode(stateData.encode(_UTF_8)))
     mainWidget.restoreState()
@@ -56,6 +56,7 @@ def _deserializeWidgetsFromBase64(stateData):
 
 # Global functions to get references to widgets in event handlers
 def findEventTarget(event):
+    """Find the target widget for this event in the widget tree"""
     id = event.target.id
     i = id.find(_ID_SUPPLEMENT)
     if i >= 0: # Remove id supplement
@@ -63,15 +64,18 @@ def findEventTarget(event):
     return _mainWidget.findId(id)
 
 def findMainWidget():
+    """Find the main widget, the root of the widget tree"""
     return _mainWidget
 
 # Store the widget state
 def _window_beforeunload(event):
+    """Save widget tree state in browser session storage, before unloading the page"""
     state = _serializeWidgetsToBase64(_mainWidget)
     sessionStorage.setItem(_STATE_KEY, state)
 
 # Create or load the widget state and bind to the browser DOM
 def bindToDom(MainWidgetClass, rootElementId): 
+    """Bind the main widget to the dom, or load the widget tree state from browser session storage if available"""
     # What is the impact of: https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
     global _mainWidget
     state = sessionStorage.getItem(_STATE_KEY)
@@ -87,19 +91,23 @@ def bindToDom(MainWidgetClass, rootElementId):
     _mainWidget.afterPageLoad()
 
 class PWidget: 
+    """Abstract widget base class"""
         
     _lastUniqueId = 0
 
     def _generateUniqueId(self):
+        """Generate a new unique widget id, a sequential number"""
         PWidget._lastUniqueId = PWidget._lastUniqueId + 1
         return _ID_PREFIX + str(PWidget._lastUniqueId)
 
     def _ensureUniqueIdBeyond(self, id):
+        """Ensure any new unique widget id, sequential number is beyond the given number"""
         i = int(id[len(_ID_PREFIX):])
         if PWidget._lastUniqueId < i:
             PWidget._lastUniqueId = i
 
     def __init__(self, tag):
+        """Constructor, define tag and class attributes"""
         self._tag = tag
         self._parent = None
         self._id = self._generateUniqueId()
@@ -117,6 +125,7 @@ class PWidget:
         self._elem.style.gridArea = self._id
 
     def getParent(self):
+        """Reference to the parent widget"""
         return self._parent
 
     def findId(self, id):
@@ -172,6 +181,7 @@ class PWidget:
 class PCompoundWidget(PWidget):
     
     def __init__(self, tag):
+        """Constructor, define tag and class attributes"""
         super().__init__(tag)
         self._children = []
 
@@ -265,6 +275,7 @@ class PCompoundWidget(PWidget):
 class PPanel(PCompoundWidget): 
     
     def __init__(self, vertical):
+        """Constructor, define tag and class attributes"""
         super().__init__("div")
         
         self._vertical = vertical
@@ -294,6 +305,7 @@ class PPanel(PCompoundWidget):
 class PGrid(PCompoundWidget): 
     
     def __init__(self):
+        """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._renderDisplay()
         
@@ -389,6 +401,7 @@ class PGrid(PCompoundWidget):
 class PLabel(PWidget): 
     
     def __init__(self, text):
+        """Constructor, define tag and class attributes"""
         super().__init__("label")
 
         self._text = text
@@ -432,6 +445,7 @@ class PButton(PWidget):
     
     #See: https://semantic-ui.com/kitchen-sink.html
     def __init__(self, text):
+        """Constructor, define tag and class attributes"""
         super().__init__("button")
         self._elem.classList.add("button")
 
@@ -500,6 +514,7 @@ class PInputWidget(PWidget):
 class PTextInput(PInputWidget): 
 
     def __init__(self, value):
+        """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._elem.classList.add("input")
         self._insertInput()
