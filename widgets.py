@@ -71,7 +71,7 @@ def bindToDom(MainWidgetClass, rootElementId):
     # What is the impact of: https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
     global _mainWidget
     state = sessionStorage.getItem(_STATE_KEY)
-    if state == None:
+    if state is None:
         _mainWidget = MainWidgetClass()
     else:
         _mainWidget = _deserializeWidgetsFromBase64(state)
@@ -214,7 +214,7 @@ class PCompoundWidget(PWidget):
             return self
         for c in self._children:
             f = c.findId(id)
-            if f != None:
+            if f is not None:
                 return f
         return None
 
@@ -409,7 +409,7 @@ class PGrid(PCompoundWidget):
             
             areaRow = ""
             for c in line:
-                if c == None:
+                if c is None:
                     areaRow += " ."
                 else:
                     if not (c in self.getChildren()):
@@ -464,7 +464,7 @@ class PLabel(PWidget):
         return self._for
 
     def setFor(self, forWidget):
-        if self._for != forWidget:
+        if id(self._for) != id(forWidget): # Object reference/id comparison
             self._for = forWidget
             self._renderFor()
         return self
@@ -526,12 +526,12 @@ class PButton(PWidget):
 
     # Property: Click
     def _renderClick(self):
-        if self._click != None:
+        if self._click is not None:
             add_event_listener(self._elem, "click", self._click)
 
     def onClick(self, click):
-        if self._click != click:
-            if self._click != None:
+        if id(self._click) != id(click): # Object reference/id comparison
+            if self._click is not None:
                 remove_event_listener(self._elem, "click", self._click)
             self._click = click
             self._renderClick()
