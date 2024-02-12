@@ -13,10 +13,6 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO TextInput component with onchange handler, regexp mask, required and readonly field. Also a request focus method.
 
-#TODO Add setVisible/isVisible property to the widget base class.
-
-#TODO Add a set/getBorder property to panel and grid with color and width in pixels.
-
 #TODO Make a progressive web application (PWA).
 
 # Private global reference to the root widget
@@ -113,6 +109,8 @@ class PWidget:
         # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
         self._elem.classList.add("ui")
         # Properties
+        self._visible = True
+        self._renderVisible()
         self._color = "inherit"
         self._renderColor()
 
@@ -169,6 +167,19 @@ class PWidget:
     def afterPageLoad(self):
         """Override this method tot execute code after the page DOM has loaded"""
         pass
+
+    # Property: Visible
+    def _renderVisible(self):
+        self._elem.style.visibility = "inherit" if self._visible else "hidden"
+
+    def isVisible(self):
+        return self._visible
+
+    def setVisible(self, visible):
+        if self._visible != visible:
+            self._visible = visible
+            self._renderVisible()
+        return self
 
     # Property: Color
     def _renderColor(self):

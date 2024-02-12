@@ -19,7 +19,7 @@ class Main(PPanel):
         self.grd.setAreas([
             [PLabel("Code")                        , PTextInput("<code>"), PLabel("Number"), PTextInput("<number>")], 
             [PLabel("Description").setFor(self.inp), self.inp            , self.inp        , self.inp              ], 
-            [None                                  , None                , self.btn        , self.btn              ],
+            [PLabel("Hidden").setVisible(False)    , None                , self.btn        , self.btn              ],
             #TODO The button height is less than the row height, maybe because of alignItems: baseline?
         ])
         self.addChild(self.grd)
