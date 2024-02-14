@@ -314,6 +314,7 @@ class PPanel(PCompoundWidget):
     def _renderVertical(self):
         # See: https://flexbox.malven.co
         self._elem.style.display = "flex"
+        self._elem.style.alignItems = "baseline"
         self._elem.style.flexWrap = "wrap"
         self._elem.style.flexDirection = "column" if self._vertical else "row"
 
@@ -458,7 +459,10 @@ class PLabel(PWidget):
 
     # Property: For
     def _renderFor(self):
-        self._elem.htmlFor = self._for._id if self._for else None
+        if self._for is not None:
+            self._elem.htmlFor = self._for._id
+        else:
+            self._elem.removeAttribute("for")
 
     def getFor(self):
         return self._for
