@@ -11,7 +11,7 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
 
-#TODO TextInput component with onchange handler, regexp mask, required and readonly field. Also a request focus method.
+#TODO _PRIO TextInput component with onchange handler, regexp mask, required and readonly field. Also a focus and scrollIntoView method.
 
 #TODO Make a progressive web application (PWA).
 
@@ -425,7 +425,12 @@ class PGrid(PCompoundWidget):
             self._areas = self._areas[1:]
         self._renderAreas()
 
-class PLabel(PWidget): 
+class PFocussableWidget(PWidget):
+    """Abstract focussable widget class"""
+    #TODO Extract generic focussable functionality to this common focussable base 
+    pass
+    
+class PLabel(PFocussableWidget): 
     """Label widget class"""
     
     def __init__(self, text):
@@ -473,7 +478,7 @@ class PLabel(PWidget):
             self._renderFor()
         return self
 
-class PButton(PWidget): 
+class PButton(PFocussableWidget): 
     """Button widget class"""
     
     #See: https://semantic-ui.com/kitchen-sink.html
@@ -541,7 +546,7 @@ class PButton(PWidget):
             self._renderClick()
         return self
 
-class PInputWidget(PWidget):
+class PInputWidget(PFocussableWidget):
     """Abstract input widget class with value"""
     #TODO Extract generic input functionality to this common input base 
     pass
@@ -651,7 +656,7 @@ class PTabPane(PCompoundWidget):
     #TODO Implement tab pane widget class, see: https://semantic-ui.com/modules/tab.html 
     pass
 
-class PTextArea(PWidget):
+class PTextArea(PFocussableWidget):
     #TODO Implement text area widget class 
     pass
 
