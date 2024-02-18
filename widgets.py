@@ -194,6 +194,7 @@ class PWidget:
 
 class PCompoundWidget(PWidget):
     """Abstract compound widget base class, that can have children"""
+    #TODO Add scrollbar options.
 
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
@@ -425,11 +426,41 @@ class PGrid(PCompoundWidget):
 
 class PFocussableWidget(PWidget):
     """Abstract focussable widget class"""
-    
+
+    def __init__(self, tag):
+        """Constructor, define tag and class attributes"""
+        super().__init__(tag)
+        # Properties
+        self._enabled = True
+        self._renderEnabled()
+
+    def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
+        super().restoreState()
+        # Properties
+        self._renderEnabled()
+
     def requestFocus(self):
+        """Request the input focus and scroll the widget into view"""
         self._elem.scrollIntoView()
         self._elem.focus()
 
+    # Property: Enabled
+    def _renderEnabled(self):
+        if self._enabled: 
+            self._elem_input.removeAttribute("disabled")
+        else:
+            self._elem_input.setAttribute("disabled", "")
+
+    def getEnabled(self):
+        return self._enabled
+
+    def setEnabled(self, enabled):
+        if self._enabled != enabled:
+            self._enabled = enabled
+            self._renderEnabled()
+        return self
+    
 class PLabel(PFocussableWidget): 
     """Label widget class"""
     
@@ -655,6 +686,7 @@ class PInputWidget(PFocussableWidget):
         return self
 
 class PTextInput(PInputWidget): 
+    #TODO Add subtype property of text input: text, password, email, tel, url
     """Text input widget class"""
 
     def __init__(self, value):
@@ -706,11 +738,11 @@ class PTextInput(PInputWidget):
         return self
 
 class PNumberInput(PInputWidget):
-    #TODO Implement number widget class
+    #TODO Implement number widget class; min, max, step and decimals properties
     pass
 
 class PDateInput(PInputWidget):
-    #TODO Implement date widget class
+    #TODO Implement date widget class; with date, time, datetime-local subtypes
     pass
 
 class PCheckBox(PInputWidget):
