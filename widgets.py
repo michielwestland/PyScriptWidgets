@@ -194,6 +194,7 @@ class PWidget:
 
 class PCompoundWidget(PWidget):
     """Abstract compound widget base class, that can have children"""
+    
     #TODO Add scrollbar options.
 
     def __init__(self, tag):
@@ -692,8 +693,9 @@ class PInputWidget(PFocussableWidget):
         return self
 
 class PTextInput(PInputWidget): 
-    #TODO Add subtype property of text input: text, password, email, tel, url
     """Text input widget class"""
+
+    #TODO Add subtype property: text, password, email, tel, url
 
     def __init__(self, value):
         """Constructor, define input type and class attributes"""
@@ -744,11 +746,11 @@ class PTextInput(PInputWidget):
         return self
 
 class PNumberInput(PInputWidget):
-    #TODO Implement number widget class; min, max, step and decimals properties
+    #TODO Implement number widget class; properties: min, max, step and decimals
     pass
 
 class PDateInput(PInputWidget):
-    #TODO Implement date widget class; with date, time, datetime-local subtypes
+    #TODO Implement date widget class; subtypes: date, time, datetime-local
     pass
 
 class PCheckBox(PInputWidget):
