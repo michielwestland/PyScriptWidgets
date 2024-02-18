@@ -1,5 +1,6 @@
 import base64
 import pickle
+import zlib
 from js import console, sessionStorage # type: ignore
 # Prefer pyscript import over more basic js import for the document and window objects
 from pyscript import document, window # type: ignore
@@ -35,12 +36,11 @@ def _serializeWidgetsToBase64(mainWidget):
     """Pickle the widget tree and encode binary data as base64"""
     mainWidget.backupState()
     # See: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
-    return base64.b64encode(pickle.dumps(mainWidget)).decode(_UTF_8)
+    return base64.b64encode(zlib.compress(pickle.dumps(mainWidget))).decode(_UTF_8)
 
 def _deserializeWidgetsFromBase64(stateData):
     """Decode binary data from base64 and unpickle the widget tree"""
-    #TODO Add a hash-signature to the stored data, and verify on load. Encrypt/decrypt and compress/uncompress the stored binary data. 
-    mainWidget = pickle.loads(base64.b64decode(stateData.encode(_UTF_8)))
+    mainWidget = pickle.loads(zlib.decompress(base64.b64decode(stateData.encode(_UTF_8))))
     mainWidget.restoreState()
     return mainWidget
 
