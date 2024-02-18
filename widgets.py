@@ -6,6 +6,11 @@ from js import console, sessionStorage # type: ignore
 from pyscript import document, window # type: ignore
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
 
+#TODO Add light/dark theme. 
+# See: https://semantic-ui.com/usage/theming.html
+# See: http://learnsemantic.com/themes/overview.html
+# See: https://github.com/Semantic-Org/Semantic-UI/blob/master/semantic.json.example
+
 #TODO Create a SVG version of the logo. 
 
 #TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
@@ -195,7 +200,9 @@ class PWidget:
 class PCompoundWidget(PWidget):
     """Abstract compound widget base class, that can have children"""
     
-    #TODO Add scrollbar options.
+    #TODO Add scrollbar options. 
+
+    #TODO Add properties: min and max, width and height
 
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
