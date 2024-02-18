@@ -448,9 +448,9 @@ class PFocussableWidget(PWidget):
     # Property: Enabled
     def _renderEnabled(self):
         if self._enabled: 
-            self._elem_input.removeAttribute("disabled")
+            self._elem.removeAttribute("disabled")
         else:
-            self._elem_input.setAttribute("disabled", "")
+            self._elem.setAttribute("disabled", "")
 
     def getEnabled(self):
         return self._enabled
@@ -630,6 +630,12 @@ class PInputWidget(PFocussableWidget):
     def requestFocus(self):
         self._elem_input.scrollIntoView()
         self._elem_input.focus()
+
+    def _renderEnabled(self):
+        if self._enabled: 
+            self._elem_input.removeAttribute("disabled")
+        else:
+            self._elem_input.setAttribute("disabled", "")
 
     # Value
     def getValue(self):
