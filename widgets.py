@@ -11,8 +11,6 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 
 #TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
 
-#TODO _PRIO TextInput component with onchange handler, regexp mask, required and readonly field. Also a focus and scrollIntoView method.
-
 #TODO Make a progressive web application (PWA).
 
 # Private global reference to the root widget
@@ -427,9 +425,14 @@ class PGrid(PCompoundWidget):
 
 class PFocussableWidget(PWidget):
     """Abstract focussable widget class"""
-    #TODO Extract generic focussable functionality to this common focussable base 
-    pass
     
+    def requestFocus(self):
+        #self._elem.scrollIntoView()
+        #self._elem.focus()
+        elem = document.getElementById(self._id)
+        elem.scrollIntoView()
+        elem.focus() #TODO _BUSY does not work, maybe add timeout delay: https://stackoverflow.com/questions/17500704/how-can-i-set-focus-on-an-element-in-an-html-form-using-javascript
+
 class PLabel(PFocussableWidget): 
     """Label widget class"""
     
@@ -464,10 +467,10 @@ class PLabel(PFocussableWidget):
 
     # Property: For
     def _renderFor(self):
-        if self._for is not None:
-            self._elem.htmlFor = self._for._id
-        else:
+        if self._for is None:
             self._elem.removeAttribute("for")
+        else:
+            self._elem.htmlFor = self._for._id
 
     def getFor(self):
         return self._for
@@ -547,23 +550,23 @@ class PButton(PFocussableWidget):
         return self
 
 class PInputWidget(PFocussableWidget):
-    """Abstract input widget class with value"""
-    #TODO Extract generic input functionality to this common input base 
-    pass
-    
-class PTextInput(PInputWidget): 
-    """Text input widget class"""
+    """Abstract input widget class with value and shared functionality"""
 
-    def __init__(self, value):
+    def __init__(self, type, value):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._elem.classList.add("input")
+        self._type = type
         self._insertInput()
         # Value
         self.setValue(value)
         # Properties
-        self._placeholder = ""
-        self._renderPlaceholder()
+        self._required = ""
+        self._renderRequired()
+        self._readonly = False
+        self._renderReadonly()
+        self._change = None
+        self._renderChange()
 
     def backupState(self):
         """Override this method to backup runtime DOM state to widget instance fields before pickling to session storage"""
@@ -578,7 +581,7 @@ class PTextInput(PInputWidget):
     def _insertInput(self):
         self._elem_input = document.createElement("input")
         self._elem_input.id = self._id + _ID_SUPPLEMENT + "input"
-        self._elem_input.setAttribute("type", "text")
+        self._elem_input.setAttribute("type", self._type)
         self._elem.appendChild(self._elem_input)
 
     def _insertState(self):
@@ -592,7 +595,9 @@ class PTextInput(PInputWidget):
         # Value
         self.setValue(self._value)
         # Properties
-        self._renderPlaceholder()
+        self._renderRequired()
+        self._renderReadonly()
+        self._renderChange()
 
     # Value
     def getValue(self):
@@ -603,9 +608,76 @@ class PTextInput(PInputWidget):
             self._elem_input.value = value
         return self
     
+    # Property: Required
+    def _renderRequired(self):
+        if self._required: 
+            self._elem_input.setAttribute("required", "")
+        else:
+            self._elem_input.removeAttribute("required")
+
+    def getRequired(self):
+        return self._required
+
+    def setRequired(self, required):
+        if self._required != required:
+            self._required = required
+            self._renderRequired()
+        return self
+
+    # Property: Readonly
+    def _renderReadonly(self):
+        if self._readonly: 
+            self._elem_input.setAttribute("readonly", "")
+        else:
+            self._elem_input.removeAttribute("readonly")
+
+    def getReadonly(self):
+        return self._readonly
+
+    def setReadonly(self, readonly):
+        if self._readonly != readonly:
+            self._readonly = readonly
+            self._renderReadonly()
+        return self
+
+    # Property: Change
+    def _renderChange(self):
+        if self._change is not None:
+            add_event_listener(self._elem, "change", self._change)
+
+    def onChange(self, change):
+        if id(self._change) != id(change): # Object reference/id comparison
+            if self._change is not None:
+                remove_event_listener(self._elem, "change", self._change)
+            self._change = change
+            self._renderChange()
+        return self
+
+class PTextInput(PInputWidget): 
+    """Text input widget class"""
+
+    def __init__(self, value):
+        """Constructor, define input type and class attributes"""
+        super().__init__("text", value)
+        # Properties
+        self._placeholder = ""
+        self._renderPlaceholder()
+        self._pattern = ""
+        self._renderPattern()
+
+    def restoreState(self):
+        """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
+        super().restoreState()
+        # Properties
+        self._renderPlaceholder()
+        self._renderPattern()
+
     # Property: Placeholder
     def _renderPlaceholder(self):
-        self._elem_input.setAttribute("placeholder", self._placeholder)
+        if len(self._placeholder) > 0:
+            self._elem_input.setAttribute("placeholder", self._placeholder)
+        else:
+            self._elem_input.removeAttribute("placeholder")
 
     def getPlaceholder(self):
         return self._placeholder
@@ -614,6 +686,22 @@ class PTextInput(PInputWidget):
         if self._placeholder != placeholder:
             self._placeholder = placeholder
             self._renderPlaceholder()
+        return self
+
+    # Property: Pattern
+    def _renderPattern(self):
+        if len(self._pattern) > 0:
+            self._elem_input.setAttribute("pattern", self._pattern)
+        else:
+            self._elem_input.removeAttribute("pattern")
+
+    def getPattern(self):
+        return self._pattern
+
+    def setPattern(self, pattern):
+        if self._pattern != pattern:
+            self._pattern = pattern
+            self._renderPattern()
         return self
 
 class PNumberInput(PInputWidget):

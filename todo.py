@@ -26,6 +26,7 @@ class TodoItem(PPanel):
         self.addChildren([self.deleteBtn, self.lbl])
 
     def deleteBtnClick(self, event):
+        self.getParent().getParent().frm.inp.requestFocus()
         self.getParent().removeChild(self)
 
 class TodoList(PPanel):
