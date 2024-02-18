@@ -427,11 +427,8 @@ class PFocussableWidget(PWidget):
     """Abstract focussable widget class"""
     
     def requestFocus(self):
-        #self._elem.scrollIntoView()
-        #self._elem.focus()
-        elem = document.getElementById(self._id)
-        elem.scrollIntoView()
-        elem.focus() #TODO _BUSY does not work, maybe add timeout delay: https://stackoverflow.com/questions/17500704/how-can-i-set-focus-on-an-element-in-an-html-form-using-javascript
+        self._elem.scrollIntoView()
+        self._elem.focus()
 
 class PLabel(PFocussableWidget): 
     """Label widget class"""
@@ -598,6 +595,10 @@ class PInputWidget(PFocussableWidget):
         self._renderRequired()
         self._renderReadonly()
         self._renderChange()
+
+    def requestFocus(self):
+        self._elem_input.scrollIntoView()
+        self._elem_input.focus()
 
     # Value
     def getValue(self):
