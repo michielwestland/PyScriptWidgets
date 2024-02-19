@@ -118,6 +118,7 @@ class PWidget:
         self._renderColor()
 
     def _insertIdGridArea(self):
+        """Insert state for id and grid area"""
         self._elem.id = self._id
         self._elem.style.gridArea = self._id
 
@@ -271,6 +272,7 @@ class PCompoundWidget(PWidget):
         self._renderMargin()
     
     def afterPageLoad(self):
+        """Override this method tot execute code after the page DOM has loaded"""
         super().afterPageLoad()
         for c in self._children:
             c.afterPageLoad()
@@ -340,7 +342,7 @@ class PGrid(PCompoundWidget):
     def __init__(self):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
-        self._renderDisplay()
+        self._insertDisplay()
         # Properties
         self._columns = []
         self._renderColumns()
@@ -349,16 +351,20 @@ class PGrid(PCompoundWidget):
         self._areas = ""
         self._renderAreas()
 
+    def _insertState(self):
+        """Override this method to insert state, for keys that could not be pickled"""
+        super()._insertState()
+        self._insertDisplay()
+    
     def restoreState(self):
         """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
-        self._renderDisplay()
         # Properties
         self._renderColumns()
         self._renderRows()
         self._renderAreas()
 
-    def _renderDisplay(self):
+    def _insertDisplay(self):
         # See: https://grid.malven.co
         self._elem.style.display = "grid"
         self._elem.style.alignItems = "baseline"
@@ -460,7 +466,7 @@ class PFocussableWidget(PWidget):
         else:
             self._elem.setAttribute("disabled", "")
 
-    def getEnabled(self):
+    def isEnabled(self):
         return self._enabled
 
     def setEnabled(self, enabled):
@@ -594,6 +600,7 @@ class PInputWidget(PFocussableWidget):
         self._elem.classList.add("input")
         self._type = type
         self._insertInput()
+        self._renderEnabled()
         # Value
         self.setValue(value)
         # Properties
@@ -640,10 +647,11 @@ class PInputWidget(PFocussableWidget):
         self._elem_input.focus()
 
     def _renderEnabled(self):
-        if self._enabled: 
-            self._elem_input.removeAttribute("disabled")
-        else:
-            self._elem_input.setAttribute("disabled", "")
+        if hasattr(self, "_elem_input"): 
+            if self._enabled: 
+                self._elem_input.removeAttribute("disabled")
+            else:
+                self._elem_input.setAttribute("disabled", "")
 
     # Value
     def getValue(self):
@@ -661,7 +669,7 @@ class PInputWidget(PFocussableWidget):
         else:
             self._elem_input.removeAttribute("required")
 
-    def getRequired(self):
+    def isRequired(self):
         return self._required
 
     def setRequired(self, required):
@@ -677,7 +685,7 @@ class PInputWidget(PFocussableWidget):
         else:
             self._elem_input.removeAttribute("readonly")
 
-    def getReadonly(self):
+    def isReadonly(self):
         return self._readonly
 
     def setReadonly(self, readonly):
