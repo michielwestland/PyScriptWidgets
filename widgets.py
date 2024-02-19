@@ -116,6 +116,14 @@ class PWidget:
         self._renderVisible()
         self._color = "inherit"
         self._renderColor()
+        self._minWidth = None
+        self._renderMinWidth()
+        self._minHeight = None
+        self._renderMinHeight()
+        self._maxWidth = None
+        self._renderMaxWidth()
+        self._maxHeight = None
+        self._renderMaxHeight()
 
     def _insertIdGridArea(self):
         """Insert state for id and grid area"""
@@ -166,7 +174,12 @@ class PWidget:
         self._ensureUniqueIdBeyond(self._id)
         self._elem.setAttribute("class", self._classlist)
         # Properties
+        self._renderVisible()
         self._renderColor()
+        self._renderMinWidth()
+        self._renderMinHeight()
+        self._renderMaxWidth()
+        self._renderMaxHeight()
 
     def afterPageLoad(self):
         """Override this method tot execute code after the page DOM has loaded"""
@@ -198,12 +211,82 @@ class PWidget:
             self._renderColor()
         return self
 
+    # Property: MinWidth
+    def _renderMinWidth(self):
+        if self._minWidth is not None:
+            try:
+                pixels = int(self._minWidth)
+                self._elem.style.minWidth = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.minWidth = str(self._minWidth) # It was not an integer value
+
+    def getMinWidth(self):
+        return self._minWidth
+    
+    def setMinWidth(self, minWidth):
+        if self._minWidth != minWidth:
+            self._minWidth = minWidth
+            self._renderMinWidth()
+        return self
+    
+    # Property: MinHeight
+    def _renderMinHeight(self):
+        if self._minHeight is not None:
+            try:
+                pixels = int(self._minHeight)
+                self._elem.style.minHeight = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.minHeight = str(self._minHeight) # It was not an integer value
+
+    def getMinHeight(self):
+        return self._minHeight
+    
+    def setMinHeight(self, minHeight):
+        if self._minHeight != minHeight:
+            self._minHeight = minHeight
+            self._renderMinHeight()
+        return self
+    
+    # Property: MaxWidth
+    def _renderMaxWidth(self):
+        if self._maxWidth is not None:
+            try:
+                pixels = int(self._maxWidth)
+                self._elem.style.maxWidth = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.maxWidth = str(self._maxWidth) # It was not an integer value
+
+    def getMaxWidth(self):
+        return self._maxWidth
+    
+    def setMaxWidth(self, maxWidth):
+        if self._maxWidth != maxWidth:
+            self._maxWidth = maxWidth
+            self._renderMaxWidth()
+        return self
+    
+    # Property: MaxHeight
+    def _renderMaxHeight(self):
+        if self._maxHeight is not None:
+            try:
+                pixels = int(self._maxHeight)
+                self._elem.style.maxHeight = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.maxHeight = str(self._maxHeight) # It was not an integer value
+
+    def getMaxHeight(self):
+        return self._maxHeight
+    
+    def setMaxHeight(self, maxHeight):
+        if self._maxHeight != maxHeight:
+            self._maxHeight = maxHeight
+            self._renderMaxHeight()
+        return self
+
 class PCompoundWidget(PWidget):
     """Abstract compound widget base class, that can have children"""
     
     #TODO Add scrollbar options. 
-
-    #TODO Add properties: min and max, width and height
 
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
