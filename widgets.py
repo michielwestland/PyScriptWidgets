@@ -10,6 +10,7 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # typ
 # See: https://semantic-ui.com/usage/theming.html
 # See: http://learnsemantic.com/themes/overview.html
 # See: https://github.com/Semantic-Org/Semantic-UI/blob/master/semantic.json.example
+# See: https://github.com/Semantic-Org/example-github/blob/master/semantic/src/theme.config
 
 #TODO Create a SVG version of the logo. 
 
