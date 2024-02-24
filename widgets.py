@@ -17,9 +17,11 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 
 # TODO Create a SVG version of the logo.
 
-# TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
+# TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget.
+# See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
-# TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
+# TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages.
+# See: https://semantic-ui.com/collections/form.html
 
 # TODO Make a progressive web application (PWA).
 
@@ -94,8 +96,8 @@ def bind_to_dom(MainWidgetClass, root_element_id):  # pylint: disable=invalid-na
         sessionStorage.removeItem(_STATE_KEY)
         console.log("Application state restored from browser session storage")
     document.getElementById(root_element_id).replaceChildren(
-        _main_widget._elem
-    )  # pylint: disable=protected-access
+        _main_widget._elem  # pylint: disable=protected-access
+    )
     # See: https://jeff.glass/post/pyscript-why-create-proxy/
     add_event_listener(window, "beforeunload", _window_beforeunload)
     _main_widget.after_page_load()
@@ -941,60 +943,60 @@ class PTextInput(PInputWidget):
 
 
 class PNumberInput(PInputWidget):
-    # TODO Implement number widget class; properties: min, max, step and decimals
-    pass
+    """Number input widget class"""
+    # TODO Implement number input, properties: min, max, step and decimals
 
 
 class PDateInput(PInputWidget):
-    # TODO Implement date widget class; subtypes: date, time, datetime-local
-    pass
+    """Date input widget class"""
+    # TODO Implement date input, subtypes: date, time, datetime-local
 
 
 class PCheckBox(PInputWidget):
-    # TODO Implement checkbox widget class, see: https://semantic-ui.com/modules/checkbox.html
-    pass
+    """Checkbox widget class"""
+    # TODO Implement checkbox, see: https://semantic-ui.com/modules/checkbox.html
 
 
 class PRadioGroup(PCompoundWidget):
-    # TODO Implement radiogroup widget class, see: https://semantic-ui.com/modules/checkbox.html#radio
-    pass
+    """Radio group widget class"""
+    # TODO Implement radio group, see: https://semantic-ui.com/modules/checkbox.html#radio
 
 
 class PComboBox(PCompoundWidget):
-    # TODO Implement combobox widget class, see: https://semantic-ui.com/modules/dropdown.html
-    pass
+    """Combobox widget class"""
+    # TODO Implement combo box, see: https://semantic-ui.com/modules/dropdown.html
 
 
-class PMenuitem(PWidget):
-    # TODO Implement menu item widget class, see: https://semantic-ui.com/collections/menu.html
-    pass
+class PMenuItem(PWidget):
+    """Menu item widget class"""
+    # TODO Implement menu item, see: https://semantic-ui.com/collections/menu.html
 
 
 class PMenu(PCompoundWidget):
-    # TODO Implement menu widget class, see: https://semantic-ui.com/collections/menu.html#menu
-    pass
+    """Menu widget class"""
+    # TODO Implement menu, see: https://semantic-ui.com/collections/menu.html#menu
 
 
 class PMenuBar(PCompoundWidget):
-    # TODO Implement menu bar widget class, see: https://semantic-ui.com/collections/menu.html#sub-menu
-    pass
+    """Menu bar widget class"""
+    # TODO Implement menu bar, see: https://semantic-ui.com/collections/menu.html#sub-menu
 
 
 class PTable(PCompoundWidget):
-    # TODO Implement table widget class, see: https://semantic-ui.com/collections/table.html
-    pass
+    """Table widget class"""
+    # TODO Implement table, see: https://semantic-ui.com/collections/table.html
 
 
 class PTabPane(PCompoundWidget):
-    # TODO Implement tab pane widget class, see: https://semantic-ui.com/modules/tab.html
-    pass
+    """Tab pane widget class"""
+    # TODO Implement tab pane, see: https://semantic-ui.com/modules/tab.html
 
 
 class PTextArea(PFocussableWidget):
-    # TODO Implement text area widget class
-    pass
+    """Text area widget class"""
+    # TODO Implement text area
 
 
 class PModal(PCompoundWidget):
-    # TODO Implement modal widget class, see: https://semantic-ui.com/modules/modal.html
-    pass
+    """Modal dialog widget class"""
+    # TODO Implement modal widget, see: https://semantic-ui.com/modules/modal.html
