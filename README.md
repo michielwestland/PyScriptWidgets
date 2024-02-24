@@ -1,5 +1,5 @@
 # PyScriptWidgets
-Client side GUI class (widget) library for building web applications with PyScript. 
+Client side GUI class (widget) library for building web applications with PyScript.
 
 See demo website: https://michielwestland.github.io/PyScriptWidgets
 ![Demo screenshot](demo-screenshot.png?raw=true "Demo screenshot")
@@ -9,6 +9,7 @@ Development:
 - Python: https://www.python.org (PSF license agreement)
 - VSCode: https://code.visualstudio.com/docs/python/python-tutorial (Microsoft product license + MIT license)
 - Python vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.python (Microsoft Pylance license + MIT license)
+- PyLint vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.pylint (MIT License)
 - Live Server vscode extension: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer (MIT license)
 - Live Preview vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server (MIT license)
 
@@ -38,10 +39,23 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 ## Install packages
 Only use pure Python packages, with file names ending in ...-py3-none-any.whl
 ```
-pip install <name>
+pip install pylint
 pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
+
+
+# PyLint
+Create a default pylint configuration
+```
+pylint --rcfile="" --generate-rcfile > .pylintrc
+```
+
+Run linter
+```
+pylint *.py
+```
+
 
 ## Webserver runtime
 Standalone:

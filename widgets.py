@@ -1,24 +1,26 @@
 import base64
 import pickle
 import zlib
-from js import console, sessionStorage # type: ignore
+from js import console, sessionStorage # type: ignore # pylint: disable=import-error
 # Prefer pyscript import over more basic js import for the document and window objects
-from pyscript import document, window # type: ignore
-from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore
+from pyscript import document, window # type: ignore # pylint: disable=import-error
+from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore # pylint: disable=import-error
 
-#TODO Add light/dark theme. 
+#TODO Add light/dark theme.
 # See: https://semantic-ui.com/usage/theming.html
 # See: http://learnsemantic.com/themes/overview.html
 # See: https://github.com/Semantic-Org/Semantic-UI/blob/master/semantic.json.example
 # See: https://github.com/Semantic-Org/example-github/blob/master/semantic/src/theme.config
 
-#TODO Create a SVG version of the logo. 
+#TODO Create a SVG version of the logo.
 
 #TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
 #TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
 
 #TODO Make a progressive web application (PWA).
+
+#TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
 
 # Private global reference to the root widget
 _mainWidget = None
@@ -70,7 +72,7 @@ def _window_beforeunload(event):
     sessionStorage.setItem(_STATE_KEY, state)
 
 # Create or load the widget state and bind to the browser DOM
-def bindToDom(MainWidgetClass, rootElementId): 
+def bindToDom(MainWidgetClass, rootElementId):
     """Bind the main widget to the dom, or load the widget tree state from browser session storage if available"""
     # What is the impact of: https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
     global _mainWidget
@@ -86,9 +88,9 @@ def bindToDom(MainWidgetClass, rootElementId):
     add_event_listener(window, "beforeunload", _window_beforeunload)
     _mainWidget.afterPageLoad()
 
-class PWidget: 
+class PWidget:
     """Abstract widget base class"""
-        
+
     _lastUniqueId = 0
 
     def _generateUniqueId(self):
@@ -137,7 +139,7 @@ class PWidget:
 
     def findId(self, id):
         """Find a reference to the widget with this id"""
-        if self._id == id: 
+        if self._id == id:
             return self
         return None
 
@@ -148,7 +150,7 @@ class PWidget:
     def _deleteState(self, state):
         """Override this method to delete state keys that cannot be pickled"""
         # Parent could be None for the main widget, parent will be set when the widget is added as child to another widget
-        if "_parent" in state.keys(): 
+        if "_parent" in state.keys():
             del state["_parent"]
         # TypeError: cannot pickle 'pyodide.ffi.JsProxy' object
         # See: https://stackoverflow.com/questions/2345944/exclude-objects-field-from-pickling-in-python
@@ -223,13 +225,13 @@ class PWidget:
 
     def getMinWidth(self):
         return self._minWidth
-    
+
     def setMinWidth(self, minWidth):
         if self._minWidth != minWidth:
             self._minWidth = minWidth
             self._renderMinWidth()
         return self
-    
+
     # Property: MinHeight
     def _renderMinHeight(self):
         if self._minHeight is not None:
@@ -241,13 +243,13 @@ class PWidget:
 
     def getMinHeight(self):
         return self._minHeight
-    
+
     def setMinHeight(self, minHeight):
         if self._minHeight != minHeight:
             self._minHeight = minHeight
             self._renderMinHeight()
         return self
-    
+
     # Property: MaxWidth
     def _renderMaxWidth(self):
         if self._maxWidth is not None:
@@ -259,13 +261,13 @@ class PWidget:
 
     def getMaxWidth(self):
         return self._maxWidth
-    
+
     def setMaxWidth(self, maxWidth):
         if self._maxWidth != maxWidth:
             self._maxWidth = maxWidth
             self._renderMaxWidth()
         return self
-    
+
     # Property: MaxHeight
     def _renderMaxHeight(self):
         if self._maxHeight is not None:
@@ -277,7 +279,7 @@ class PWidget:
 
     def getMaxHeight(self):
         return self._maxHeight
-    
+
     def setMaxHeight(self, maxHeight):
         if self._maxHeight != maxHeight:
             self._maxHeight = maxHeight
@@ -286,8 +288,8 @@ class PWidget:
 
 class PCompoundWidget(PWidget):
     """Abstract compound widget base class, that can have children"""
-    
-    #TODO Add scrollbar options. 
+
+    #TODO Add scrollbar options.
 
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
@@ -302,7 +304,7 @@ class PCompoundWidget(PWidget):
 
     def findId(self, id):
         """Find a reference to the widget with this id, also search in children"""
-        if self._id == id: 
+        if self._id == id:
             return self
         for c in self._children:
             f = c.findId(id)
@@ -343,7 +345,7 @@ class PCompoundWidget(PWidget):
         super().backupState()
         for c in self._children:
             c.backupState()
-    
+
     def restoreState(self):
         """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
@@ -354,7 +356,7 @@ class PCompoundWidget(PWidget):
         # Properties
         self._renderGap()
         self._renderMargin()
-    
+
     def afterPageLoad(self):
         """Override this method tot execute code after the page DOM has loaded"""
         super().afterPageLoad()
@@ -367,7 +369,7 @@ class PCompoundWidget(PWidget):
 
     def getMargin(self):
         return self._margin
-    
+
     def setMargin(self, margin):
         if self._margin != margin:
             self._margin = margin
@@ -380,16 +382,16 @@ class PCompoundWidget(PWidget):
 
     def getGap(self):
         return self._gap
-    
+
     def setGap(self, gap):
         if self._gap != gap:
             self._gap = gap
             self._renderGap()
         return self
 
-class PPanel(PCompoundWidget): 
+class PPanel(PCompoundWidget):
     """Panel widget class with flex layout"""
-    
+
     def __init__(self, vertical):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
@@ -413,16 +415,16 @@ class PPanel(PCompoundWidget):
 
     def isVertical(self):
         return self._vertical
-    
+
     def setVertical(self, vertical):
         if self._vertical != vertical:
             self._vertical = vertical
             self._renderVertical()
         return self
 
-class PGrid(PCompoundWidget): 
+class PGrid(PCompoundWidget):
     """Grid widget class with grid layout obviously"""
-    
+
     def __init__(self):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
@@ -439,7 +441,7 @@ class PGrid(PCompoundWidget):
         """Override this method to insert state, for keys that could not be pickled"""
         super()._insertState()
         self._insertDisplay()
-    
+
     def restoreState(self):
         """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
@@ -459,7 +461,7 @@ class PGrid(PCompoundWidget):
 
     def getColumns(self):
         return self._columns
-    
+
     def setColumns(self, columns):
         for index, value in enumerate(columns):
             try:
@@ -467,7 +469,7 @@ class PGrid(PCompoundWidget):
                 columns[index] = str(pixels) + "px"
             except ValueError:
                 pass # It was not an integer value
-        
+
         if self._columns != columns:
             self._columns = columns
             self._renderColumns()
@@ -479,7 +481,7 @@ class PGrid(PCompoundWidget):
 
     def getRows(self):
         return self._rows
-    
+
     def setRows(self, rows):
         for index, value in enumerate(rows):
             try:
@@ -487,7 +489,7 @@ class PGrid(PCompoundWidget):
                 rows[index] = str(pixels) + "px"
             except ValueError:
                 pass # It was not an integer value
-        
+
         if self._rows != rows:
             self._rows = rows
             self._renderRows()
@@ -501,10 +503,10 @@ class PGrid(PCompoundWidget):
         #See: https://www.w3schools.com/css/css_grid.asp
         #See: https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
         self.removeAllChildren()
-        
+
         self._areas = ""
         for line in areas:
-            
+
             areaRow = ""
             for c in line:
                 if c is None:
@@ -513,7 +515,7 @@ class PGrid(PCompoundWidget):
                     if not (c in self.getChildren()):
                         self.addChild(c)
                     areaRow += " " + c._id
-            
+
             if len(areaRow) > 0:
                 areaRow = areaRow[1:]
             self._areas += " " + "\"" + areaRow + "\""
@@ -545,7 +547,7 @@ class PFocussableWidget(PWidget):
 
     # Property: Enabled
     def _renderEnabled(self):
-        if self._enabled: 
+        if self._enabled:
             self._elem.removeAttribute("disabled")
         else:
             self._elem.setAttribute("disabled", "")
@@ -558,10 +560,10 @@ class PFocussableWidget(PWidget):
             self._enabled = enabled
             self._renderEnabled()
         return self
-    
-class PLabel(PFocussableWidget): 
+
+class PLabel(PFocussableWidget):
     """Label widget class"""
-    
+
     def __init__(self, text):
         """Constructor, define tag and class attributes"""
         super().__init__("label")
@@ -607,9 +609,9 @@ class PLabel(PFocussableWidget):
             self._renderFor()
         return self
 
-class PButton(PFocussableWidget): 
+class PButton(PFocussableWidget):
     """Button widget class"""
-    
+
     #See: https://semantic-ui.com/kitchen-sink.html
     def __init__(self, text):
         """Constructor, define tag and class attributes"""
@@ -715,7 +717,7 @@ class PInputWidget(PFocussableWidget):
         """Override this method to insert state, for keys that could not be pickled"""
         super()._insertState()
         self._insertInput()
-    
+
     def restoreState(self):
         """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restoreState()
@@ -731,8 +733,8 @@ class PInputWidget(PFocussableWidget):
         self._elem_input.focus()
 
     def _renderEnabled(self):
-        if hasattr(self, "_elem_input"): 
-            if self._enabled: 
+        if hasattr(self, "_elem_input"):
+            if self._enabled:
                 self._elem_input.removeAttribute("disabled")
             else:
                 self._elem_input.setAttribute("disabled", "")
@@ -740,15 +742,15 @@ class PInputWidget(PFocussableWidget):
     # Value
     def getValue(self):
         return self._elem_input.value
-    
+
     def setValue(self, value):
         if self._elem_input.value != value:
             self._elem_input.value = value
         return self
-    
+
     # Property: Required
     def _renderRequired(self):
-        if self._required: 
+        if self._required:
             self._elem_input.setAttribute("required", "")
         else:
             self._elem_input.removeAttribute("required")
@@ -764,7 +766,7 @@ class PInputWidget(PFocussableWidget):
 
     # Property: Readonly
     def _renderReadonly(self):
-        if self._readonly: 
+        if self._readonly:
             self._elem_input.setAttribute("readonly", "")
         else:
             self._elem_input.removeAttribute("readonly")
@@ -791,7 +793,7 @@ class PInputWidget(PFocussableWidget):
             self._renderChange()
         return self
 
-class PTextInput(PInputWidget): 
+class PTextInput(PInputWidget):
     """Text input widget class"""
 
     #TODO Add subtype property: text, password, email, tel, url
@@ -857,7 +859,7 @@ class PCheckBox(PInputWidget):
     pass
 
 class PRadioGroup(PCompoundWidget):
-    #TODO Implement radiogroup widget class, see: https://semantic-ui.com/modules/checkbox.html#radio 
+    #TODO Implement radiogroup widget class, see: https://semantic-ui.com/modules/checkbox.html#radio
     pass
 
 class PComboBox(PCompoundWidget):
@@ -873,19 +875,19 @@ class PMenu(PCompoundWidget):
     pass
 
 class PMenuBar(PCompoundWidget):
-    #TODO Implement menu bar widget class, see: https://semantic-ui.com/collections/menu.html#sub-menu 
+    #TODO Implement menu bar widget class, see: https://semantic-ui.com/collections/menu.html#sub-menu
     pass
 
 class PTable(PCompoundWidget):
-    #TODO Implement table widget class, see: https://semantic-ui.com/collections/table.html 
+    #TODO Implement table widget class, see: https://semantic-ui.com/collections/table.html
     pass
 
 class PTabPane(PCompoundWidget):
-    #TODO Implement tab pane widget class, see: https://semantic-ui.com/modules/tab.html 
+    #TODO Implement tab pane widget class, see: https://semantic-ui.com/modules/tab.html
     pass
 
 class PTextArea(PFocussableWidget):
-    #TODO Implement text area widget class 
+    #TODO Implement text area widget class
     pass
 
 class PModal(PCompoundWidget):

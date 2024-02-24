@@ -1,5 +1,5 @@
 from datetime import datetime
-from js import fetch, JSON # type: ignore
+from js import fetch, JSON # type: ignore # pylint: disable=import-error
 from widgets import PPanel, PGrid, PTextInput, PButton, PLabel, bindToDom
 from todo import TodoPanel
 
@@ -17,8 +17,8 @@ class Main(PPanel):
         self.grd.setRows([36, 36, 72])
         self.grd.setColumns([100, 200, 100, 200])
         self.grd.setAreas([
-            [PLabel("Code")                        , PTextInput("<code>").setRequired(True), PLabel("Number"), PTextInput("<number>").setReadonly(True)], 
-            [PLabel("Description").setFor(self.inp), self.inp                              , self.inp        , self.inp                                ], 
+            [PLabel("Code")                        , PTextInput("<code>").setRequired(True), PLabel("Number"), PTextInput("<number>").setReadonly(True)],
+            [PLabel("Description").setFor(self.inp), self.inp                              , self.inp        , self.inp                                ],
             [PLabel("Hidden").setVisible(False)    , None                                  , self.btn        , self.btn                                ],
         ])
         self.addChild(self.grd)
@@ -26,7 +26,7 @@ class Main(PPanel):
         self.todoPnl = TodoPanel()
         self.addChild(self.todoPnl)
 
-    async def btnClick(self, event): 
+    async def btnClick(self, event):
         self.btn.setColor("red")
         response = await fetch("./data.json", {"method": "GET"})
         data = await response.json()
