@@ -1,4 +1,4 @@
-"""PyScript widgets"""
+"""PyScriptWidgets - A client side GUI class (widget) library for building web applications with PyScript."""
 
 import base64
 import pickle

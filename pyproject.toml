@@ -1,3 +1,13 @@
+[project]
+name = "PyScriptWidgets"
+description = "A client side GUI class (widget) library for building web applications with PyScript."
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [
+    { name = "Michiel Westland", email = "michielwestland@gmail.com" },
+]
+
 [tool.black]
+# See: https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
 line-length = 100
 target-version = ['py311']

@@ -1,5 +1,5 @@
 # PyScriptWidgets
-Client side GUI class (widget) library for building web applications with PyScript.
+A client side GUI class (widget) library for building web applications with PyScript.
 
 See demo website: https://michielwestland.github.io/PyScriptWidgets
 ![Demo screenshot](demo-screenshot.png?raw=true "Demo screenshot")
@@ -10,7 +10,8 @@ Development:
 - Python: https://www.python.org (PSF license agreement)
 - VSCode: https://code.visualstudio.com/docs/python/python-tutorial (Microsoft product license + MIT license)
 - Python vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.python (Microsoft Pylance license + MIT license)
-- PyLint vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.pylint (MIT License)
+- PyLint vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.pylint (MIT license)
+- Black vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter (MIT license)
 - Live Server vscode extension: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer (MIT license)
 - Live Preview vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server (MIT license)
 
