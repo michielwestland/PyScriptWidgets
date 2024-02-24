@@ -6,6 +6,7 @@ See demo website: https://michielwestland.github.io/PyScriptWidgets
 
 ## Thirdparty software
 Development:
+- PyEnv for Windows: https://pyenv-win.github.io/pyenv-win (MIT license)
 - Python: https://www.python.org (PSF license agreement)
 - VSCode: https://code.visualstudio.com/docs/python/python-tutorial (Microsoft product license + MIT license)
 - Python vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.python (Microsoft Pylance license + MIT license)
@@ -46,7 +47,7 @@ pip install -r requirements.txt
 ```
 
 
-# PyLint and Black
+# Linting and formatting
 Create a default pylint configuration
 ```
 pylint --rcfile="" --generate-rcfile > .pylintrc
