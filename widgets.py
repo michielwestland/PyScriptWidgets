@@ -3,6 +3,7 @@
 import base64
 import pickle
 import zlib
+from enum import Enum
 from js import console, sessionStorage  # type: ignore # pylint: disable=import-error
 
 # Prefer pyscript import over more basic js import for the document and window objects
@@ -817,6 +818,11 @@ class PInputWidget(PFocussableWidget):
             else:
                 self._elem_input.setAttribute("disabled", "")
 
+    # Widget type
+    def get_widget_type(self):
+        """"Accessor"""
+        return self._widget_type
+
     # Value
     def get_value(self):
         """Accessor"""
@@ -882,14 +888,21 @@ class PInputWidget(PFocussableWidget):
         return self
 
 
+class PTextInputType(Enum):
+    """PTextInpout types"""
+    TEXT = "text"
+    PASSWORD = "password"
+    EMAIL = "email"
+    TEL = "tel"
+    URL = "url"
+
+
 class PTextInput(PInputWidget):
     """Text input widget class"""
 
-    # TODO Add subtype property: text, password, email, tel, url
-
-    def __init__(self, value):
+    def __init__(self, widget_type: PTextInputType, value):
         """Constructor, define input type and class attributes"""
-        super().__init__("text", value)
+        super().__init__(widget_type, value)
         # Properties
         self._placeholder = ""
         self._render_placeholder()
