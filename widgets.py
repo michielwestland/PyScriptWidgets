@@ -1,3 +1,5 @@
+"""PyScript widgets"""
+
 import base64
 import pickle
 import zlib
@@ -66,7 +68,7 @@ def findMainWidget():
     return _mainWidget
 
 # Store the widget state
-def _window_beforeunload(event):
+def _window_beforeunload(event): # pylint: disable=unused-argument
     """Save widget tree state in browser session storage, before unloading the page"""
     state = _serializeWidgetsToBase64(_mainWidget)
     sessionStorage.setItem(_STATE_KEY, state)

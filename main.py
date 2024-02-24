@@ -1,3 +1,5 @@
+"""Main file"""
+
 from datetime import datetime
 from js import fetch, JSON # type: ignore # pylint: disable=import-error
 from widgets import PPanel, PGrid, PTextInput, PButton, PLabel, bindToDom
@@ -7,26 +9,31 @@ from todo import TodoPanel
 BASE_URL = "."
 
 class Main(PPanel):
+    """Main class"""
 
     def __init__(self):
         super().__init__(True)
         self.inp = PTextInput("").setPlaceholder("press the button...")
-        self.btn = PButton("Press me!").setColor("blue").onClick(self.btnClick)
+        self.btn = PButton("Press me!").setColor("blue").onClick(self.btn_click)
 
         self.grd = PGrid().setMargin(6).setGap(6)
         self.grd.setRows([36, 36, 72])
         self.grd.setColumns([100, 200, 100, 200])
         self.grd.setAreas([
-            [PLabel("Code")                        , PTextInput("<code>").setRequired(True), PLabel("Number"), PTextInput("<number>").setReadonly(True)],
-            [PLabel("Description").setFor(self.inp), self.inp                              , self.inp        , self.inp                                ],
-            [PLabel("Hidden").setVisible(False)    , None                                  , self.btn        , self.btn                                ],
+            [PLabel("Code")                        , PTextInput("<code>").setRequired(True), \
+                    PLabel("Number"), PTextInput("<number>").setReadonly(True)],
+            [PLabel("Description").setFor(self.inp), self.inp                              , \
+                    self.inp        , self.inp                                ],
+            [PLabel("Hidden").setVisible(False)    , None                                  , \
+                    self.btn        , self.btn                                ],
         ])
         self.addChild(self.grd)
 
-        self.todoPnl = TodoPanel()
-        self.addChild(self.todoPnl)
+        self.todo_pnl = TodoPanel()
+        self.addChild(self.todo_pnl)
 
-    async def btnClick(self, event):
+    async def btn_click(self, event): # pylint: disable=unused-argument
+        """Button click event handler"""
         self.btn.setColor("red")
         response = await fetch("./data.json", {"method": "GET"})
         data = await response.json()
