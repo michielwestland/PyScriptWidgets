@@ -40,12 +40,13 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 Only use pure Python packages, with file names ending in ...-py3-none-any.whl
 ```
 pip install pylint
+pip install black
 pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
 
 
-# PyLint
+# PyLint and Black
 Create a default pylint configuration
 ```
 pylint --rcfile="" --generate-rcfile > .pylintrc
@@ -54,6 +55,11 @@ pylint --rcfile="" --generate-rcfile > .pylintrc
 Run linter
 ```
 pylint *.py
+```
+
+Run formatter
+```
+black *.py
 ```
 
 

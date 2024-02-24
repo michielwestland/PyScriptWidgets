@@ -3,35 +3,37 @@
 import base64
 import pickle
 import zlib
-from js import console, sessionStorage # type: ignore # pylint: disable=import-error
-# Prefer pyscript import over more basic js import for the document and window objects
-from pyscript import document, window # type: ignore # pylint: disable=import-error
-from pyodide.ffi.wrappers import add_event_listener, remove_event_listener # type: ignore # pylint: disable=import-error
+from js import console, sessionStorage  # type: ignore # pylint: disable=import-error
 
-#TODO Add light/dark theme.
+# Prefer pyscript import over more basic js import for the document and window objects
+from pyscript import document, window  # type: ignore # pylint: disable=import-error
+from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # type: ignore # pylint: disable=import-error
+
+# TODO Add light/dark theme.
 # See: https://semantic-ui.com/usage/theming.html
 # See: http://learnsemantic.com/themes/overview.html
 # See: https://github.com/Semantic-Org/Semantic-UI/blob/master/semantic.json.example
 # See: https://github.com/Semantic-Org/example-github/blob/master/semantic/src/theme.config
 
-#TODO Create a SVG version of the logo.
+# TODO Create a SVG version of the logo.
 
-#TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
+# TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget. See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
-#TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
+# TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages: https://semantic-ui.com/collections/form.html
 
-#TODO Make a progressive web application (PWA).
+# TODO Make a progressive web application (PWA).
 
-#TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
+# TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
 
 # Private global reference to the root widget
-_main_widget = None # pylint: disable=invalid-name
+_main_widget = None  # pylint: disable=invalid-name
 
 # Constants
 _STATE_KEY = "widget_state"
 _ID_PREFIX = "e"
 _ID_SUPPLEMENT = "."
 _UTF_8 = "utf-8"
+
 
 # Debug utiliies
 def debug_object(obj):
@@ -41,6 +43,7 @@ def debug_object(obj):
         if not attr.startswith("__"):
             console.debug(attr + " = " + repr(getattr(obj, attr)))
 
+
 # Global subroutines for (de)serializing the widget tree, when the page (un)loads
 def _serialize_to_base64(root_widget):
     """Pickle the widget tree and encode binary data as base64"""
@@ -48,36 +51,41 @@ def _serialize_to_base64(root_widget):
     # See: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
     return base64.b64encode(zlib.compress(pickle.dumps(root_widget))).decode(_UTF_8)
 
+
 def _deserialize_from_base64(state_data):
     """Decode binary data from base64 and unpickle the widget tree"""
     root_widget = pickle.loads(zlib.decompress(base64.b64decode(state_data.encode(_UTF_8))))
     root_widget.restore_state()
     return root_widget
 
+
 # Global functions to get references to widgets in event handlers
 def find_event_target(event):
     """Find the target widget for this event in the widget tree"""
     widget_id = event.target.id
     i = widget_id.find(_ID_SUPPLEMENT)
-    if i >= 0: # Remove id supplement
+    if i >= 0:  # Remove id supplement
         widget_id = widget_id[:i]
     return _main_widget.findId(widget_id)
+
 
 def find_main_widget():
     """Find the main widget, the root of the widget tree"""
     return _main_widget
 
+
 # Store the widget state
-def _window_beforeunload(event): # pylint: disable=unused-argument
+def _window_beforeunload(event):  # pylint: disable=unused-argument
     """Save widget tree state in browser session storage, before unloading the page"""
     state = _serialize_to_base64(_main_widget)
     sessionStorage.setItem(_STATE_KEY, state)
 
+
 # Create or load the widget state and bind to the browser DOM
-def bind_to_dom(MainWidgetClass, root_element_id): # pylint: disable=invalid-name
+def bind_to_dom(MainWidgetClass, root_element_id):  # pylint: disable=invalid-name
     """Bind the main widget to the dom, or load the widget tree state from browser session storage if available"""
     # What is the impact of: https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
-    global _main_widget # pylint: disable=global-statement
+    global _main_widget  # pylint: disable=global-statement
     state = sessionStorage.getItem(_STATE_KEY)
     if state is None:
         _main_widget = MainWidgetClass()
@@ -85,10 +93,13 @@ def bind_to_dom(MainWidgetClass, root_element_id): # pylint: disable=invalid-nam
         _main_widget = _deserialize_from_base64(state)
         sessionStorage.removeItem(_STATE_KEY)
         console.log("Application state restored from browser session storage")
-    document.getElementById(root_element_id).replaceChildren(_main_widget._elem) # pylint: disable=protected-access
+    document.getElementById(root_element_id).replaceChildren(
+        _main_widget._elem
+    )  # pylint: disable=protected-access
     # See: https://jeff.glass/post/pyscript-why-create-proxy/
     add_event_listener(window, "beforeunload", _window_beforeunload)
     _main_widget.after_page_load()
+
 
 class PWidget:
     """Abstract widget base class"""
@@ -102,7 +113,7 @@ class PWidget:
 
     def _ensure_unique_id_beyond(self, widget_id):
         """Ensure any new unique widget id, sequential number is beyond the given number"""
-        i = int(widget_id[len(_ID_PREFIX):])
+        i = int(widget_id[len(_ID_PREFIX) :])
         PWidget._last_unique_id = max(PWidget._last_unique_id, i)
 
     def __init__(self, tag):
@@ -229,7 +240,7 @@ class PWidget:
                 pixels = int(self._min_width)
                 self._elem.style.minWidth = str(pixels) + "px"
             except ValueError:
-                self._elem.style.minWidth = str(self._min_width) # It was not an integer value
+                self._elem.style.minWidth = str(self._min_width)  # It was not an integer value
 
     def get_min_width(self):
         """Accessor"""
@@ -250,7 +261,7 @@ class PWidget:
                 pixels = int(self._min_height)
                 self._elem.style.minHeight = str(pixels) + "px"
             except ValueError:
-                self._elem.style.minHeight = str(self._min_height) # It was not an integer value
+                self._elem.style.minHeight = str(self._min_height)  # It was not an integer value
 
     def get_min_height(self):
         """Accessor"""
@@ -271,7 +282,7 @@ class PWidget:
                 pixels = int(self._max_width)
                 self._elem.style.maxWidth = str(pixels) + "px"
             except ValueError:
-                self._elem.style.maxWidth = str(self._max_width) # It was not an integer value
+                self._elem.style.maxWidth = str(self._max_width)  # It was not an integer value
 
     def get_max_width(self):
         """Accessor"""
@@ -292,7 +303,7 @@ class PWidget:
                 pixels = int(self._max_height)
                 self._elem.style.maxHeight = str(pixels) + "px"
             except ValueError:
-                self._elem.style.maxHeight = str(self._max_height) # It was not an integer value
+                self._elem.style.maxHeight = str(self._max_height)  # It was not an integer value
 
     def get_max_height(self):
         """Accessor"""
@@ -305,10 +316,11 @@ class PWidget:
             self._render_max_height()
         return self
 
+
 class PCompoundWidget(PWidget):
     """Abstract compound widget base class, that can have children"""
 
-    #TODO Add scrollbar options.
+    # TODO Add scrollbar options.
 
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
@@ -338,8 +350,8 @@ class PCompoundWidget(PWidget):
 
     def remove_child(self, child):
         """Remove a single child"""
-        child._parent = None # pylint: disable=protected-access
-        self._elem.removeChild(child._elem) # pylint: disable=protected-access
+        child._parent = None  # pylint: disable=protected-access
+        self._elem.removeChild(child._elem)  # pylint: disable=protected-access
         self._children.remove(child)
         return self
 
@@ -347,14 +359,14 @@ class PCompoundWidget(PWidget):
         """Remove all children"""
         self._elem.replaceChildren()
         for c in self._children:
-            c._parent = None # pylint: disable=protected-access
+            c._parent = None  # pylint: disable=protected-access
         self._children.clear()
         return self
 
     def add_child(self, child):
         """Add a single child"""
-        child._parent = self # pylint: disable=protected-access
-        self._elem.appendChild(child._elem) # pylint: disable=protected-access
+        child._parent = self  # pylint: disable=protected-access
+        self._elem.appendChild(child._elem)  # pylint: disable=protected-access
         self._children.append(child)
         return self
 
@@ -375,8 +387,8 @@ class PCompoundWidget(PWidget):
         super().restore_state()
         for c in self._children:
             c.restore_state()
-            c._parent = self # pylint: disable=protected-access
-            self._elem.appendChild(c._elem) # pylint: disable=protected-access
+            c._parent = self  # pylint: disable=protected-access
+            self._elem.appendChild(c._elem)  # pylint: disable=protected-access
         # Properties
         self._render_gap()
         self._render_margin()
@@ -419,6 +431,7 @@ class PCompoundWidget(PWidget):
             self._render_gap()
         return self
 
+
 class PPanel(PCompoundWidget):
     """Panel widget class with flex layout"""
 
@@ -454,6 +467,7 @@ class PPanel(PCompoundWidget):
             self._vertical = vertical
             self._render_vertical()
         return self
+
 
 class PGrid(PCompoundWidget):
     """Grid widget class with grid layout obviously"""
@@ -504,7 +518,7 @@ class PGrid(PCompoundWidget):
                 pixels = int(value)
                 columns[index] = str(pixels) + "px"
             except ValueError:
-                pass # It was not an integer value
+                pass  # It was not an integer value
 
         if self._columns != columns:
             self._columns = columns
@@ -527,7 +541,7 @@ class PGrid(PCompoundWidget):
                 pixels = int(value)
                 rows[index] = str(pixels) + "px"
             except ValueError:
-                pass # It was not an integer value
+                pass  # It was not an integer value
 
         if self._rows != rows:
             self._rows = rows
@@ -541,8 +555,8 @@ class PGrid(PCompoundWidget):
 
     def set_areas(self, areas):
         """Mutator"""
-        #See: https://www.w3schools.com/css/css_grid.asp
-        #See: https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
+        # See: https://www.w3schools.com/css/css_grid.asp
+        # See: https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
         self.remove_all_children()
 
         self._areas = ""
@@ -555,15 +569,16 @@ class PGrid(PCompoundWidget):
                 else:
                     if not c in self.get_children():
                         self.add_child(c)
-                    area_row += " " + c._widget_id # pylint: disable=protected-access
+                    area_row += " " + c._widget_id  # pylint: disable=protected-access
 
             if len(area_row) > 0:
                 area_row = area_row[1:]
-            self._areas += " " + "\"" + area_row + "\""
+            self._areas += " " + '"' + area_row + '"'
 
         if len(self._areas) > 0:
             self._areas = self._areas[1:]
         self._render_areas()
+
 
 class PFocussableWidget(PWidget):
     """Abstract focussable widget class"""
@@ -604,6 +619,7 @@ class PFocussableWidget(PWidget):
             self._enabled = enabled
             self._render_enabled()
         return self
+
 
 class PLabel(PFocussableWidget):
     """Label widget class"""
@@ -646,7 +662,7 @@ class PLabel(PFocussableWidget):
         if self._for is None:
             self._elem.removeAttribute("for")
         else:
-            self._elem.htmlFor = self._for._widget_id # pylint: disable=protected-access
+            self._elem.htmlFor = self._for._widget_id  # pylint: disable=protected-access
 
     def get_for(self):
         """Accessor"""
@@ -654,15 +670,16 @@ class PLabel(PFocussableWidget):
 
     def set_for(self, for_widget):
         """Mutator"""
-        if id(self._for) != id(for_widget): # Object reference/id comparison
+        if id(self._for) != id(for_widget):  # Object reference/id comparison
             self._for = for_widget
             self._render_for()
         return self
 
+
 class PButton(PFocussableWidget):
     """Button widget class"""
 
-    #See: https://semantic-ui.com/kitchen-sink.html
+    # See: https://semantic-ui.com/kitchen-sink.html
     def __init__(self, text):
         """Constructor, define tag and class attributes"""
         super().__init__("button")
@@ -727,12 +744,13 @@ class PButton(PFocussableWidget):
 
     def on_click(self, click):
         """Mutator"""
-        if id(self._click) != id(click): # Object reference/id comparison
+        if id(self._click) != id(click):  # Object reference/id comparison
             if self._click is not None:
                 remove_event_listener(self._elem, "click", self._click)
             self._click = click
             self._render_click()
         return self
+
 
 class PInputWidget(PFocussableWidget):
     """Abstract input widget class with value and shared functionality"""
@@ -854,17 +872,18 @@ class PInputWidget(PFocussableWidget):
 
     def on_change(self, change):
         """Mutator"""
-        if id(self._change) != id(change): # Object reference/id comparison
+        if id(self._change) != id(change):  # Object reference/id comparison
             if self._change is not None:
                 remove_event_listener(self._elem, "change", self._change)
             self._change = change
             self._render_change()
         return self
 
+
 class PTextInput(PInputWidget):
     """Text input widget class"""
 
-    #TODO Add subtype property: text, password, email, tel, url
+    # TODO Add subtype property: text, password, email, tel, url
 
     def __init__(self, value):
         """Constructor, define input type and class attributes"""
@@ -920,50 +939,62 @@ class PTextInput(PInputWidget):
             self._render_pattern()
         return self
 
+
 class PNumberInput(PInputWidget):
-    #TODO Implement number widget class; properties: min, max, step and decimals
+    # TODO Implement number widget class; properties: min, max, step and decimals
     pass
+
 
 class PDateInput(PInputWidget):
-    #TODO Implement date widget class; subtypes: date, time, datetime-local
+    # TODO Implement date widget class; subtypes: date, time, datetime-local
     pass
+
 
 class PCheckBox(PInputWidget):
-    #TODO Implement checkbox widget class, see: https://semantic-ui.com/modules/checkbox.html
+    # TODO Implement checkbox widget class, see: https://semantic-ui.com/modules/checkbox.html
     pass
+
 
 class PRadioGroup(PCompoundWidget):
-    #TODO Implement radiogroup widget class, see: https://semantic-ui.com/modules/checkbox.html#radio
+    # TODO Implement radiogroup widget class, see: https://semantic-ui.com/modules/checkbox.html#radio
     pass
+
 
 class PComboBox(PCompoundWidget):
-    #TODO Implement combobox widget class, see: https://semantic-ui.com/modules/dropdown.html
+    # TODO Implement combobox widget class, see: https://semantic-ui.com/modules/dropdown.html
     pass
+
 
 class PMenuitem(PWidget):
-    #TODO Implement menu item widget class, see: https://semantic-ui.com/collections/menu.html
+    # TODO Implement menu item widget class, see: https://semantic-ui.com/collections/menu.html
     pass
+
 
 class PMenu(PCompoundWidget):
-    #TODO Implement menu widget class, see: https://semantic-ui.com/collections/menu.html#menu
+    # TODO Implement menu widget class, see: https://semantic-ui.com/collections/menu.html#menu
     pass
+
 
 class PMenuBar(PCompoundWidget):
-    #TODO Implement menu bar widget class, see: https://semantic-ui.com/collections/menu.html#sub-menu
+    # TODO Implement menu bar widget class, see: https://semantic-ui.com/collections/menu.html#sub-menu
     pass
+
 
 class PTable(PCompoundWidget):
-    #TODO Implement table widget class, see: https://semantic-ui.com/collections/table.html
+    # TODO Implement table widget class, see: https://semantic-ui.com/collections/table.html
     pass
+
 
 class PTabPane(PCompoundWidget):
-    #TODO Implement tab pane widget class, see: https://semantic-ui.com/modules/tab.html
+    # TODO Implement tab pane widget class, see: https://semantic-ui.com/modules/tab.html
     pass
+
 
 class PTextArea(PFocussableWidget):
-    #TODO Implement text area widget class
+    # TODO Implement text area widget class
     pass
 
+
 class PModal(PCompoundWidget):
-    #TODO Implement modal widget class, see: https://semantic-ui.com/modules/modal.html
+    # TODO Implement modal widget class, see: https://semantic-ui.com/modules/modal.html
     pass
