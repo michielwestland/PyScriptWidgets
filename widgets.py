@@ -944,59 +944,71 @@ class PTextInput(PInputWidget):
 
 class PNumberInput(PInputWidget):
     """Number input widget class"""
+
     # TODO Implement number input, properties: min, max, step and decimals
 
 
 class PDateInput(PInputWidget):
     """Date input widget class"""
+
     # TODO Implement date input, subtypes: date, time, datetime-local
 
 
 class PCheckBox(PInputWidget):
     """Checkbox widget class"""
+
     # TODO Implement checkbox, see: https://semantic-ui.com/modules/checkbox.html
 
 
 class PRadioGroup(PCompoundWidget):
     """Radio group widget class"""
+
     # TODO Implement radio group, see: https://semantic-ui.com/modules/checkbox.html#radio
 
 
 class PComboBox(PCompoundWidget):
     """Combobox widget class"""
+
     # TODO Implement combo box, see: https://semantic-ui.com/modules/dropdown.html
 
 
 class PMenuItem(PWidget):
     """Menu item widget class"""
+
     # TODO Implement menu item, see: https://semantic-ui.com/collections/menu.html
 
 
 class PMenu(PCompoundWidget):
     """Menu widget class"""
+
     # TODO Implement menu, see: https://semantic-ui.com/collections/menu.html#menu
 
 
 class PMenuBar(PCompoundWidget):
     """Menu bar widget class"""
+
     # TODO Implement menu bar, see: https://semantic-ui.com/collections/menu.html#sub-menu
 
 
 class PTable(PCompoundWidget):
     """Table widget class"""
+
     # TODO Implement table, see: https://semantic-ui.com/collections/table.html
 
 
 class PTabPane(PCompoundWidget):
     """Tab pane widget class"""
+
     # TODO Implement tab pane, see: https://semantic-ui.com/modules/tab.html
 
 
 class PTextArea(PFocussableWidget):
     """Text area widget class"""
+
     # TODO Implement text area
 
 
 class PModal(PCompoundWidget):
     """Modal dialog widget class"""
+
     # TODO Implement modal widget, see: https://semantic-ui.com/modules/modal.html
