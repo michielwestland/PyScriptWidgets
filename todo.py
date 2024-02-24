@@ -1,7 +1,7 @@
 """Todo example"""
 
 from datetime import datetime
-from widgets import PPanel, PLabel, PTextInput, PButton
+from widgets import PPanel, PLabel, PTextInputType, PTextInput, PButton
 
 
 class TodoForm(PPanel):
@@ -10,7 +10,7 @@ class TodoForm(PPanel):
     def __init__(self):
         super().__init__(False)
         self.set_gap(5)
-        self.inp = PTextInput("").set_placeholder("<new todo>")
+        self.inp = PTextInput(PTextInputType.TEXT, "").set_placeholder("<new todo>")
         self.add_btn = PButton("Add").on_click(self.add_btn_click)
         self.add_children([self.inp, self.add_btn])
 

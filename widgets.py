@@ -889,7 +889,7 @@ class PInputWidget(PFocussableWidget):
 
 
 class PTextInputType(Enum):
-    """PTextInpout types"""
+    """PTextInput types"""
     TEXT = "text"
     PASSWORD = "password"
     EMAIL = "email"
@@ -961,10 +961,17 @@ class PNumberInput(PInputWidget):
     # TODO Implement number input, properties: min, max, step and decimals
 
 
+class PDateInputType(Enum):
+    """PDateInput types"""
+    DATE = "date"
+    TIME = "time"
+    DATETIME = "datetime-local"
+
+
 class PDateInput(PInputWidget):
     """Date input widget class"""
 
-    # TODO Implement date input, subtypes: date, time, datetime-local
+    # TODO Implement date input
 
 
 class PCheckBox(PInputWidget):
