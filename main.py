@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from js import fetch, JSON  # type: ignore # pylint: disable=import-error
-from widgets import PPanel, PGrid, PTextInputType, PTextInput, PButton, PLabel, bind_to_dom
+from widgets import PPanel, PGrid, PTextInput, PButton, PLabel, bind_to_dom
 from todo import TodoPanel
 
 # Set the base url when deploying to: https://michielwestland.github.io/PyScriptWidgets
@@ -14,7 +14,7 @@ class Main(PPanel):
 
     def __init__(self):
         super().__init__(True)
-        self.inp = PTextInput(PTextInputType.TEXT, "").set_placeholder("press the button...")
+        self.inp = PTextInput("").set_placeholder("press the button...")
         self.btn = PButton("Press me!").set_color("blue").on_click(self.btn_click)
 
         self.grd = PGrid().set_margin(6).set_gap(6)
@@ -24,9 +24,9 @@ class Main(PPanel):
             [
                 [
                     PLabel("Code"),
-                    PTextInput(PTextInputType.TEXT, "<code>").set_required(True),
+                    PTextInput("<code>").set_required(True),
                     PLabel("Number"),
-                    PTextInput(PTextInputType.TEXT, "<number>").set_readonly(True),
+                    PTextInput("<number>").set_readonly(True),
                 ],
                 [PLabel("Description").set_for(self.inp), self.inp, self.inp, self.inp],
                 [PLabel("Hidden").set_visible(False), None, self.btn, self.btn],

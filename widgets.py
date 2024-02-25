@@ -665,7 +665,10 @@ class PLabel(PFocussableWidget):
         if self._for is None:
             self._elem.removeAttribute("for")
         else:
-            self._elem.htmlFor = self._for._widget_id  # pylint: disable=protected-access
+            if isinstance(self._for, PInputWidget):
+                self._elem.htmlFor = self._for._widget_id + _ID_SUPPLEMENT + "input"  # pylint: disable=protected-access
+            else:
+                self._elem.htmlFor = self._for._widget_id  # pylint: disable=protected-access
 
     def get_for(self):
         """Accessor"""
@@ -758,11 +761,11 @@ class PButton(PFocussableWidget):
 class PInputWidget(PFocussableWidget):
     """Abstract input widget class with value and shared functionality"""
 
-    def __init__(self, widget_type, value):
+    def __init__(self, input_type, value):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._elem.classList.add("input")
-        self._widget_type = widget_type
+        self._input_type = input_type
         self._insert_input()
         self._render_enabled()
         # Value
@@ -789,7 +792,7 @@ class PInputWidget(PFocussableWidget):
     def _insert_input(self):
         self._elem_input = document.createElement("input")
         self._elem_input.id = self._widget_id + _ID_SUPPLEMENT + "input"
-        self._elem_input.setAttribute("type", self._widget_type)
+        self._elem_input.setAttribute("type", self._input_type)
         self._elem.appendChild(self._elem_input)
 
     def _insert_state(self):
@@ -817,11 +820,6 @@ class PInputWidget(PFocussableWidget):
                 self._elem_input.removeAttribute("disabled")
             else:
                 self._elem_input.setAttribute("disabled", "")
-
-    # Widget type
-    def get_widget_type(self):
-        """"Accessor"""
-        return self._widget_type
 
     # Value
     def get_value(self):
@@ -888,21 +886,12 @@ class PInputWidget(PFocussableWidget):
         return self
 
 
-class PTextInputType(Enum):
-    """PTextInput types"""
-    TEXT = "text"
-    PASSWORD = "password"
-    EMAIL = "email"
-    TEL = "tel"
-    URL = "url"
-
-
 class PTextInput(PInputWidget):
     """Text input widget class"""
 
-    def __init__(self, widget_type: PTextInputType, value):
+    def __init__(self, value):
         """Constructor, define input type and class attributes"""
-        super().__init__(widget_type, value)
+        super().__init__("text", value)
         # Properties
         self._placeholder = ""
         self._render_placeholder()
@@ -915,6 +904,19 @@ class PTextInput(PInputWidget):
         # Properties
         self._render_placeholder()
         self._render_pattern()
+
+    # Type: password
+    def is_type_password(self):  # TODO _PRIO Also email tel and url
+        """Accessor"""
+        return self._input_type == "password"
+
+    def set_type_password(self, type_password):
+        """Mutator"""
+        input_type = "password" if type_password else "text"
+        if self._input_type != input_type:
+            self._input_type == input_type
+            self._elem_input.setAttribute("type", self._input_type)
+        return self
 
     # Property: placeholder
     def _render_placeholder(self):
@@ -960,12 +962,7 @@ class PNumberInput(PInputWidget):
 
     # TODO Implement number input, properties: min, max, step and decimals
 
-
-class PDateInputType(Enum):
-    """PDateInput types"""
-    DATE = "date"
-    TIME = "time"
-    DATETIME = "datetime-local"
+    # TODO Also input types date, time, datetime-local
 
 
 class PDateInput(PInputWidget):
