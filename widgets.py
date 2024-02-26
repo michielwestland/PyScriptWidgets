@@ -3,18 +3,14 @@
 import base64
 import pickle
 import zlib
-from enum import Enum
 from js import console, sessionStorage  # type: ignore # pylint: disable=import-error
 
 # Prefer pyscript import over more basic js import for the document and window objects
 from pyscript import document, window  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # type: ignore # pylint: disable=import-error
 
-# TODO Add light/dark theme.
-# See: https://semantic-ui.com/usage/theming.html
-# See: http://learnsemantic.com/themes/overview.html
-# See: https://github.com/Semantic-Org/Semantic-UI/blob/master/semantic.json.example
-# See: https://github.com/Semantic-Org/example-github/blob/master/semantic/src/theme.config
+# TODO Add light/dark theme. Use the inverted class.
+# See: https://herculino.com/en/blog/semantic_ui_darkmode_part1.html
 
 # TODO Create a SVG version of the logo.
 
@@ -27,6 +23,9 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 # TODO Make a progressive web application (PWA).
 
 # TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
+
+# TODO Use a postgres database in de browser local storage from python.
+# See: https://electric-sql.com/
 
 # Private global reference to the root widget
 _main_widget = None  # pylint: disable=invalid-name
