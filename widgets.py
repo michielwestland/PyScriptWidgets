@@ -764,7 +764,7 @@ class PInputWidget(PFocussableWidget):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._elem.classList.add("input")
-        self._input_type = input_type
+        self._input_type = input_type  # TODO _PRIO Aparte render method voor het input type maken en ook bij een restore/insert state uitvoeren, of zo laten?
         self._insert_input()
         self._render_enabled()
         # Value
