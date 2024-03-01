@@ -692,7 +692,7 @@ class PButton(PFocussableWidget):
         # Properties
         self._text = text
         self._icon = ""
-        self._render_text_con()
+        self._render_text_icon()
         self._click = None
         self._render_click()
 
@@ -700,11 +700,11 @@ class PButton(PFocussableWidget):
         """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restore_state()
         # Properties
-        self._render_text_con()
+        self._render_text_icon()
         self._render_click()
 
     # Property: text
-    def _render_text_con(self):
+    def _render_text_icon(self):
         """Renderer"""
         self._elem.replaceChildren()
         if len(self._icon) > 0:
@@ -726,7 +726,7 @@ class PButton(PFocussableWidget):
         """Mutator"""
         if self._text != text:
             self._text = text
-            self._render_text_con()
+            self._render_text_icon()
         return self
 
     # Property: icon
@@ -738,7 +738,7 @@ class PButton(PFocussableWidget):
         """Mutator"""
         if self._icon != icon:
             self._icon = icon
-            self._render_text_con()
+            self._render_text_icon()
         return self
 
     # Property: click (writeonly)
@@ -764,13 +764,15 @@ class PInputWidget(PFocussableWidget):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._elem.classList.add("input")
-        self._input_type = input_type  # TODO _PRIO Aparte render method voor het input type maken en ook bij een restore/insert state uitvoeren, of zo laten?
         self._insert_input()
-        self._render_enabled()
         # Value
         self._value = ""
         self.set_value(value)
         # Properties
+        self._input_type = input_type
+        self._render_input_type()
+        self._enabled = True
+        self._render_enabled()
         self._required = ""
         self._render_required()
         self._readonly = False
@@ -791,7 +793,7 @@ class PInputWidget(PFocussableWidget):
     def _insert_input(self):
         self._elem_input = document.createElement("input")
         self._elem_input.id = self._widget_id + _ID_SUPPLEMENT + "input"
-        self._elem_input.setAttribute("type", self._input_type)
+        self._elem_input.setAttribute("type", "text")
         self._elem.appendChild(self._elem_input)
 
     def _insert_state(self):
@@ -805,6 +807,8 @@ class PInputWidget(PFocussableWidget):
         # Value
         self.set_value(self._value)
         # Properties
+        self._render_input_type()
+        self._render_enabled()
         self._render_required()
         self._render_readonly()
         self._render_change()
@@ -812,13 +816,6 @@ class PInputWidget(PFocussableWidget):
     def request_focus(self):
         self._elem_input.scrollIntoView()
         self._elem_input.focus()
-
-    def _render_enabled(self):
-        if hasattr(self, "_elem_input"):
-            if self._enabled:
-                self._elem_input.removeAttribute("disabled")
-            else:
-                self._elem_input.setAttribute("disabled", "")
 
     # Value
     def get_value(self):
@@ -830,6 +827,31 @@ class PInputWidget(PFocussableWidget):
         if self._elem_input.value != value:
             self._elem_input.value = value
         return self
+
+    # Property: input_type
+    def _render_input_type(self):
+        """"Renderer"""
+        self._elem_input.setAttribute("type", self._input_type)
+
+    def get_input_type(self):
+        """Accessor"""
+        return self._input_type
+
+    def set_input_type(self, input_type):
+        """Mutator"""
+        if self._input_type != input_type:
+            self._input_type = input_type
+            self._render_input_type()
+        return self
+
+    # Property: enabled
+    def _render_enabled(self):
+        """Renderer"""
+        if hasattr(self, "_elem_input"): # This overridden method is also called earlier, before _elem_input exists
+            if self._enabled:
+                self._elem_input.removeAttribute("disabled")
+            else:
+                self._elem_input.setAttribute("disabled", "")
 
     # Property: required
     def _render_required(self):
@@ -905,17 +927,40 @@ class PTextInput(PInputWidget):
         self._render_pattern()
 
     # Type: password
-    def is_type_password(self):  # TODO _PRIO Also email tel and url
+    def is_type_password(self):
         """Accessor"""
-        return self._input_type == "password"
+        return self.get_input_type() == "password"
 
     def set_type_password(self, type_password):
         """Mutator"""
-        input_type = "password" if type_password else "text"
-        if self._input_type != input_type:
-            self._input_type == input_type
-            self._elem_input.setAttribute("type", self._input_type)
-        return self
+        return self.set_input_type("password" if type_password else "text")
+
+    # Type: email
+    def is_type_email(self):
+        """Accessor"""
+        return self.get_input_type() == "email"
+
+    def set_type_email(self, type_email):
+        """Mutator"""
+        return self.set_input_type("email" if type_email else "text")
+
+    # Type: tel
+    def is_type_tel(self):
+        """Accessor"""
+        return self.get_input_type() == "tel"
+
+    def set_type_tel(self, type_tel):
+        """Mutator"""
+        return self.set_input_type("tel" if type_tel else "text")
+
+    # Type: url
+    def is_type_url(self):
+        """Accessor"""
+        return self.get_input_type() == "url"
+
+    def set_type_url(self, type_url):
+        """Mutator"""
+        return self.set_input_type("url" if type_url else "text")
 
     # Property: placeholder
     def _render_placeholder(self):
