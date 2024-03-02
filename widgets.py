@@ -75,7 +75,7 @@ def find_main_widget():
 
 def _detect_dark_mode():
     """Detect dark mode in the browser"""
-    if window.matchMedia and window.matchMedia('(prefers-color-scheme: dark)').matches:
+    if window.matchMedia and window.matchMedia("(prefers-color-scheme: dark)").matches:
         _main_widget.set_dark_mode(True)
 
 
@@ -107,7 +107,7 @@ def bind_to_dom(MainWidgetClass, root_element_id):  # pylint: disable=invalid-na
     _main_widget.after_page_load()
 
 
-class PWidget:
+class PWidget: # pylint: disable=too-many-instance-attributes
     """Abstract widget base class"""
 
     _last_unique_id = 0
@@ -388,7 +388,9 @@ class PCompoundWidget(PWidget):
     def add_child(self, child):
         """Add a single child"""
         child._parent = self  # pylint: disable=protected-access
-        child.set_dark_mode(child.get_parent().is_dark_mode()) # Inherit dark mode property from parent
+        child.set_dark_mode(
+            child.get_parent().is_dark_mode()
+        )  # Inherit dark mode property from parent
         self._elem.appendChild(child._elem)  # pylint: disable=protected-access
         self._children.append(child)
         return self
@@ -693,7 +695,9 @@ class PLabel(PFocussableWidget):
             self._elem.removeAttribute("for")
         else:
             if isinstance(self._for, PInputWidget):
-                self._elem.htmlFor = self._for._widget_id + _ID_SUPPLEMENT + "input"  # pylint: disable=protected-access
+                self._elem.htmlFor = (
+                    self._for._widget_id + _ID_SUPPLEMENT + "input"  # pylint: disable=protected-access
+                )
             else:
                 self._elem.htmlFor = self._for._widget_id  # pylint: disable=protected-access
 
@@ -859,7 +863,7 @@ class PInputWidget(PFocussableWidget):
 
     # Property: input_type
     def _render_input_type(self):
-        """"Renderer"""
+        """Renderer"""
         self._elem_input.setAttribute("type", self._input_type)
 
     def get_input_type(self):
@@ -877,7 +881,9 @@ class PInputWidget(PFocussableWidget):
     def _render_enabled(self):
         """Renderer"""
         # No need to call super(), because the surrounding element cannot be disabled
-        if hasattr(self, "_elem_input"): # This overridden method is also called earlier, before _elem_input exists
+        if hasattr(
+            self, "_elem_input"
+        ):  # This overridden method is also called earlier, before _elem_input exists
             if self._enabled:
                 self._elem_input.removeAttribute("disabled")
             else:
