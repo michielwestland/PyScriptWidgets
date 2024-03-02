@@ -37,6 +37,33 @@ class Main(PPanel):
         self.todo_pnl = TodoPanel()
         self.add_child(self.todo_pnl)
 
+        span_btn1 = PButton("Span1")
+        span_btn2 = PButton("Span2")
+        self.wide_grd = PGrid()
+        self.wide_grd.set_min_width(1000)
+        self.wide_grd.set_rows([36, 36, 36])
+        self.wide_grd.set_columns(
+            [
+                90,
+                "calc(25 * (100% - 180px) / 100)",
+                "calc(75 * (100% - 180px) / 100)",
+                90,
+            ]
+        )
+        self.wide_grd.set_areas(
+            [
+                [span_btn1, span_btn1, span_btn1, span_btn1],
+                [
+                    PLabel("Left side"),
+                    PButton("Small 25% button"),
+                    PButton("Wide 75% button"),
+                    PLabel("Right side"),
+                ],
+                [span_btn2, span_btn2, span_btn2, span_btn2],
+            ]
+        )
+        self.add_child(self.wide_grd)
+
     async def btn_click(self, event):  # pylint: disable=unused-argument
         """Button click event handler"""
         self.btn.set_color("red")

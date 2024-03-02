@@ -107,7 +107,7 @@ def bind_to_dom(MainWidgetClass, root_element_id):  # pylint: disable=invalid-na
     _main_widget.after_page_load()
 
 
-class PWidget: # pylint: disable=too-many-instance-attributes
+class PWidget:  # pylint: disable=too-many-instance-attributes
     """Abstract widget base class"""
 
     _last_unique_id = 0
@@ -537,6 +537,7 @@ class PGrid(PCompoundWidget):
     # Property: columns
     def _render_columns(self):
         """Renderer"""
+        # TODO Grid columns: automatically convert percentages to calc of percentage of remaining space: calc(<PERC> * (100% - <TOTAL>px) / 100)
         self._elem.style.gridTemplateColumns = " ".join(self._columns)
 
     def get_columns(self):
@@ -547,7 +548,7 @@ class PGrid(PCompoundWidget):
         """Mutator"""
         for index, value in enumerate(columns):
             try:
-                pixels = int(value)
+                pixels = int(value) # Integer values as a convenience
                 columns[index] = str(pixels) + "px"
             except ValueError:
                 pass  # It was not an integer value
@@ -560,6 +561,7 @@ class PGrid(PCompoundWidget):
     # Property: rows
     def _render_rows(self):
         """Renderer"""
+        # TODO Grid rows: automatically convert percentages to calc of percentage of remaining space: calc(<PERC> * (100% - <TOTAL>px) / 100)
         self._elem.style.gridTemplateRows = " ".join(self._rows)
 
     def get_rows(self):
@@ -570,7 +572,7 @@ class PGrid(PCompoundWidget):
         """Mutator"""
         for index, value in enumerate(rows):
             try:
-                pixels = int(value)
+                pixels = int(value) # Integer values as a convenience
                 rows[index] = str(pixels) + "px"
             except ValueError:
                 pass  # It was not an integer value
@@ -696,7 +698,9 @@ class PLabel(PFocussableWidget):
         else:
             if isinstance(self._for, PInputWidget):
                 self._elem.htmlFor = (
-                    self._for._widget_id + _ID_SUPPLEMENT + "input"  # pylint: disable=protected-access
+                    self._for._widget_id  # pylint: disable=protected-access
+                    + _ID_SUPPLEMENT
+                    + "input"
                 )
             else:
                 self._elem.htmlFor = self._for._widget_id  # pylint: disable=protected-access
