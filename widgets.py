@@ -1040,13 +1040,13 @@ class PTextInput(PInputWidget):
 class PNumberInput(PInputWidget):
     """Number input widget class"""
 
-    # TODO Implement number input, properties: min, max, step and decimals
+    # TODO Implement number input, format value, properties: min, max, step and decimals
 
 
 class PDateInput(PInputWidget):
     """Date input widget class"""
 
-    # TODO Implement date input, input types date, time, datetime-local
+    # TODO Implement date input, format value, input types: date, time, datetime-local
 
 
 class PCheckBox(PInputWidget):
