@@ -47,7 +47,6 @@ class Main(PPanel):
     def after_page_load(self):
         super().after_page_load()
         # Here, try out code after a page refresh with Live Server/Live Preview
-        self.set_dark_mode(True)
         self.btn.set_color("green")
 
 

@@ -73,6 +73,12 @@ def find_main_widget():
     return _main_widget
 
 
+def _detect_dark_mode():
+    """Detect dark mode in the browser"""
+    if window.matchMedia and window.matchMedia('(prefers-color-scheme: dark)').matches:
+        _main_widget.set_dark_mode(True)
+
+
 # Store the widget state
 def _window_beforeunload(event):  # pylint: disable=unused-argument
     """Save widget tree state in browser session storage, before unloading the page"""
@@ -92,6 +98,7 @@ def bind_to_dom(MainWidgetClass, root_element_id):  # pylint: disable=invalid-na
         _main_widget = _deserialize_from_base64(state)
         sessionStorage.removeItem(_STATE_KEY)
         console.log("Application state restored from browser session storage")
+    _detect_dark_mode()
     document.getElementById(root_element_id).replaceChildren(
         _main_widget._elem  # pylint: disable=protected-access
     )
