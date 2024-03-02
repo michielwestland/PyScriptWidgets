@@ -24,9 +24,9 @@ class Main(PPanel):
             [
                 [
                     PLabel("Code"),
-                    PTextInput("<code>").set_required(True),
+                    PTextInput("ABC").set_required(True),
                     PLabel("Number"),
-                    PTextInput("<number>").set_readonly(True),
+                    PTextInput("123").set_readonly(True),
                 ],
                 [PLabel("Description").set_for(self.inp), self.inp, self.inp, self.inp],
                 [PLabel("Hidden").set_visible(False), None, self.btn, self.btn],
