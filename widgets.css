@@ -1,0 +1,5 @@
+/* Some CSS tweaks for Semantic UI elements */
+
+label.ui.inverted {
+    color: white;
+}

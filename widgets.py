@@ -9,9 +9,6 @@ from js import console, sessionStorage  # type: ignore # pylint: disable=import-
 from pyscript import document, window  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # type: ignore # pylint: disable=import-error
 
-# TODO Add light/dark theme. Use the inverted class.
-# See: https://herculino.com/en/blog/semantic_ui_darkmode_part1.html
-
 # TODO Create a SVG version of the logo.
 
 # TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget.
@@ -132,7 +129,7 @@ class PWidget:
         # Properties
         self._visible = True
         self._render_visible()
-        self._color = "inherit"
+        self._color = ""
         self._render_color()
         self._min_width = None
         self._render_min_width()
@@ -202,6 +199,22 @@ class PWidget:
     def after_page_load(self):
         """Override this method tot execute code after the page DOM has loaded"""
 
+    # Property: dark_mode
+    def is_dark_mode(self):
+        """Accessor"""
+        return "inverted" in self._elem.classList
+
+    def set_dark_mode(self, dark_mode):
+        """Mutator"""
+        # See: https://herculino.com/en/blog/semantic_ui_darkmode_part1.html
+        if dark_mode:
+            if not self.is_dark_mode():
+                self._elem.classList.add("inverted")
+        else:
+            if self.is_dark_mode():
+                self._elem.classList.remove("inverted")
+        return self
+
     # Property: visible
     def _render_visible(self):
         """Renderer"""
@@ -221,7 +234,7 @@ class PWidget:
     # Property: color
     def _render_color(self):
         """Renderer"""
-        self._elem.style.color = self._color
+        self._elem.style.color = self._color if self._color != "" else None
 
     def get_color(self):
         """Accessor"""
@@ -368,6 +381,7 @@ class PCompoundWidget(PWidget):
     def add_child(self, child):
         """Add a single child"""
         child._parent = self  # pylint: disable=protected-access
+        child.set_dark_mode(child.get_parent().is_dark_mode()) # Inherit dark mode property from parent
         self._elem.appendChild(child._elem)  # pylint: disable=protected-access
         self._children.append(child)
         return self
@@ -400,6 +414,13 @@ class PCompoundWidget(PWidget):
         super().after_page_load()
         for c in self._children:
             c.after_page_load()
+
+    # Property: dark_mode (overridden)
+    def set_dark_mode(self, dark_mode):
+        """Mutator"""
+        super().set_dark_mode(dark_mode)
+        for c in self._children:
+            c.set_dark_mode(dark_mode)
 
     # Property: margin
     def _render_margin(self):
@@ -710,9 +731,9 @@ class PButton(PFocussableWidget):
         if len(self._icon) > 0:
             e = document.createElement("i")
             e.id = self._widget_id + _ID_SUPPLEMENT + "i"
+            e.classList.add("icon")
             for c in self._icon.split():
                 e.classList.add(c)
-            e.classList.add("icon")
             self._elem.appendChild(e)
         s = " " if len(self._icon) > 0 and len(self._text) > 0 else ""
         if len(s + self._text) > 0:
@@ -791,9 +812,10 @@ class PInputWidget(PFocussableWidget):
         del state["_elem_input"]
 
     def _insert_input(self):
+        # Non need to replace existing children, this method is only called from initialization or deserialization
         self._elem_input = document.createElement("input")
-        self._elem_input.id = self._widget_id + _ID_SUPPLEMENT + "input"
         self._elem_input.setAttribute("type", "text")
+        self._elem_input.id = self._widget_id + _ID_SUPPLEMENT + "input"
         self._elem.appendChild(self._elem_input)
 
     def _insert_state(self):
@@ -844,9 +866,10 @@ class PInputWidget(PFocussableWidget):
             self._render_input_type()
         return self
 
-    # Property: enabled
+    # Property: enabled (overridden)
     def _render_enabled(self):
         """Renderer"""
+        # No need to call super(), because the surrounding element cannot be disabled
         if hasattr(self, "_elem_input"): # This overridden method is also called earlier, before _elem_input exists
             if self._enabled:
                 self._elem_input.removeAttribute("disabled")
