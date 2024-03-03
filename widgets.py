@@ -87,12 +87,12 @@ def _window_beforeunload(event):  # pylint: disable=unused-argument
 
 
 # Create or load the widget state and bind to the browser DOM
-def bind_to_dom(MainWidgetClass, root_element_id):  # pylint: disable=invalid-name
+def bind_to_dom(MainWidgetClass, root_element_id, debug=False):  # pylint: disable=invalid-name
     """Bind the main widget to the dom, or load the widget tree state from browser session storage if available"""
     # What is the impact of: https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
     global _main_widget  # pylint: disable=global-statement
     state = sessionStorage.getItem(_STATE_KEY)
-    if state is None:
+    if state is None or debug:
         _main_widget = MainWidgetClass()
     else:
         _main_widget = _deserialize_from_base64(state)
@@ -138,6 +138,7 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
         self._render_visible()
         self._color = ""
         self._render_color()
+        #TODO _PRIO Widget implement width, height properties
         self._min_width = None
         self._render_min_width()
         self._min_height = None
@@ -537,7 +538,9 @@ class PGrid(PCompoundWidget):
     # Property: columns
     def _render_columns(self):
         """Renderer"""
-        # TODO Grid columns: automatically convert percentages to calc of percentage of remaining space: calc(<PERC> * (100% - <TOTAL>px) / 100)
+        # TODO Grid columns: automatically convert percentages to calc of percentage of remaining space:
+        #      calc(<PERC> * (100% - <TOTAL>px) / 100)
+        #      Only if there are only 'px' and/or '%' values
         self._elem.style.gridTemplateColumns = " ".join(self._columns)
 
     def get_columns(self):
@@ -561,7 +564,9 @@ class PGrid(PCompoundWidget):
     # Property: rows
     def _render_rows(self):
         """Renderer"""
-        # TODO Grid rows: automatically convert percentages to calc of percentage of remaining space: calc(<PERC> * (100% - <TOTAL>px) / 100)
+        # TODO Grid rows: automatically convert percentages to calc of percentage of remaining space:
+        #      calc(<PERC> * (100% - <TOTAL>px) / 100)
+        #      Only if there are only 'px' and/or '%' values
         self._elem.style.gridTemplateRows = " ".join(self._rows)
 
     def get_rows(self):

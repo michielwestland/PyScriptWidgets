@@ -24,7 +24,7 @@ class Main(PPanel):
             [
                 [
                     PLabel("Code"),
-                    PTextInput("ABC").set_required(True),
+                    PTextInput("ABC").set_pattern("[A-Z]+").set_required(True),
                     PLabel("Number"),
                     PTextInput("123").set_readonly(True),
                 ],
@@ -37,8 +37,8 @@ class Main(PPanel):
         self.todo_pnl = TodoPanel()
         self.add_child(self.todo_pnl)
 
-        span_btn1 = PButton("Span1")
-        span_btn2 = PButton("Span2")
+        hdr_inp = PTextInput("Header span")
+        ftr_inp = PTextInput("Footer span")
         self.wide_grd = PGrid()
         self.wide_grd.set_min_width(1000)
         self.wide_grd.set_rows([36, 36, 36])
@@ -52,14 +52,14 @@ class Main(PPanel):
         )
         self.wide_grd.set_areas(
             [
-                [span_btn1, span_btn1, span_btn1, span_btn1],
+                [hdr_inp, hdr_inp, hdr_inp, hdr_inp],
                 [
                     PLabel("Left side"),
                     PButton("Small 25% button"),
                     PButton("Wide 75% button"),
                     PLabel("Right side"),
                 ],
-                [span_btn2, span_btn2, span_btn2, span_btn2],
+                [ftr_inp, ftr_inp, ftr_inp, ftr_inp],
             ]
         )
         self.add_child(self.wide_grd)
@@ -78,4 +78,4 @@ class Main(PPanel):
 
 
 if __name__ == "__main__":
-    bind_to_dom(Main, "root")
+    bind_to_dom(Main, "root", debug=True)

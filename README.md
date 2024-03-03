@@ -20,7 +20,6 @@ Runtime:
 - Pyodide: https://pyodide.org/en/stable (MPL-2.0 license)
 - Semantic UI: https://semantic-ui.com (MIT license)
 - jQuery: https://jquery.com (MIT license)
-- Freepik: https://www.freepik.com/free-vector/realistic-blur-background_14212526.htm (Freepik Free license with attribution)
 
 Logo:
 ![Logo](logo.png?raw=true "Logo")
