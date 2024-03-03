@@ -585,10 +585,24 @@ class PGrid(PCompoundWidget):
     # Property: columns
     def _render_columns(self):
         """Renderer"""
-        # TODO _PRIO Grid columns: automatically convert percentages to calc of percentage of remaining space:
-        #      calc(<PERC> * (100% - <TOTAL>px) / 100)
-        #      Only if there are only 'px' and/or '%' values
-        self._elem.style.gridTemplateColumns = " ".join(self._columns)
+        all_perc_px = len(self._columns) > 0
+        total_px = 0
+        for c in self._columns:
+            all_perc_px = all_perc_px and (c.endswith("%") or c.endswith("px"))
+            if c.endswith("px"):
+                total_px += int(c[:-2])
+        if all_perc_px:
+            # When there are only 'px' and '%' values, convert percentages to a calculation of the percentage of *remaining* space
+            arr = []
+            for c in self._columns:
+                if c.endswith("%"):
+                    perc = int(c[:-1])
+                    arr.append("calc(" + c + " - " + str(perc * total_px / 100) + "px)")
+                else:
+                    arr.append(c)
+            self._elem.style.gridTemplateColumns = " ".join(arr)
+        else:
+            self._elem.style.gridTemplateColumns = " ".join(self._columns)
 
     def get_columns(self):
         """Accessor"""
@@ -611,10 +625,24 @@ class PGrid(PCompoundWidget):
     # Property: rows
     def _render_rows(self):
         """Renderer"""
-        # TODO _PRIO Grid rows: automatically convert percentages to calc of percentage of remaining space:
-        #      calc(<PERC> * (100% - <TOTAL>px) / 100)
-        #      Only if there are only 'px' and/or '%' values
-        self._elem.style.gridTemplateRows = " ".join(self._rows)
+        all_perc_px = len(self._rows) > 0
+        total_px = 0
+        for r in self._rows:
+            all_perc_px = all_perc_px and (r.endswith("%") or r.endswith("px"))
+            if r.endswith("px"):
+                total_px += int(r[:-2])
+        if all_perc_px:
+            # When there are only 'px' and '%' values, convert percentages to a calculation of the percentage of *remaining* space
+            arr = []
+            for r in self._rows:
+                if r.endswith("%"):
+                    perc = int(r[:-1])
+                    arr.append("calc(" + r + " - " + str(perc * total_px / 100) + "px)")
+                else:
+                    arr.append(r)
+            self._elem.style.gridTemplateRows = " ".join(arr)
+        else:
+            self._elem.style.gridTemplateRows = " ".join(self._rows)
 
     def get_rows(self):
         """Accessor"""

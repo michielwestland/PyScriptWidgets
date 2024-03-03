@@ -42,14 +42,7 @@ class Main(PPanel):
         self.wide_grd = PGrid()
         self.wide_grd.set_min_width(1000)
         self.wide_grd.set_rows([36, 36, 36])
-        self.wide_grd.set_columns(
-            [
-                90,
-                "calc(25 * (100% - 180px) / 100)",
-                "calc(75 * (100% - 180px) / 100)",
-                90,
-            ]
-        )
+        self.wide_grd.set_columns([90, "25%", "75%", 90])
         self.wide_grd.set_areas(
             [
                 [hdr_inp, hdr_inp, hdr_inp, hdr_inp],
@@ -74,7 +67,7 @@ class Main(PPanel):
     def after_page_load(self):
         super().after_page_load()
         # Here, try out code after a page refresh with Live Server/Live Preview
-        self.btn.set_color("green")
+        self.btn.set_color("#AAFF00")
 
 
 if __name__ == "__main__":
