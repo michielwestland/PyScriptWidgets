@@ -9,6 +9,8 @@ from js import console, sessionStorage  # type: ignore # pylint: disable=import-
 from pyscript import document, window  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # type: ignore # pylint: disable=import-error
 
+# TODO Copyright notice at the beginning of each source file.
+
 # TODO Create a SVG version of the logo.
 
 # TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget.
@@ -31,8 +33,6 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 # TODO Add image widget.
 
 # TODO Add hyperlink widget.
-
-# TODO Add component classname as style class for easy identification.
 
 # Private global reference to the root widget
 _main_widget = None  # pylint: disable=invalid-name
