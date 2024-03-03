@@ -138,7 +138,10 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
         self._render_visible()
         self._color = ""
         self._render_color()
-        #TODO _PRIO Widget implement width, height properties
+        self._width = None
+        self._render_width()
+        self._height = None
+        self._render_height()
         self._min_width = None
         self._render_min_width()
         self._min_height = None
@@ -199,6 +202,8 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
         # Properties
         self._render_visible()
         self._render_color()
+        self._render_width()
+        self._render_height()
         self._render_min_width()
         self._render_min_height()
         self._render_max_width()
@@ -253,6 +258,48 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
         if self._color != color:
             self._color = color
             self._render_color()
+        return self
+
+    # Property: width
+    def _render_width(self):
+        """Renderer"""
+        if self._width is not None:
+            try:
+                pixels = int(self._width)
+                self._elem.style.width = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.width = str(self._width)  # It was not an integer value
+
+    def get_width(self):
+        """Accessor"""
+        return self._width
+
+    def set_width(self, width):
+        """Mutator"""
+        if self._width != width:
+            self._width = width
+            self._render_width()
+        return self
+
+    # Property: height
+    def _render_height(self):
+        """Renderer"""
+        if self._height is not None:
+            try:
+                pixels = int(self._height)
+                self._elem.style.height = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.height = str(self._height)  # It was not an integer value
+
+    def get_height(self):
+        """Accessor"""
+        return self._height
+
+    def set_height(self, height):
+        """Mutator"""
+        if self._height != height:
+            self._height = height
+            self._render_height()
         return self
 
     # Property: min_width
