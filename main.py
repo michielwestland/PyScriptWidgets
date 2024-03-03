@@ -72,4 +72,4 @@ class Main(PGrid):
 
 
 if __name__ == "__main__":
-    bind_to_dom(Main, "root", debug=True)
+    bind_to_dom(Main, "root", debug=False)
