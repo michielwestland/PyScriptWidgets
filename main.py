@@ -2,18 +2,25 @@
 
 from datetime import datetime
 from js import fetch, JSON  # type: ignore # pylint: disable=import-error
-from widgets import PPanel, PGrid, PTextInput, PButton, PLabel, bind_to_dom
+from widgets import PGrid, PTextInput, PButton, PLabel, bind_to_dom
 from todo import TodoPanel
 
 # Set the base url when deploying to: https://michielwestland.github.io/PyScriptWidgets
 BASE_URL = "."
 
 
-class Main(PPanel):
+class Main(PGrid):
     """Main class"""
 
     def __init__(self):
-        super().__init__(True)
+        super().__init__()
+        self.set_width("100vw")
+        self.set_height("100vh")
+
+        self.set_rows([100, "100%", 50])
+        self.set_columns([100, "60%", 100, "40%"])
+
+        # First demo panel
         self.inp = PTextInput("").set_placeholder("press the button...")
         self.btn = PButton("Press me!").set_color("blue").on_click(self.btn_click)
 
@@ -32,30 +39,24 @@ class Main(PPanel):
                 [PLabel("Hidden").set_visible(False), None, self.btn, self.btn],
             ]
         )
-        self.add_child(self.grd)
 
-        self.todo_pnl = TodoPanel()
-        self.add_child(self.todo_pnl)
+        # Second demo panel
+        self.todo = TodoPanel()
 
-        hdr_inp = PTextInput("Header span")
-        ftr_inp = PTextInput("Footer span")
-        self.wide_grd = PGrid()
-        self.wide_grd.set_min_width(1000)
-        self.wide_grd.set_rows([36, 36, 36])
-        self.wide_grd.set_columns([90, "25%", "75%", 90])
-        self.wide_grd.set_areas(
+        hdr = PTextInput("Header")
+        ftr = PTextInput("Footer")
+        self.set_areas(
             [
-                [hdr_inp, hdr_inp, hdr_inp, hdr_inp],
+                [hdr, hdr, hdr, hdr],
                 [
-                    PLabel("Left side"),
-                    PButton("Small 25% button"),
-                    PButton("Wide 75% button"),
-                    PLabel("Right side"),
+                    PTextInput("Left"),
+                    self.grd,
+                    PTextInput("Middle"),
+                    self.todo,
                 ],
-                [ftr_inp, ftr_inp, ftr_inp, ftr_inp],
+                [ftr, ftr, ftr, ftr],
             ]
         )
-        self.add_child(self.wide_grd)
 
     async def btn_click(self, event):  # pylint: disable=unused-argument
         """Button click event handler"""
@@ -67,7 +68,7 @@ class Main(PPanel):
     def after_page_load(self):
         super().after_page_load()
         # Here, try out code after a page refresh with Live Server/Live Preview
-        self.btn.set_color("#AAFF00")
+        self.btn.set_color("#65FF00")
 
 
 if __name__ == "__main__":

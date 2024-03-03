@@ -24,6 +24,12 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 # TODO Use a postgres database in de browser local storage from python.
 # See: https://electric-sql.com/
 
+# TODO Add widget border property.
+
+# TODO Add image widget.
+
+# TODO Add hyperlink widget.
+
 # Private global reference to the root widget
 _main_widget = None  # pylint: disable=invalid-name
 
@@ -1184,7 +1190,7 @@ class PTabPane(PCompoundWidget):
 class PTextArea(PFocussableWidget):
     """Text area widget class"""
 
-    # TODO Implement text area
+    # TODO Implement text area.
 
 
 class PModal(PCompoundWidget):
