@@ -585,7 +585,7 @@ class PGrid(PCompoundWidget):
     # Property: columns
     def _render_columns(self):
         """Renderer"""
-        # TODO Grid columns: automatically convert percentages to calc of percentage of remaining space:
+        # TODO _PRIO Grid columns: automatically convert percentages to calc of percentage of remaining space:
         #      calc(<PERC> * (100% - <TOTAL>px) / 100)
         #      Only if there are only 'px' and/or '%' values
         self._elem.style.gridTemplateColumns = " ".join(self._columns)
@@ -611,7 +611,7 @@ class PGrid(PCompoundWidget):
     # Property: rows
     def _render_rows(self):
         """Renderer"""
-        # TODO Grid rows: automatically convert percentages to calc of percentage of remaining space:
+        # TODO _PRIO Grid rows: automatically convert percentages to calc of percentage of remaining space:
         #      calc(<PERC> * (100% - <TOTAL>px) / 100)
         #      Only if there are only 'px' and/or '%' values
         self._elem.style.gridTemplateRows = " ".join(self._rows)

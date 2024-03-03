@@ -19,6 +19,7 @@ Runtime:
 - PyScript: https://pyscript.net (Apache license 2.0)
 - Pyodide: https://pyodide.org/en/stable (MPL-2.0 license)
 - Semantic UI: https://semantic-ui.com (MIT license)
+- or alternatively Fomantic UI: https://fomantic-ui.com (MIT license)
 - jQuery: https://jquery.com (MIT license)
 
 Logo:
