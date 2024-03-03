@@ -2,13 +2,13 @@
 
 @media (prefers-color-scheme: light) {
     body {
-        background-image: linear-gradient(to bottom right, #F0F8FF, white);
+        background-image: linear-gradient(to bottom right, #9cd1ff, white);
     }
 }
 
 @media (prefers-color-scheme: dark) {
     body {
-        background-image: linear-gradient(to bottom right, #002D62, black);
+        background-image: linear-gradient(to bottom right, #1e4a7c, rgb(75, 75, 75));
     }
 }
 

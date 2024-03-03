@@ -26,11 +26,13 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 
 # TODO Add widget border property.
 
-# TODO Add widget background image/linear gradient property.
+# TODO Add widget background image/linear gradient property: linear-gradient(to bottom right, #F0F8FF, white);
 
 # TODO Add image widget.
 
 # TODO Add hyperlink widget.
+
+# TODO Add component classname as style class for easy identification.
 
 # Private global reference to the root widget
 _main_widget = None  # pylint: disable=invalid-name
@@ -38,7 +40,7 @@ _main_widget = None  # pylint: disable=invalid-name
 # Constants
 _STATE_KEY = "widget_state"
 _ID_PREFIX = "e"
-_ID_SUPPLEMENT = "."
+_ID_SUPPLEMENT = "_"
 _UTF_8 = "utf-8"
 
 
@@ -140,6 +142,7 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
         self._insert_id_grid_area()
         # Standard widget styling through CSS: https://stackoverflow.com/questions/507138/how-to-add-a-class-to-a-given-element
         self._classlist = []
+        self._elem.classList.add(self.__class__.__name__)
         self._elem.classList.add("ui")
         # Properties
         self._visible = True
@@ -417,7 +420,9 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
 class PCompoundWidget(PWidget):
     """Abstract compound widget base class, that can have children"""
 
-    # TODO Add scrollbar options.
+    # TODO _BUSY Add overflow scrollbar option to some or all compound widgets.
+
+    # TODO Also implement padding property, move both properties to widget class.
 
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
@@ -548,20 +553,22 @@ class PPanel(PCompoundWidget):
         # Properties
         self._vertical = vertical
         self._render_vertical()
+        self._wrap = False
+        self._render_wrap()
 
     def restore_state(self):
         """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
         super().restore_state()
         # Properties
         self._render_vertical()
+        self._render_wrap()
 
     # Property: vertical
     def _render_vertical(self):
         """Renderer"""
         # See: https://flexbox.malven.co
-        self._elem.style.display = "flex"
-        self._elem.style.alignItems = "baseline"
-        self._elem.style.flexWrap = "wrap"
+        self._elem.style.display = "flex" # TODO Dit moet in een _insert_display net als bij flex
+        self._elem.style.alignItems = "baseline" # TODO Dit moet in een _insert_display net als bij flex
         self._elem.style.flexDirection = "column" if self._vertical else "row"
 
     def is_vertical(self):
@@ -573,6 +580,22 @@ class PPanel(PCompoundWidget):
         if self._vertical != vertical:
             self._vertical = vertical
             self._render_vertical()
+        return self
+
+    # Property: wrap
+    def _render_wrap(self):
+        """Renderer"""
+        self._elem.style.flexWrap = "wrap" if self._wrap else "nowrap"
+
+    def is_wrap(self):
+        """Accessor"""
+        return self._wrap
+
+    def set_wrap(self, wrap):
+        """Mutator"""
+        if self._wrap != wrap:
+            self._wrap = wrap
+            self._render_wrap()
         return self
 
 
@@ -719,6 +742,14 @@ class PGrid(PCompoundWidget):
         if len(self._areas) > 0:
             self._areas = self._areas[1:]
         self._render_areas()
+
+    def add_child(self, child):
+        """Add a single child"""
+        if isinstance(child, PCompoundWidget):
+            child._elem.style.overflow = "auto"
+            child.set_max_width("100%")
+            child.set_max_height("100%")
+        return super().add_child(child)
 
 
 class PFocussableWidget(PWidget):
@@ -938,6 +969,7 @@ class PInputWidget(PFocussableWidget):
         self._elem_input = document.createElement("input")
         self._elem_input.setAttribute("type", "text")
         self._elem_input.id = self._widget_id + _ID_SUPPLEMENT + "input"
+        self._elem_input.classList.add(self.__class__.__name__)
         self._elem.appendChild(self._elem_input)
 
     def _insert_state(self):
