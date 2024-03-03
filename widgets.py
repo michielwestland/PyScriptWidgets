@@ -26,7 +26,7 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 
 # TODO Add widget border property.
 
-# TODO Add widget background color property, maybe with option for linear gradient.
+# TODO Add widget background image/linear gradient property.
 
 # TODO Add image widget.
 
@@ -146,6 +146,8 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
         self._render_visible()
         self._color = ""
         self._render_color()
+        self._bg_color = ""
+        self._render_bg_color()
         self._width = None
         self._render_width()
         self._height = None
@@ -210,6 +212,7 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
         # Properties
         self._render_visible()
         self._render_color()
+        self._render_bg_color()
         self._render_width()
         self._render_height()
         self._render_min_width()
@@ -266,6 +269,22 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
         if self._color != color:
             self._color = color
             self._render_color()
+        return self
+
+    # Property: bg_color
+    def _render_bg_color(self):
+        """Renderer"""
+        self._elem.style.backgroundColor = self._bg_color if self._bg_color != "" else None
+
+    def get_bg_color(self):
+        """Accessor"""
+        return self._bg_color
+
+    def set_bg_color(self, bg_color):
+        """Mutator"""
+        if self._bg_color != bg_color:
+            self._bg_color = bg_color
+            self._render_bg_color()
         return self
 
     # Property: width

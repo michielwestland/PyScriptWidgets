@@ -43,15 +43,15 @@ class Main(PGrid):
         # Second demo panel
         self.todo = TodoPanel()
 
-        hdr = PTextInput("Header")
-        ftr = PTextInput("Footer")
+        hdr = PLabel("Header").set_bg_color("blue")
+        ftr = PLabel("Footer").set_bg_color("green")
         self.set_areas(
             [
                 [hdr, hdr, hdr, hdr],
                 [
-                    PTextInput("Left"),
+                    PLabel("Left").set_bg_color("purple"),
                     self.grd,
-                    PTextInput("Middle"),
+                    PLabel("Middle").set_bg_color("purple"),
                     self.todo,
                 ],
                 [ftr, ftr, ftr, ftr],
@@ -68,7 +68,7 @@ class Main(PGrid):
     def after_page_load(self):
         super().after_page_load()
         # Here, try out code after a page refresh with Live Server/Live Preview
-        self.btn.set_color("#65FF00")
+        self.btn.set_color("green")
 
 
 if __name__ == "__main__":
