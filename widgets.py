@@ -26,6 +26,8 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 
 # TODO Add widget border property.
 
+# TODO Add widget background color property, maybe with option for linear gradient.
+
 # TODO Add image widget.
 
 # TODO Add hyperlink widget.
