@@ -420,8 +420,6 @@ class PWidget:  # pylint: disable=too-many-instance-attributes
 class PCompoundWidget(PWidget):
     """Abstract compound widget base class, that can have children"""
 
-    # TODO _BUSY Add overflow scrollbar option to some or all compound widgets.
-
     # TODO Also implement padding property, move both properties to widget class.
 
     def __init__(self, tag):
@@ -550,11 +548,17 @@ class PPanel(PCompoundWidget):
     def __init__(self, vertical):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
+        self._insert_display()
         # Properties
         self._vertical = vertical
         self._render_vertical()
         self._wrap = False
         self._render_wrap()
+
+    def _insert_state(self):
+        """Override this method to insert state, for keys that could not be pickled"""
+        super()._insert_state()
+        self._insert_display()
 
     def restore_state(self):
         """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
@@ -563,12 +567,14 @@ class PPanel(PCompoundWidget):
         self._render_vertical()
         self._render_wrap()
 
+    def _insert_display(self):
+        # See: https://flexbox.malven.co
+        self._elem.style.display = "flex"
+        self._elem.style.alignItems = "baseline"
+
     # Property: vertical
     def _render_vertical(self):
         """Renderer"""
-        # See: https://flexbox.malven.co
-        self._elem.style.display = "flex" # TODO Dit moet in een _insert_display net als bij flex
-        self._elem.style.alignItems = "baseline" # TODO Dit moet in een _insert_display net als bij flex
         self._elem.style.flexDirection = "column" if self._vertical else "row"
 
     def is_vertical(self):
@@ -746,7 +752,8 @@ class PGrid(PCompoundWidget):
     def add_child(self, child):
         """Add a single child"""
         if isinstance(child, PCompoundWidget):
-            child._elem.style.overflow = "auto"
+            # TODO _BUSY Add overflow scrollbar option to some or all compound widgets.
+            child._elem.style.overflow = "auto"  # pylint: disable=protected-access
             child.set_max_width("100%")
             child.set_max_height("100%")
         return super().add_child(child)
