@@ -751,8 +751,7 @@ class PGrid(PCompoundWidget):
 
     def add_child(self, child):
         """Add a single child"""
-        if isinstance(child, PCompoundWidget):
-            # TODO _BUSY Add overflow scrollbar option to some or all compound widgets.
+        if isinstance(child, PPanel) or isinstance(child, PGrid):
             child._elem.style.overflow = "auto"  # pylint: disable=protected-access
             child.set_max_width("100%")
             child.set_max_height("100%")
