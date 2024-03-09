@@ -673,7 +673,7 @@ class PGrid(PCompoundWidget):
         """Mutator"""
         for index, value in enumerate(columns):
             try:
-                pixels = int(value) # Integer values as a convenience
+                pixels = int(value)  # Integer values as a convenience
                 columns[index] = str(pixels) + "px"
             except ValueError:
                 pass  # It was not an integer value
@@ -713,7 +713,7 @@ class PGrid(PCompoundWidget):
         """Mutator"""
         for index, value in enumerate(rows):
             try:
-                pixels = int(value) # Integer values as a convenience
+                pixels = int(value)  # Integer values as a convenience
                 rows[index] = str(pixels) + "px"
             except ValueError:
                 pass  # It was not an integer value
