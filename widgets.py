@@ -14,8 +14,6 @@ from js import console, sessionStorage  # type: ignore # pylint: disable=import-
 from pyscript import document, window  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # type: ignore # pylint: disable=import-error
 
-# TODO Create a SVG version of the logo.
-
 # TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget.
 # See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
