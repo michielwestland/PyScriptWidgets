@@ -29,7 +29,7 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 # TODO Use a postgres database in de browser local storage from python.
 # See: https://electric-sql.com/
 
-# TODO Add widget border property.
+# TODO Add widget border property or border component.
 
 # TODO Add widget background image/linear gradient property: linear-gradient(to bottom right, #F0F8FF, white);
 
