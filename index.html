@@ -14,10 +14,11 @@
     </script>
 
     <!-- Set the *base url* when deploying to: https://michielwestland.github.io/PyScriptWidgets -->
-    <!-- <base href="https://michielwestland.github.io/PyScriptWidgets"> -->
+    <!-- Make sure any url, other than a dot, ends with a forward slash! -->
+    <!-- <base href="https://michielwestland.github.io/PyScriptWidgets/"> -->
     <base href=".">
 
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
     <!-- Semantic UI components
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
@@ -55,9 +56,7 @@
     </div>
 
     <!-- Application main Python script -->
-    <!-- Prefix these urls with *base url* /PyScriptWidgets when deploying to: https://michielwestland.github.io/PyScriptWidgets -->
-    <!-- <script type="py" src="./PyScriptWidgets/main.py" config="./PyScriptWidgets/pyscript.toml"></script> -->
-    <script type="py" src="./main.py" config="./pyscript.toml"></script>
+    <script type="py" src="main.py" config="pyscript.toml"></script>
 
     <!-- Display the total page load time, remove loading spinner, restore original title after a while -->
     <!-- See: https://jeff.glass/post/whats-new-pyscript-2023-11-1/ -->

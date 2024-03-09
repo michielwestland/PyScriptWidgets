@@ -6,6 +6,7 @@ packages = [
 
 [files]
 # Set the *base url* when deploying to: https://michielwestland.github.io/PyScriptWidgets
+# Make sure the url does not end with a forward slash!
 # "{BASE}" = "https://michielwestland.github.io/PyScriptWidgets"
 "{BASE}" = "."
 "{BASE}/widgets.py" = "./widgets.py"

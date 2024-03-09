@@ -6,6 +6,7 @@ from widgets import PGrid, PTextInput, PButton, PLabel, bind_to_dom
 from todo import TodoPanel
 
 # Set the *base url* when deploying to: https://michielwestland.github.io/PyScriptWidgets
+# Make sure the url does not end with a forward slash!
 # BASE_URL = "https://michielwestland.github.io/PyScriptWidgets"
 BASE_URL = "."
 
@@ -62,7 +63,7 @@ class Main(PGrid):
     async def btn_click(self, event):  # pylint: disable=unused-argument
         """Button click event handler"""
         self.btn.set_color("red")
-        response = await fetch("./data.json", {"method": "GET"})
+        response = await fetch(BASE_URL + "/data.json", {"method": "GET"})
         data = await response.json()
         self.inp.set_value("Now is: " + str(datetime.now()) + " " + JSON.stringify(data))
 
