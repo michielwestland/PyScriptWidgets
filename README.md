@@ -27,7 +27,7 @@ Runtime:
 - jQuery: https://jquery.com (MIT license)
 
 Logo:
-![Logo](logo.png?raw=true "Logo")
+![Logo](logo.svg)
 
 
 ## Virtual environment
