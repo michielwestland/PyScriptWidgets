@@ -20,6 +20,8 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 # See: https://semantic-ui.com/collections/form.html
 
 # TODO Make a progressive web application (PWA).
+# See: https://github.com/jhanley-com/pyscript_pwa_demo_1
+# See: https://github.com/Oussama1403/Pyscript-Offline
 
 # TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
 
