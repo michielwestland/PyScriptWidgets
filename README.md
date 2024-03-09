@@ -4,6 +4,7 @@ A client side GUI class (widget) library for building web applications with PySc
 See demo website: https://michielwestland.github.io/PyScriptWidgets
 ![Demo screenshot](demo-screenshot.png?raw=true "Demo screenshot")
 
+
 ## Thirdparty software
 Development:
 - PyEnv for Windows: https://pyenv-win.github.io/pyenv-win (MIT license)
@@ -25,6 +26,7 @@ Runtime:
 Logo:
 ![Logo](logo.png?raw=true "Logo")
 
+
 ## Virtual environment
 ```
 python -m venv .venv
@@ -37,6 +39,7 @@ Set powershell execution policy if needed:
 Get-ExecutionPolicy -list
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 ```
+
 
 ## Install packages
 Only use pure Python packages, with file names ending in ...-py3-none-any.whl
@@ -92,3 +95,13 @@ Live Preview:
 [Preview]
 http://127.0.0.1:3000/index.html
 ```
+
+
+## Deployment
+Set the base url in the following files: (search for the term *base url*)
+- index.html
+- pyscript.toml
+- main.py
+
+
+*EOF*

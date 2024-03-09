@@ -5,7 +5,8 @@ packages = [
 ]
 
 [files]
-# Set the base url when deploying to: https://michielwestland.github.io/PyScriptWidgets
+# Set the *base url* when deploying to: https://michielwestland.github.io/PyScriptWidgets
+# "{BASE}" = "https://michielwestland.github.io/PyScriptWidgets"
 "{BASE}" = "."
 "{BASE}/widgets.py" = "./widgets.py"
 "{BASE}/todo.py" = "./todo.py"
