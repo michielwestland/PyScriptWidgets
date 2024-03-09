@@ -1,4 +1,9 @@
-/* Some CSS tweaks for Semantic UI or alternatively Fomantic UI elements */
+/*
+Copyright (c) 2024 Michiel Westland
+This software is distributed under the terms of the MIT license. See LICENSE.txt
+
+Some CSS tweaks for Semantic UI or alternatively Fomantic UI elements
+*/
 
 @media (prefers-color-scheme: light) {
     body {

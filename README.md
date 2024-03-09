@@ -1,6 +1,9 @@
 # PyScriptWidgets
 A client side GUI class (widget) library for building web applications with PyScript.
 
+Copyright (c) 2024 Michiel Westland
+This software is distributed under the terms of the MIT license. See LICENSE.txt
+
 See demo website: https://michielwestland.github.io/PyScriptWidgets
 ![Demo screenshot](demo-screenshot.png?raw=true "Demo screenshot")
 

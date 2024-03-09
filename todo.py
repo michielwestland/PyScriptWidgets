@@ -1,4 +1,9 @@
-"""Todo example"""
+"""
+Copyright (c) 2024 Michiel Westland
+This software is distributed under the terms of the MIT license. See LICENSE.txt
+
+Todo example
+"""
 
 from datetime import datetime
 from widgets import PPanel, PLabel, PTextInput, PButton

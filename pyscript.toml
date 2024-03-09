@@ -1,5 +1,10 @@
-name = "PyScriptWidgets"
+# Copyright (c) 2024 Michiel Westland
+# This software is distributed under the terms of the MIT license. See LICENSE.txt
+#
+# PyScript configuration file
+# See: https://pyscript.github.io/docs/2024.1.3/user-guide/configuration/#files
 
+name = "PyScriptWidgets"
 packages = [
     "asyncio",
 ]
@@ -11,5 +16,3 @@ packages = [
 "{BASE}" = "."
 "{BASE}/widgets.py" = "./widgets.py"
 "{BASE}/todo.py" = "./todo.py"
-
-# See: https://pyscript.github.io/docs/2024.1.3/user-guide/configuration/#files

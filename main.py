@@ -1,4 +1,9 @@
-"""Main file"""
+"""
+Copyright (c) 2024 Michiel Westland
+This software is distributed under the terms of the MIT license. See LICENSE.txt
+
+Main file
+"""
 
 from datetime import datetime
 from js import fetch, JSON  # type: ignore # pylint: disable=import-error

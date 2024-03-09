@@ -1,4 +1,9 @@
-"""PyScriptWidgets - A client side GUI class (widget) library for building web applications with PyScript."""
+"""
+Copyright (c) 2024 Michiel Westland
+This software is distributed under the terms of the MIT license. See LICENSE.txt
+
+PyScriptWidgets - A client side GUI class (widget) library for building web applications with PyScript.
+"""
 
 import base64
 import pickle
@@ -8,8 +13,6 @@ from js import console, sessionStorage  # type: ignore # pylint: disable=import-
 # Prefer pyscript import over more basic js import for the document and window objects
 from pyscript import document, window  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # type: ignore # pylint: disable=import-error
-
-# TODO Copyright notice at the beginning of each source file.
 
 # TODO Create a SVG version of the logo.
 
@@ -119,7 +122,7 @@ def bind_to_dom(MainWidgetClass, root_element_id, debug=False):  # pylint: disab
     _main_widget.after_page_load()
 
 
-class PWidget:  # pylint: disable=too-many-instance-attributes
+class PWidget:  # pylint: disable=too-many-instance-attributes,too-many-public-methods
     """Abstract widget base class"""
 
     _last_unique_id = 0
@@ -753,7 +756,7 @@ class PGrid(PCompoundWidget):
 
     def add_child(self, child):
         """Add a single child"""
-        if isinstance(child, PPanel) or isinstance(child, PGrid):
+        if isinstance(child, (PPanel, PGrid)):
             child._elem.style.overflow = "auto"  # pylint: disable=protected-access
             child.set_max_width("100%")
             child.set_max_height("100%")
