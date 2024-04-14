@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css">
+        <script src="index.js"></script>
+    </head>
+    <body>
+
+        <!-- https://phuoc.ng/collection/html-dom/create-resizable-split-views/ -->
+        <div class="container">
+            <div class="container__left">
+
+                <div class="container__top">
+                    LEFT TOP
+                </div>
+                <div class="resizer" data-direction="vertical"></div>
+                <div class="container__bottom treepane">
+                    LEFT BOTTOM
+                </div>
+
+            </div>
+            <div class="resizer" data-direction="horizontal"></div>
+            <div class="container__right">
+                RIGHT
+            </div>
+        </div>
+
+    </body>
+</html>

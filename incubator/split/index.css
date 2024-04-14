@@ -1,0 +1,47 @@
+body {
+    margin: 0px;
+}
+
+/* See: https://phuoc.ng/collection/html-dom/create-resizable-split-views */
+
+.container {
+    display: flex;
+    /* Misc */
+    border: 0px;
+    height: 100vh;
+    width: 100vw;
+}
+
+.resizer[data-direction='horizontal'] {
+    background-color: #cbd5e0;
+    cursor: ew-resize;
+    height: 100%;
+    width: 7px;
+}
+
+.resizer[data-direction='vertical'] {
+    background-color: #cbd5e0;
+    cursor: ns-resize;
+    height: 7px;
+    width: 100%;
+}
+
+.container__left {
+    /* Initially, the left takes 1/4 width */
+    width: 25%;
+}
+
+.container__right {
+    /* Take the remaining width */
+    flex: 1;
+}
+
+.container__top {
+    /* Initial height */
+    height: 25%;
+}
+
+.container__bottom {
+    /* Take the remaining height */
+    flex: 1;
+}

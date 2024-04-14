@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.js"></script>
+    <!--
+        Info see:
+        https://semantic-ui.com/examples/fixed.html
+        https://fomantic-ui.com/collections/menu.html
+        https://ehkoo.github.io/semantic-ui-examples/navbar/
+        https://codepen.io/Ammly/pen/KoVVmV
+    -->
+</head>
+<body>
+
+    <!-- https://fomantic-ui.com/collections/menu.html#menu -->
+
+    <div class="ui menu navbar">
+        <a class="ui dropdown item">
+            <i class="icon game"></i>File
+
+            <div class="ui menu">
+
+                <div class="ui item">
+                    <i class="icon dropdown"></i>
+                    <span class="text"><i class="icon video play"></i>&nbsp;&nbsp;New</span><!-- hack -->
+
+                    <div class="ui menu">
+                        <div class="ui item">
+                            <i class="icon video play"></i>Document
+                        </div>
+                        <div class="ui item">
+                            <i class="icon game"></i>Image
+                        </div>
+                    </div><!-- menu -->
+
+                </div>
+                <div class="ui item">
+                    <i class="icon car"></i>Open...
+                </div>
+                <div class="ui item">
+                    <i class="icon transparent"></i>Save...
+                </div>
+                <div class="ui divider"></div>
+                <div class="ui item">
+                    <i class="icon game"></i>Export
+                </div>
+                <div class="ui item">
+                    <i class="icon transparent"></i>Close...
+                </div>
+            </div><!-- menu -->
+
+        </a>
+        <a class="ui dropdown item">
+            <i class="icon wrench"></i>Help
+
+            <div class="ui menu">
+                <div class="ui item">
+                    <i class="icon video play"></i>Information...
+                </div>
+                <div class="ui item">
+                    <i class="icon game"></i>Check updates
+                </div>
+                <div class="ui divider"></div>
+                <div class="ui item">
+                    <i class="icon transparent"></i>About...
+                </div>
+            </div><!-- menu -->
+
+        </a>
+    </div>
+    <script>
+        $('.ui.dropdown').dropdown();
+    </script>
+
+</body>
+</html>

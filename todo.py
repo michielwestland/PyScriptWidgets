@@ -20,7 +20,7 @@ class TodoForm(PPanel):
         self.add_children([self.inp, self.add_btn])
 
     def add_btn_click(self, event):  # pylint: disable=unused-argument
-        """Ädd button event handler"""
+        """Add button event handler"""
         text = self.inp.get_value()
         if len(text) == 0:
             text = "<" + str(datetime.now()) + ">"
