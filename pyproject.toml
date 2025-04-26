@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Michiel Westland
+# Copyright (c) 2025 Michiel Westland
 # This software is distributed under the terms of the MIT license. See LICENSE.txt
 #
 # Python project configuration file
@@ -6,14 +6,16 @@
 
 [project]
 name = "PyScriptWidgets"
+version = "0.9.0"
 description = "A client side GUI class (widget) library for building web applications with PyScript."
 license = { text = "MIT" }
-requires-python = ">=3.11"
 authors = [
     { name = "Michiel Westland", email = "michielwestland@gmail.com" },
 ]
+readme = "README.md"
+requires-python = ">=3.11"
 
 [tool.black]
 # See: https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
 line-length = 100
-target-version = ['py311']
+target-version = [ "py311" ]

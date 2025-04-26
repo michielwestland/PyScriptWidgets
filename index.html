@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <!-- Copyright (c) 2024 Michiel Westland -->
+    <!-- Copyright (c) 2025 Michiel Westland -->
     <!-- This software is distributed under the terms of the MIT license. See LICENSE.txt -->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,19 +23,7 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
-    <!-- Semantic UI components
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"
-            integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
-            integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
-            crossorigin="anonymous" referrerpolicy="no-referrer" />
-    -->
-
-    <!-- or alternatively Fomantic UI components -->
+    <!-- Fomantic UI components (continuation of the Semantic UI project) -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.js"></script>
@@ -43,8 +31,9 @@
     <link rel="stylesheet" href="widgets.css" />
 
     <!-- PyScript / Pyodide interpreter -->
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.2.1/core.css" />
-    <script type="module" src="https://pyscript.net/releases/2024.2.1/core.js"></script>
+    <!-- For latest PyScript version, see documentation page url: https://docs.pyscript.net/2025.3.1/ -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2025.3.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
 </head>
 <body>
 
@@ -65,20 +54,29 @@
     <!-- See: https://jeff.glass/post/whats-new-pyscript-2023-11-1/ -->
     <script type="py">
         import js
+
         from pyscript import document
         from pyodide.ffi import create_proxy
-
-        delta = (js.Date.now() - js.startTimeMillis) / 1000
-        document.title = js.savedDocumentTitle + f" (load {delta:.1f}s)"
 
         root = document.getElementById("root")
         for c in root.children:
             if "dimmer" in c.classList:
                 root.removeChild(c)
 
+        delta = (js.Date.now() - js.startTimeMillis) / 1000
+        document.title = js.savedDocumentTitle + f" (load {delta:.1f}s)"
+
         def timeout_handler():
             document.title = js.savedDocumentTitle
         js.setTimeout(create_proxy(timeout_handler), 10 * 1000)
     </script>
+
+    <!-- This only works from JavaScript
+    <script>
+        window.onbeforeunload = function() {
+            return "Are you sure you want to exit this application?";
+        }
+    </script>
+    -->
 </body>
 </html>

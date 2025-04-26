@@ -1,7 +1,7 @@
 # PyScriptWidgets
 A client side GUI class (widget) library for building web applications with PyScript.
 
-Copyright (c) 2024 Michiel Westland
+Copyright (c) 2025 Michiel Westland
 This software is distributed under the terms of the MIT license. See LICENSE.txt
 
 See demo website: https://michielwestland.github.io/PyScriptWidgets
@@ -22,8 +22,7 @@ Development:
 Runtime:
 - PyScript: https://pyscript.net (Apache license 2.0)
 - Pyodide: https://pyodide.org/en/stable (MPL-2.0 license)
-- Semantic UI: https://semantic-ui.com (MIT license)
-- or alternatively Fomantic UI: https://fomantic-ui.com (MIT license)
+- Fomantic UI: https://fomantic-ui.com (MIT license)
 - jQuery: https://jquery.com (MIT license)
 
 Logo:
@@ -53,6 +52,10 @@ pip install black
 pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
+
+
+# PyScript documentation
+PyScript.net: https://docs.pyscript.net/2025.3.1/
 
 
 # Linting and formatting

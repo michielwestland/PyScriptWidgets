@@ -1,5 +1,5 @@
 """
-Copyright (c) 2024 Michiel Westland
+Copyright (c) 2025 Michiel Westland
 This software is distributed under the terms of the MIT license. See LICENSE.txt
 
 Main file
@@ -75,8 +75,8 @@ class Main(PGrid):
     def after_page_load(self):
         super().after_page_load()
         # Here, try out code after a page refresh with Live Server/Live Preview
-        self.btn.set_color("green")
+        #self.btn.set_color("green")
 
 
 if __name__ == "__main__":
-    bind_to_dom(Main, "root", debug=False)
+    bind_to_dom(Main, "root")

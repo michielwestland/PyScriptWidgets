@@ -1,5 +1,5 @@
 """
-Copyright (c) 2024 Michiel Westland
+Copyright (c) 2025 Michiel Westland
 This software is distributed under the terms of the MIT license. See LICENSE.txt
 
 Todo example
@@ -35,7 +35,6 @@ class TodoItem(PPanel):
         super().__init__(False)
         self.set_gap(5)
         self.lbl = PLabel(todoTxt)
-        # See: https://semantic-ui.com/elements/icon.html
         self.delete_btn = (
             PButton("Delete").set_icon("trash alternate").on_click(self.delete_btn_click)
         )
