@@ -1,5 +1,5 @@
 """
-Copyright (c) 2024 Michiel Westland
+Copyright (c) 2025 Michiel Westland
 This software is distributed under the terms of the MIT license. See LICENSE.txt
 
 PyScriptWidgets - A client side GUI class (widget) library for building web applications with PyScript.
