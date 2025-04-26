@@ -27,9 +27,6 @@ from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # ty
 
 # TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
 
-# TODO Use a postgres database in de browser local storage from python.
-# See: https://electric-sql.com/
-
 # TODO Add widget border property or border component.
 
 # TODO Add widget background image/linear gradient property: linear-gradient(to bottom right, #F0F8FF, white);
