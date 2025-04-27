@@ -12,7 +12,7 @@ from widgets.base import PBaseWidget
 class PCompoundWidget(PBaseWidget):
     """Abstract compound widget base class, that can have children"""
 
-    # TODO Also implement padding property, move both properties to widget class.
+    # TODO Move both margin and padding properties to base widget class.
 
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
@@ -22,6 +22,8 @@ class PCompoundWidget(PBaseWidget):
         # Properties
         self._margin = 0
         self._render_margin()
+        self._padding = 0
+        self._render_padding()
         self._gap = 0
         self._render_gap()
 
@@ -85,8 +87,9 @@ class PCompoundWidget(PBaseWidget):
             c._parent = self  # pylint: disable=protected-access
             self._elem.appendChild(c._elem)  # pylint: disable=protected-access
         # Properties
-        self._render_gap()
         self._render_margin()
+        self._render_padding
+        self._render_gap()
 
     def after_page_load(self):
         """Override this method tot execute code after the page DOM has loaded"""
@@ -115,6 +118,22 @@ class PCompoundWidget(PBaseWidget):
         if self._margin != margin:
             self._margin = margin
             self._render_margin()
+        return self
+
+    # Property: padding
+    def _render_padding(self):
+        """Renderer"""
+        self._elem.style.padding = str(self._padding) + "px"
+
+    def get_padding(self):
+        """Accessor"""
+        return self._padding
+
+    def set_padding(self, padding):
+        """Mutator"""
+        if self._padding != padding:
+            self._padding = padding
+            self._render_padding()
         return self
 
     # Property: gap
