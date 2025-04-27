@@ -17,7 +17,7 @@ from widgets.globals import _ID_SUPPLEMENT
 class PButton(PFocussableWidget):
     """Button widget class"""
 
-    # See: https://semantic-ui.com/kitchen-sink.html
+    # See: https://fomantic-ui.com/kitchen-sink.html
     def __init__(self, text):
         """Constructor, define tag and class attributes"""
         super().__init__("button")

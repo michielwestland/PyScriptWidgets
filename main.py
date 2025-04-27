@@ -69,7 +69,7 @@ class Main(PGrid):
     async def btn_click(self, event):  # pylint: disable=unused-argument
         """Button click event handler"""
         self.btn.set_color("red")
-        response = await fetch(BASE_URL + "/assets/data.json", {"method": "GET"})
+        response = await fetch(BASE_URL + "/assets/demo-data.json", {"method": "GET"})
         data = await response.json()
         self.inp.set_value("Now is: " + str(datetime.now()) + " " + JSON.stringify(data))
 

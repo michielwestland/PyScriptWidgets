@@ -22,7 +22,7 @@ from widgets.text import *
 # See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 
 # TODO Add a form widget that wraps labels/inputs with divs for error state and that shows error messages.
-# See: https://semantic-ui.com/collections/form.html
+# See: https://fomantic-ui.com/collections/form.html
 
 # TODO Make a progressive web application (PWA).
 # See: https://github.com/jhanley-com/pyscript_pwa_demo_1
@@ -45,32 +45,32 @@ from widgets.text import *
 # TODO Implement date input, format value, input types: date, time, datetime-local
 #class PDateInput(PInputWidget):    """Date input widget class"""
 
-# TODO Implement checkbox, see: https://semantic-ui.com/modules/checkbox.html
+# TODO Implement checkbox, see: https://fomantic-ui.com/modules/checkbox.html
 #class PCheckBox(PInputWidget):    """Checkbox widget class"""
 
-# TODO Implement radio group, see: https://semantic-ui.com/modules/checkbox.html#radio
+# TODO Implement radio group, see: https://fomantic-ui.com/modules/checkbox.html#radio
 #class PRadioGroup(PCompoundWidget):    """Radio group widget class"""
 
-# TODO Implement combo box, see: https://semantic-ui.com/modules/dropdown.html
+# TODO Implement combo box, see: https://fomantic-ui.com/modules/dropdown.html
 #class PComboBox(PCompoundWidget):    """Combobox widget class"""
 
-# TODO Implement menu item, see: https://semantic-ui.com/collections/menu.html
+# TODO Implement menu item, see: https://fomantic-ui.com/collections/menu.html
 #class PMenuItem(PWidget):    """Menu item widget class"""
 
-# TODO Implement menu, see: https://semantic-ui.com/collections/menu.html#menu
+# TODO Implement menu, see: https://fomantic-ui.com/collections/menu.html#menu
 #class PMenu(PCompoundWidget):    """Menu widget class"""
 
-# TODO Implement menu bar, see: https://semantic-ui.com/collections/menu.html#sub-menu
+# TODO Implement menu bar, see: https://fomantic-ui.com/collections/menu.html#sub-menu
 #class PMenuBar(PCompoundWidget):    """Menu bar widget class"""
 
-# TODO Implement table, see: https://semantic-ui.com/collections/table.html
+# TODO Implement table, see: https://fomantic-ui.com/collections/table.html
 #class PTable(PCompoundWidget):    """Table widget class"""
 
-# TODO Implement tab pane, see: https://semantic-ui.com/modules/tab.html
+# TODO Implement tab pane, see: https://fomantic-ui.com/modules/tab.html
 #class PTabPane(PCompoundWidget):    """Tab pane widget class"""
 
 # TODO Implement text area.
 #class PTextArea(PFocussableWidget):    """Text area widget class"""
 
-# TODO Implement modal widget, see: https://semantic-ui.com/modules/modal.html
+# TODO Implement modal widget, see: https://fomantic-ui.com/modules/modal.html
 #class PModal(PCompoundWidget):    """Modal dialog widget class"""
