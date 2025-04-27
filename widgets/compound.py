@@ -208,7 +208,7 @@ class PCompoundWidget(PBaseWidget):
         """Accessor"""
         return self._row_gap
 
-    def set_gap(self, row_gap):
+    def set_row_gap(self, row_gap):
         """Mutator"""
         if self._row_gap != row_gap:
             self._row_gap = row_gap

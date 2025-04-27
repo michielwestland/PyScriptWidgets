@@ -27,7 +27,7 @@ class Main(PGrid):
         self.inp = PTextInput("").set_placeholder("press the button...")
         self.btn = PButton("Press me!").set_color("blue").on_click(self.btn_click)
 
-        self.grd = PGrid().set_margin(6).set_gap(6)
+        self.grd = PGrid().set_margin(6).set_row_gap(6).set_column_gap(6)
         self.grd.set_rows([36, 36, 72])
         self.grd.set_columns([100, 200, 100, 200])
         self.grd.set_areas(
