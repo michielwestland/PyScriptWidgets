@@ -11,9 +11,9 @@ description = "A client side GUI class (widget) library for building web applica
 license = { text = "MIT" }
 authors = [ { name = "Michiel Westland", email = "michielwestland@gmail.com" } ]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 
 [tool.black]
 # See: https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
 line-length = 100
-target-version = [ "py311" ]
+target-version = [ "py312" ]
