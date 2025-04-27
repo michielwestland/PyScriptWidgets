@@ -140,4 +140,8 @@ With these files:
 - assets/data.json
 - favicon.ico
 
+When serving `__init__.py` (or generally files that start with underscores) from github pages,
+make sure there is an empty file `.nojekyll` in the root directory, to instruct the web server
+not to interpret those files, but just serve them statically.
+
 ### EOF
