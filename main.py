@@ -42,10 +42,10 @@ class Main(PGrid):
                 [PLabel("Hidden").set_visible(False), None, self.btn, self.btn],
             ]
         )
+        self.grd.set_border_width(2).set_border_style("dotted").set_border_color("blue")
 
         # Second demo panel
         self.todo = TodoPanel()
-        self.todo.set_border_width(2).set_border_style("dash").set_border_color("blue")
 
         hdr = PLabel("Header").set_color("blue")
         ftr = PLabel("Footer").set_color("green")

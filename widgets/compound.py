@@ -167,6 +167,7 @@ class PCompoundWidget(PBaseWidget):
 
     def set_border_style(self, border_style):
         """Mutator"""
+        # Valid styles, see: https://www.w3schools.com/css/css_border.asp
         if self._border_style != border_style:
             self._border_style = border_style
             self._render_border_style()
