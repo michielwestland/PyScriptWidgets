@@ -18,7 +18,7 @@ class PCompoundWidget(PBaseWidget):
         # Children
         self._children = []
         # Properties
-        self._margin = 0
+        self._margin = None
         self._render_margin()
         self._border_width = None
         self._render_border_width()
@@ -26,7 +26,7 @@ class PCompoundWidget(PBaseWidget):
         self._render_border_style()
         self._border_color = ""
         self._render_border_color()
-        self._padding = 0
+        self._padding = None
         self._render_padding()
         self._row_gap = 0
         self._render_row_gap()
@@ -117,7 +117,12 @@ class PCompoundWidget(PBaseWidget):
     # Property: margin
     def _render_margin(self):
         """Renderer"""
-        self._elem.style.margin = str(self._margin) + "px"
+        if self._margin is not None:
+            try:
+                pixels = int(self._margin)
+                self._elem.style.margin = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.margin = str(self._margin)  # It was not an integer value
 
     def get_margin(self):
         """Accessor"""
@@ -186,7 +191,12 @@ class PCompoundWidget(PBaseWidget):
     # Property: padding
     def _render_padding(self):
         """Renderer"""
-        self._elem.style.padding = str(self._padding) + "px"
+        if self._padding is not None:
+            try:
+                pixels = int(self._padding)
+                self._elem.style.padding = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.padding = str(self._padding)  # It was not an integer value
 
     def get_padding(self):
         """Accessor"""
