@@ -28,8 +28,10 @@ class PCompoundWidget(PBaseWidget):
         self._render_border_color()
         self._padding = 0
         self._render_padding()
-        self._gap = 0
-        self._render_gap()
+        self._row_gap = 0
+        self._render_row_gap()
+        self._column_gap = 0
+        self._render_column_gap()
 
     def find_id(self, widget_id):
         """Find a reference to the widget with this id, also search in children"""
@@ -96,7 +98,8 @@ class PCompoundWidget(PBaseWidget):
         self._render_border_style()
         self._render_border_color()
         self._render_padding()
-        self._render_gap()
+        self._render_row_gap()
+        self._render_column_gap()
 
     def after_page_load(self):
         """Override this method tot execute code after the page DOM has loaded"""
@@ -196,18 +199,34 @@ class PCompoundWidget(PBaseWidget):
             self._render_padding()
         return self
 
-    # Property: gap
-    def _render_gap(self):
+    # Property: row_gap
+    def _render_row_gap(self):
         """Renderer"""
-        self._elem.style.gap = str(self._gap) + "px"
+        self._elem.style.rowGap = str(self._row_gap) + "px"
 
-    def get_gap(self):
+    def get_row_gap(self):
         """Accessor"""
-        return self._gap
+        return self._row_gap
 
-    def set_gap(self, gap):
+    def set_gap(self, row_gap):
         """Mutator"""
-        if self._gap != gap:
-            self._gap = gap
-            self._render_gap()
+        if self._row_gap != row_gap:
+            self._row_gap = row_gap
+            self._render_row_gap()
+        return self
+
+    # Property: column_gap
+    def _render_column_gap(self):
+        """Renderer"""
+        self._elem.style.columnGap = str(self._column_gap) + "px"
+
+    def get_column_gap(self):
+        """Accessor"""
+        return self._column_gap
+
+    def set_column_gap(self, column_gap):
+        """Mutator"""
+        if self._column_gap != column_gap:
+            self._column_gap = column_gap
+            self._render_column_gap()
         return self
