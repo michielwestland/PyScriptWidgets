@@ -7,10 +7,8 @@ Main file
 
 from datetime import datetime
 from js import fetch, JSON  # type: ignore # pylint: disable=import-error
-# Prefer pyscript import over more basic js import for the document and window objects
-from pyscript import window  # type: ignore # pylint: disable=import-error
 
-from widgets import PGrid, PTextInput, PButton, PLabel, bind_to_dom
+from widgets import PGrid, PTextInput, PButton, PLabel, bind_to_dom, base_url
 from todo import TodoPanel
 
 
@@ -66,10 +64,7 @@ class Main(PGrid):
     async def btn_click(self, event):  # pylint: disable=unused-argument
         """Button click event handler"""
         self.btn.set_color("red")
-        url = window.location.href
-        if url[:-1] != "/":
-            url = url + "/"
-        response = await fetch(url + "assets/demo-data.json", {"method": "GET"})
+        response = await fetch(base_url() + "/assets/demo-data.json", {"method": "GET"})
         data = await response.json()
         self.inp.set_value("Now is: " + str(datetime.now()) + " " + JSON.stringify(data))
 

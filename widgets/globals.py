@@ -98,3 +98,11 @@ def bind_to_dom(MainWidgetClass, root_element_id, debug=False):  # pylint: disab
     # See: https://jeff.glass/post/pyscript-why-create-proxy/
     add_event_listener(window, "beforeunload", _window_beforeunload)
     _main_widget.after_page_load()
+
+
+# Get the base url of the page
+def base_url():
+    url = str(window.location.href)
+    if len(url) > 0 and url[-1] == "/":
+        url = url[:-1]
+    return url
