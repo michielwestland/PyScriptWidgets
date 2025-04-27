@@ -5,28 +5,28 @@ A client side GUI class (widget) library for building web applications with PySc
 Copyright (c) 2025 Michiel Westland
 This software is distributed under the terms of the MIT license. See LICENSE.txt
 
-See demo website: https://michielwestland.github.io/PyScriptWidgets
+See demo website: [https://michielwestland.github.io/PyScriptWidgets](https://michielwestland.github.io/PyScriptWidgets)
 ![Demo screenshot](assets/demo-screenshot.png?raw=true "Demo screenshot")
 
 ## Thirdparty software
 
 Development:
 
-- PyEnv for Windows: https://pyenv-win.github.io/pyenv-win (MIT license)
-- Python: https://www.python.org (PSF license agreement)
-- VSCode: https://code.visualstudio.com/docs/python/python-tutorial (Microsoft product license + MIT license)
-- Python vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.python (Microsoft Pylance license + MIT license)
-- PyLint vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.pylint (MIT license)
-- Black vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter (MIT license)
-- Live Server vscode extension: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer (MIT license)
-- Live Preview vscode extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server (MIT license)
+- PyEnv for Windows: [https://pyenv-win.github.io/pyenv-win](https://pyenv-win.github.io/pyenv-win) (MIT license)
+- Python: [https://www.python.org](https://www.python.org) (PSF license agreement)
+- VSCode: [https://code.visualstudio.com/docs/python/python-tutorial](https://code.visualstudio.com/docs/python/python-tutorial) (Microsoft product license + MIT license)
+- Python vscode extension: [https://marketplace.visualstudio.com/items?itemName=ms-python.python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) (Microsoft Pylance license + MIT license)
+- PyLint vscode extension: [https://marketplace.visualstudio.com/items?itemName=ms-python.pylint](https://marketplace.visualstudio.com/items?itemName=ms-python.pylint) (MIT license)
+- Black vscode extension: [https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) (MIT license)
+- Live Server vscode extension: [https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) (MIT license)
+- Live Preview vscode extension: [https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) (MIT license)
 
 Runtime:
 
-- PyScript: https://pyscript.net (Apache license 2.0)
-- Pyodide: https://pyodide.org/en/stable (MPL-2.0 license)
-- Fomantic UI: https://fomantic-ui.com (MIT license)
-- jQuery: https://jquery.com (MIT license)
+- PyScript: [https://pyscript.net](https://pyscript.net) (Apache license 2.0)
+- Pyodide: [https://pyodide.org](https://pyodide.org) (MPL-2.0 license)
+- Fomantic UI: [https://fomantic-ui.com](https://fomantic-ui.com) (MIT license)
+- jQuery: [https://jquery.com](https://jquery.com) (MIT license)
 
 Logo:
 
@@ -63,7 +63,7 @@ pip install -r requirements.txt
 
 ## PyScript documentation
 
-PyScript.net: https://docs.pyscript.net/2025.3.1/
+PyScript.net: [https://docs.pyscript.net/2025.3.1/](https://docs.pyscript.net/2025.3.1/)
 
 ## Linting and formatting
 
@@ -128,4 +128,6 @@ Set the variable BASE_URL url in the following file:
 
 Update the contents of this directory in github:
 
-https://github.com/michielwestland/michielwestland.github.io/tree/main/PyScriptWidgets
+[https://github.com/michielwestland/michielwestland.github.io/tree/main/PyScriptWidgets](https://github.com/michielwestland/michielwestland.github.io/tree/main/PyScriptWidgets)
+
+### EOF
