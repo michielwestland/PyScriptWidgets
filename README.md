@@ -5,7 +5,7 @@ Copyright (c) 2025 Michiel Westland
 This software is distributed under the terms of the MIT license. See LICENSE.txt
 
 See demo website: https://michielwestland.github.io/PyScriptWidgets
-![Demo screenshot](demo-screenshot.png?raw=true "Demo screenshot")
+![Demo screenshot](assets/demo-screenshot.png?raw=true "Demo screenshot")
 
 
 ## Thirdparty software
@@ -27,7 +27,7 @@ Runtime:
 
 Logo:
 
-![Logo](logo.svg)
+![Logo](assets/logo.svg)
 
 
 ## Virtual environment
