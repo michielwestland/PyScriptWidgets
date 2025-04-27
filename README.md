@@ -120,7 +120,7 @@ Live Preview:
 http://127.0.0.1:3000/index.html
 ```
 
-## Deployment
+## Deployment demo website
 
 Set the variable BASE_URL url in the following file:
 
@@ -129,5 +129,15 @@ Set the variable BASE_URL url in the following file:
 Update the contents of this directory in github:
 
 [https://github.com/michielwestland/michielwestland.github.io/tree/main/PyScriptWidgets](https://github.com/michielwestland/michielwestland.github.io/tree/main/PyScriptWidgets)
+
+With these files:
+
+- widgets/*.*
+- pyscript.toml
+- index.html
+- main.py
+- todo.py
+- assets/data.json
+- favicon.ico
 
 ### EOF

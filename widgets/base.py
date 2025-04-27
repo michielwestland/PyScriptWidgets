@@ -9,7 +9,7 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 # Prefer pyscript import over more basic js import for the document and window objects
 from pyscript import document  # type: ignore # pylint: disable=import-error
 
-from widgets.globals import _ID_PREFIX
+from widgets.globals import _generate_unique_id, _ensure_unique_id_beyond
 
 
 class PWidget:  # pylint: disable=too-many-instance-attributes,too-many-public-methods
@@ -17,23 +17,11 @@ class PWidget:  # pylint: disable=too-many-instance-attributes,too-many-public-m
 
     #TODO Rename this class to PBaseWidget
 
-    _last_unique_id = 0 #TODO Make this a global variable
-
-    def _generate_unique_id(self):
-        """Generate a new unique widget id, a sequential number"""
-        PWidget._last_unique_id = PWidget._last_unique_id + 1
-        return _ID_PREFIX + str(PWidget._last_unique_id)
-
-    def _ensure_unique_id_beyond(self, widget_id):
-        """Ensure any new unique widget id, sequential number is beyond the given number"""
-        i = int(widget_id[len(_ID_PREFIX) :])
-        PWidget._last_unique_id = max(PWidget._last_unique_id, i)
-
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
         self._tag = tag
         self._parent = None
-        self._widget_id = self._generate_unique_id()
+        self._widget_id = _generate_unique_id()
         # DOM manipulation: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
         self._elem = document.createElement(self._tag)
         self._insert_id_grid_area()
@@ -107,7 +95,7 @@ class PWidget:  # pylint: disable=too-many-instance-attributes,too-many-public-m
 
     def restore_state(self):
         """Override this method to restore runtime DOM state from widget instance fields after unpickling from session storage"""
-        self._ensure_unique_id_beyond(self._widget_id)
+        _ensure_unique_id_beyond(self._widget_id)
         self._elem.setAttribute("class", self._classlist)
         # Properties
         self._render_visible()

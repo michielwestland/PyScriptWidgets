@@ -27,6 +27,10 @@ _UTF_8 = "utf-8"
 _main_widget = None  # pylint: disable=invalid-name
 
 
+# Private global counter for unique element ID's
+_last_unique_id = 0  # pylint: disable=invalid-name
+
+
 # Debug utiliies
 def debug_object(obj):
     """Print object attributes to the debug console"""
@@ -102,7 +106,24 @@ def bind_to_dom(MainWidgetClass, root_element_id, debug=False):  # pylint: disab
 
 # Get the base url of the page
 def base_url():
+    """Get the base url of the web page, trim an optional slash from the end"""
     url = str(window.location.href)
     if len(url) > 0 and url[-1] == "/":
         url = url[:-1]
     return url
+
+
+# Generate a new unique widget id
+def _generate_unique_id():
+    """Generate a new unique widget id, a sequential number"""
+    global _last_unique_id  # pylint: disable=global-statement
+    _last_unique_id = _last_unique_id + 1
+    return _ID_PREFIX + str(_last_unique_id)
+
+
+# Ensure new unique widget id's after unpickling from session state
+def _ensure_unique_id_beyond(widget_id):
+    """Ensure any new unique widget id, is beyond the given number of the last unpickled widget"""
+    global _last_unique_id  # pylint: disable=global-statement
+    i = int(widget_id[len(_ID_PREFIX) :])
+    _last_unique_id = max(_last_unique_id, i)
