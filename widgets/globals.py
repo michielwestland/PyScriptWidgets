@@ -75,6 +75,10 @@ def _detect_dark_mode():
     if window.matchMedia and window.matchMedia("(prefers-color-scheme: dark)").matches:
         _main_widget.set_dark_mode(True)
 
+    top_left = "rgb(25, 25, 25)" if _main_widget.is_dark_mode() else "white"
+    bottom_right = "rgb(55, 55, 55)" if _main_widget.is_dark_mode() else "rgb(240, 240, 240)"
+    document.body.style.backgroundImage = f"linear-gradient(to bottom right, {top_left}, {bottom_right})"
+
 
 # Store the widget state
 def _window_beforeunload(event):  # pylint: disable=unused-argument
@@ -88,19 +92,24 @@ def bind_to_dom(MainWidgetClass, root_element_id, debug=False):  # pylint: disab
     """Bind the main widget to the dom, or load the widget tree state from browser session storage if available"""
     # What is the impact of: https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
     global _main_widget  # pylint: disable=global-statement
+
     state = sessionStorage.getItem(_STATE_KEY)
     if state is None or debug:
         _main_widget = MainWidgetClass()
     else:
         _main_widget = _deserialize_from_base64(state)
         sessionStorage.removeItem(_STATE_KEY)
-        console.log("Application state restored from browser session storage")
+        #console.log("Application state restored from browser session storage")
+
     _detect_dark_mode()
+
     document.getElementById(root_element_id).replaceChildren(
         _main_widget._elem  # pylint: disable=protected-access
     )
+
     # See: https://jeff.glass/post/pyscript-why-create-proxy/
     add_event_listener(window, "beforeunload", _window_beforeunload)
+
     _main_widget.after_page_load()
 
 

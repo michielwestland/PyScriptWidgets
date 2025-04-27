@@ -17,8 +17,8 @@ class Main(PGrid):
 
     def __init__(self):
         super().__init__()
-        self.set_width("100vw")
-        self.set_height("100vh")
+        self.set_width("100dvw")
+        self.set_height("100dvh")
 
         self.set_rows([100, "100%", 50])
         self.set_columns([100, "60%", 100, "40%"])
