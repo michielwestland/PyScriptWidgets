@@ -31,42 +31,44 @@ from widgets.text import *
 
 # TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
 
-# TODO Add image widget.
+# TODO Implement image widget.
+#class PImage(PBaseWidget): """Image widget class"""
 
-# TODO Add hyperlink widget.
-
-# TODO Implement number input, format value, properties: min, max, step and decimals
-#class PNumberInput(PInputWidget):    """Number input widget class"""
-
-# TODO Implement date input, format value, input types: date, time, datetime-local
-#class PDateInput(PInputWidget):    """Date input widget class"""
-
-# TODO Implement checkbox, see: https://fomantic-ui.com/modules/checkbox.html
-#class PCheckBox(PInputWidget):    """Checkbox widget class"""
-
-# TODO Implement radio group, see: https://fomantic-ui.com/modules/checkbox.html#radio
-#class PRadioGroup(PCompoundWidget):    """Radio group widget class"""
-
-# TODO Implement combo box, see: https://fomantic-ui.com/modules/dropdown.html
-#class PComboBox(PCompoundWidget):    """Combobox widget class"""
-
-# TODO Implement menu item, see: https://fomantic-ui.com/collections/menu.html
-#class PMenuItem(PBaseWidget):    """Menu item widget class"""
-
-# TODO Implement menu, see: https://fomantic-ui.com/collections/menu.html#menu
-#class PMenu(PCompoundWidget):    """Menu widget class"""
-
-# TODO Implement menu bar, see: https://fomantic-ui.com/collections/menu.html#sub-menu
-#class PMenuBar(PCompoundWidget):    """Menu bar widget class"""
-
-# TODO Implement table, see: https://fomantic-ui.com/collections/table.html
-#class PTable(PCompoundWidget):    """Table widget class"""
-
-# TODO Implement tab pane, see: https://fomantic-ui.com/modules/tab.html
-#class PTabPane(PCompoundWidget):    """Tab pane widget class"""
+# TODO Implement hyperlink widget. Always target a new browser tab/window
+#class PHyperlink(PBaseWidget): """Hyperlink widget class"""
 
 # TODO Implement text area.
-#class PTextArea(PFocussableWidget):    """Text area widget class"""
+#class PTextArea(PFocussableWidget): """Text area widget class"""
+
+# TODO Implement number input, format value, properties: min, max, step and decimals
+#class PNumberInput(PInputWidget): """Number input widget class"""
+
+# TODO Implement date input, format value, input types: date, time, datetime-local
+#class PDateInput(PInputWidget): """Date input widget class"""
+
+# TODO Implement checkbox, see: https://fomantic-ui.com/modules/checkbox.html
+#class PCheckBox(PInputWidget): """Checkbox widget class"""
+
+# TODO Implement radio group, see: https://fomantic-ui.com/modules/checkbox.html#radio
+#class PRadioGroup(PCompoundWidget): """Radio group widget class"""
+
+# TODO Implement combo box, see: https://fomantic-ui.com/modules/dropdown.html
+#class PComboBox(PCompoundWidget): """Combobox widget class"""
+
+# TODO Implement menu item, see: https://fomantic-ui.com/collections/menu.html
+#class PMenuItem(PBaseWidget): """Menu item widget class"""
+
+# TODO Implement menu, see: https://fomantic-ui.com/collections/menu.html#menu
+#class PMenu(PCompoundWidget): """Menu widget class"""
+
+# TODO Implement menu bar, see: https://fomantic-ui.com/collections/menu.html#sub-menu
+#class PMenuBar(PCompoundWidget): """Menu bar widget class"""
+
+# TODO Implement table, see: https://fomantic-ui.com/collections/table.html
+#class PTable(PCompoundWidget): """Table widget class"""
+
+# TODO Implement tab pane, see: https://fomantic-ui.com/modules/tab.html
+#class PTabPane(PCompoundWidget): """Tab pane widget class"""
 
 # TODO Implement modal widget, see: https://fomantic-ui.com/modules/modal.html
-#class PModal(PCompoundWidget):    """Modal dialog widget class"""
+#class PModal(PCompoundWidget): """Modal dialog widget class"""
