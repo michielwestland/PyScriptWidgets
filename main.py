@@ -45,16 +45,17 @@ class Main(PGrid):
 
         # Second demo panel
         self.todo = TodoPanel()
+        self.todo.set_border_width(2).set_border_style("dash").set_border_color("blue")
 
-        hdr = PLabel("Header").set_bg_color("blue")
-        ftr = PLabel("Footer").set_bg_color("green")
+        hdr = PLabel("Header").set_color("blue")
+        ftr = PLabel("Footer").set_color("green")
         self.set_areas(
             [
                 [hdr, hdr, hdr, hdr],
                 [
-                    PLabel("Left").set_bg_color("purple"),
+                    PLabel("Left").set_color("purple"),
                     self.grd,
-                    PLabel("Middle").set_bg_color("purple"),
+                    PLabel("Middle").set_color("orange"),
                     self.todo,
                 ],
                 [ftr, ftr, ftr, ftr],
