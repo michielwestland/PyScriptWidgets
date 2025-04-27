@@ -6,10 +6,10 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 """
 
 
-from widgets.base import PWidget
+from widgets.base import PBaseWidget
 
 
-class PCompoundWidget(PWidget):
+class PCompoundWidget(PBaseWidget):
     """Abstract compound widget base class, that can have children"""
 
     # TODO Also implement padding property, move both properties to widget class.

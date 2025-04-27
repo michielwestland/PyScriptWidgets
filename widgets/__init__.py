@@ -55,7 +55,7 @@ from widgets.text import *
 #class PComboBox(PCompoundWidget):    """Combobox widget class"""
 
 # TODO Implement menu item, see: https://fomantic-ui.com/collections/menu.html
-#class PMenuItem(PWidget):    """Menu item widget class"""
+#class PMenuItem(PBaseWidget):    """Menu item widget class"""
 
 # TODO Implement menu, see: https://fomantic-ui.com/collections/menu.html#menu
 #class PMenu(PCompoundWidget):    """Menu widget class"""

@@ -12,10 +12,8 @@ from pyscript import document  # type: ignore # pylint: disable=import-error
 from widgets.globals import _generate_unique_id, _ensure_unique_id_beyond
 
 
-class PWidget:  # pylint: disable=too-many-instance-attributes,too-many-public-methods
+class PBaseWidget:  # pylint: disable=too-many-instance-attributes,too-many-public-methods
     """Abstract widget base class"""
-
-    #TODO Rename this class to PBaseWidget
 
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
