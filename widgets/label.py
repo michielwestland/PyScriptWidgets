@@ -56,7 +56,7 @@ class PLabel(PFocussableWidget):
         if self._for is None:
             self._elem.removeAttribute("for")
         else:
-            if isinstance(self._for, PInputWidget):  #TODO This slould be any focussable widget
+            if isinstance(self._for, PInputWidget):
                 self._elem.htmlFor = (
                     self._for._widget_id  # pylint: disable=protected-access
                     + _ID_SUPPLEMENT
