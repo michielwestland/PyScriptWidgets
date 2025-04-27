@@ -15,6 +15,7 @@ from todo import TodoPanel
 # BASE_URL = "https://michielwestland.github.io/PyScriptWidgets"
 BASE_URL = "."
 
+#TODO Fix this BASE url stuff, it should not be necessary
 
 class Main(PGrid):
     """Main class"""
@@ -72,7 +73,7 @@ class Main(PGrid):
         data = await response.json()
         self.inp.set_value("Now is: " + str(datetime.now()) + " " + JSON.stringify(data))
 
-    def after_page_load(self):
+    def after_page_load(self):  # pylint: disable=useless-parent-delegation
         super().after_page_load()
         # Here, try out code after a page refresh with Live Server/Live Preview
         #self.btn.set_color("green")

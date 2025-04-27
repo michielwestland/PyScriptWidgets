@@ -14,5 +14,18 @@ packages = [
 # Make sure the url does not end with a forward slash!
 # "{BASE}" = "https://michielwestland.github.io/PyScriptWidgets"
 "{BASE}" = "."
-"{BASE}/widgets.py" = "./widgets.py"
+
+"{BASE}/widgets/__init__.py" = "./widgets/__init__.py"
+"{BASE}/widgets/base.py" = "./widgets/base.py"
+"{BASE}/widgets/button.py" = "./widgets/button.py"
+"{BASE}/widgets/compound.py" = "./widgets/compound.py"
+"{BASE}/widgets/focussable.py" = "./widgets/focussable.py"
+"{BASE}/widgets/globals.py" = "./widgets/globals.py"
+"{BASE}/widgets/grid.py" = "./widgets/grid.py"
+"{BASE}/widgets/input.py" = "./widgets/input.py"
+"{BASE}/widgets/label.py" = "./widgets/label.py"
+"{BASE}/widgets/panel.py" = "./widgets/panel.py"
+"{BASE}/widgets/text.py" = "./widgets/text.py"
+
+"{BASE}/main.py" = "./main.py"
 "{BASE}/todo.py" = "./todo.py"

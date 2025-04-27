@@ -32,7 +32,7 @@ Logo:
 
 ## Virtual environment
 ```
-python -m venv .venv
+python -m venv .venv --upgrade-deps
 .venv/Scripts/Activate.ps1
 python.exe -m pip install --upgrade pip
 ```
