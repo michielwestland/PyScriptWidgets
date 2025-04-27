@@ -14,7 +14,7 @@ class TodoForm(PPanel):
 
     def __init__(self):
         super().__init__(False)
-        self.set_gap(5)
+        self.set_row_gap(5).set_column_gap(5)
         self.inp = PTextInput("").set_placeholder("<new todo>")
         self.add_btn = PButton("Add").on_click(self.add_btn_click)
         self.add_children([self.inp, self.add_btn])
@@ -33,7 +33,7 @@ class TodoItem(PPanel):
 
     def __init__(self, todoTxt):
         super().__init__(False)
-        self.set_gap(5)
+        self.set_row_gap(5).set_column_gap(5)
         self.lbl = PLabel(todoTxt)
         self.delete_btn = (
             PButton("Delete").set_icon("trash alternate").on_click(self.delete_btn_click)
@@ -51,7 +51,7 @@ class TodoList(PPanel):
 
     def __init__(self):
         super().__init__(True)
-        self.set_gap(5)
+        self.set_row_gap(5).set_column_gap(5)
 
 
 class TodoPanel(PPanel):
