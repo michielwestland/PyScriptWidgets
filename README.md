@@ -122,8 +122,10 @@ http://127.0.0.1:3000/index.html
 
 ## Deployment
 
-Set the base url in the following files: (search for the term *base url*)
+Set the variable BASE_URL url in the following file:
 
-- index.html
 - pyscript.toml
-- main.py
+
+Update the contents of this directory in github:
+
+https://github.com/michielwestland/michielwestland.github.io/tree/main/PyScriptWidgets

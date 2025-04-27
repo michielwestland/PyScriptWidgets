@@ -7,15 +7,12 @@ Main file
 
 from datetime import datetime
 from js import fetch, JSON  # type: ignore # pylint: disable=import-error
+# Prefer pyscript import over more basic js import for the document and window objects
+from pyscript import window  # type: ignore # pylint: disable=import-error
+
 from widgets import PGrid, PTextInput, PButton, PLabel, bind_to_dom
 from todo import TodoPanel
 
-# Set the *base url* when deploying to: https://michielwestland.github.io/PyScriptWidgets
-# Make sure the url does not end with a forward slash!
-# BASE_URL = "https://michielwestland.github.io/PyScriptWidgets"
-BASE_URL = "."
-
-#TODO Fix this BASE url stuff, it should not be necessary
 
 class Main(PGrid):
     """Main class"""
@@ -69,7 +66,10 @@ class Main(PGrid):
     async def btn_click(self, event):  # pylint: disable=unused-argument
         """Button click event handler"""
         self.btn.set_color("red")
-        response = await fetch(BASE_URL + "/assets/demo-data.json", {"method": "GET"})
+        url = window.location.href
+        if url[:-1] != "/":
+            url = url + "/"
+        response = await fetch(url + "assets/demo-data.json", {"method": "GET"})
         data = await response.json()
         self.inp.set_value("Now is: " + str(datetime.now()) + " " + JSON.stringify(data))
 
