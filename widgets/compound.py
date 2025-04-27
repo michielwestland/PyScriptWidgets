@@ -12,8 +12,6 @@ from widgets.base import PBaseWidget
 class PCompoundWidget(PBaseWidget):
     """Abstract compound widget base class, that can have children"""
 
-    # TODO Move both margin and padding properties to base widget class.
-
     def __init__(self, tag):
         """Constructor, define tag and class attributes"""
         super().__init__(tag)
@@ -22,6 +20,12 @@ class PCompoundWidget(PBaseWidget):
         # Properties
         self._margin = 0
         self._render_margin()
+        self._border_width = None
+        self._render_border_width()
+        self._border_style = ""
+        self._render_border_style()
+        self._border_color = ""
+        self._render_border_color()
         self._padding = 0
         self._render_padding()
         self._gap = 0
@@ -88,7 +92,10 @@ class PCompoundWidget(PBaseWidget):
             self._elem.appendChild(c._elem)  # pylint: disable=protected-access
         # Properties
         self._render_margin()
-        self._render_padding
+        self._render_border_width()
+        self._render_border_style()
+        self._render_border_color()
+        self._render_padding()
         self._render_gap()
 
     def after_page_load(self):
@@ -118,6 +125,59 @@ class PCompoundWidget(PBaseWidget):
         if self._margin != margin:
             self._margin = margin
             self._render_margin()
+        return self
+
+    # Property: border_width
+    def _render_border_width(self):
+        """Renderer"""
+        if self._border_width is not None:
+            try:
+                pixels = int(self._border_width)
+                self._elem.style.borderWidth = str(pixels) + "px"
+            except ValueError:
+                self._elem.style.borderWidth = str(self._border_width)  # It was not an integer value
+
+    def get_border_width(self):
+        """Accessor"""
+        return self._border_width
+
+    def set_border_width(self, border_width):
+        """Mutator"""
+        if self._border_width != border_width:
+            self._border_width = border_width
+            self._render_border_width()
+        return self
+
+    # Property: border_style
+    def _render_border_style(self):
+        """Renderer"""
+        self._elem.style.borderStyle = self._border_style if self._border_style != "" else None
+
+    def get_border_style(self):
+        """Accessor"""
+        return self._border_style
+
+    def set_border_style(self, border_style):
+        """Mutator"""
+        if self._border_style != border_style:
+            self._border_style = border_style
+            self._render_border_style()
+        return self
+
+    # Property: border_color
+    def _render_border_color(self):
+        """Renderer"""
+        self._elem.style.borderColor = self._border_color if self._border_color != "" else None
+
+    def get_border_color(self):
+        """Accessor"""
+        return self._border_color
+
+    def set_border_color(self, border_color):
+        """Mutator"""
+        if self._border_color != border_color:
+            self._border_color = border_color
+            self._render_border_color()
         return self
 
     # Property: padding

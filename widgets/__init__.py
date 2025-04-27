@@ -31,10 +31,6 @@ from widgets.text import *
 
 # TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
 
-# TODO Add widget border property or border component.
-
-# TODO Add widget background image/linear gradient property: linear-gradient(to bottom right, #F0F8FF, white);
-
 # TODO Add image widget.
 
 # TODO Add hyperlink widget.
