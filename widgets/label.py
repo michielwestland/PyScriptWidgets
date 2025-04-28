@@ -6,9 +6,10 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 """
 
 
+from typing import Self
+
 # Prefer pyscript import over more basic js import for the document and window objects
 from pyscript import document  # type: ignore # pylint: disable=import-error
-
 
 from widgets.focussable import PFocussableWidget
 from widgets.globals import _ID_SUPPLEMENT
@@ -18,7 +19,7 @@ from widgets.input import PInputWidget, _ID_INPUT
 class PLabel(PFocussableWidget):
     """Label widget class"""
 
-    def __init__(self, text):
+    def __init__(self, text: str):
         """Constructor, define tag and class attributes"""
         super().__init__("label")
         # Properties
@@ -39,11 +40,11 @@ class PLabel(PFocussableWidget):
         """Renderer"""
         self._elem.replaceChildren(document.createTextNode(self._text))
 
-    def get_text(self):
+    def get_text(self) -> str:
         """Accessor"""
         return self._text
 
-    def set_text(self, text):
+    def set_text(self, text: str) -> Self:
         """Mutator"""
         if self._text != text:
             self._text = text
@@ -65,11 +66,11 @@ class PLabel(PFocussableWidget):
             else:
                 self._elem.htmlFor = self._for._widget_id  # pylint: disable=protected-access
 
-    def get_for(self):
+    def get_for(self) -> PFocussableWidget | None:
         """Accessor"""
         return self._for
 
-    def set_for(self, for_widget):
+    def set_for(self, for_widget: PFocussableWidget | None) -> Self:
         """Mutator"""
         if id(self._for) != id(for_widget):  # Object reference/id comparison
             self._for = for_widget

@@ -5,6 +5,7 @@ This software is distributed under the terms of the MIT license. See LICENSE.txt
 PyScriptWidgets - A client side GUI class (widget) library for building web applications with PyScript.
 """
 
+from typing import Self
 
 from widgets.compound import PCompoundWidget
 
@@ -12,7 +13,7 @@ from widgets.compound import PCompoundWidget
 class PPanel(PCompoundWidget):
     """Panel widget class with flex layout"""
 
-    def __init__(self, vertical):
+    def __init__(self, vertical: bool):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._insert_display()
@@ -44,11 +45,11 @@ class PPanel(PCompoundWidget):
         """Renderer"""
         self._elem.style.flexDirection = "column" if self._vertical else "row"
 
-    def is_vertical(self):
+    def is_vertical(self) -> bool:
         """Accessor"""
         return self._vertical
 
-    def set_vertical(self, vertical):
+    def set_vertical(self, vertical: bool) -> Self:
         """Mutator"""
         if self._vertical != vertical:
             self._vertical = vertical
@@ -60,11 +61,11 @@ class PPanel(PCompoundWidget):
         """Renderer"""
         self._elem.style.flexWrap = "wrap" if self._wrap else "nowrap"
 
-    def is_wrap(self):
+    def is_wrap(self) -> bool:
         """Accessor"""
         return self._wrap
 
-    def set_wrap(self, wrap):
+    def set_wrap(self, wrap: bool) -> Self:
         """Mutator"""
         if self._wrap != wrap:
             self._wrap = wrap

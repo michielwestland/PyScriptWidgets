@@ -18,8 +18,6 @@ from widgets.panel import *  # pylint: disable=unused-import
 from widgets.text import *  # pylint: disable=unused-import
 
 
-# TODO Add type hints
-
 # TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget.
 # See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event
 

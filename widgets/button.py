@@ -6,6 +6,8 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 """
 
 
+from collections.abc import Callable
+from typing import Self
 # Prefer pyscript import over more basic js import for the document and window objects
 from pyscript import document  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # type: ignore # pylint: disable=import-error
@@ -18,7 +20,7 @@ class PButton(PFocussableWidget):
     """Button widget class"""
 
     # See: https://fomantic-ui.com/kitchen-sink.html
-    def __init__(self, text):
+    def __init__(self, text: str):
         """Constructor, define tag and class attributes"""
         super().__init__("button")
         self._elem.classList.add("button")
@@ -51,11 +53,11 @@ class PButton(PFocussableWidget):
         if len(s + self._text) > 0:
             self._elem.appendChild(document.createTextNode(s + self._text))
 
-    def get_text(self):
+    def get_text(self) -> str:
         """Accessor"""
         return self._text
 
-    def set_text(self, text):
+    def set_text(self, text: str) -> Self:
         """Mutator"""
         if self._text != text:
             self._text = text
@@ -63,11 +65,11 @@ class PButton(PFocussableWidget):
         return self
 
     # Property: icon
-    def get_icon(self):
+    def get_icon(self) -> str:
         """Accessor"""
         return self._icon
 
-    def set_icon(self, icon):
+    def set_icon(self, icon: str) -> Self:
         """Mutator"""
         if self._icon != icon:
             self._icon = icon
@@ -80,7 +82,7 @@ class PButton(PFocussableWidget):
         if self._click is not None:
             add_event_listener(self._elem, "click", self._click)
 
-    def on_click(self, click):
+    def on_click(self, click: Callable | None) -> Self:
         """Mutator"""
         if id(self._click) != id(click):  # Object reference/id comparison
             if self._click is not None:

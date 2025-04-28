@@ -6,10 +6,12 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 """
 
 
+from collections.abc import Callable
+from typing import Self
+
 # Prefer pyscript import over more basic js import for the document and window objects
 from pyscript import document  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener, remove_event_listener  # type: ignore # pylint: disable=import-error
-
 
 from widgets.focussable import PFocussableWidget
 from widgets.globals import _ID_SUPPLEMENT
@@ -21,7 +23,7 @@ _ID_INPUT = "input"
 class PInputWidget(PFocussableWidget):
     """Abstract input widget class with value and shared functionality"""
 
-    def __init__(self, input_type, value):
+    def __init__(self, input_type: str, value: str):
         """Constructor, define tag and class attributes"""
         super().__init__("div")
         self._elem.classList.add("input")
@@ -81,11 +83,11 @@ class PInputWidget(PFocussableWidget):
         self._elem_input.focus()
 
     # Value
-    def get_value(self):
+    def get_value(self) -> str:
         """Accessor"""
         return self._elem_input.value
 
-    def set_value(self, value):
+    def set_value(self, value: str) -> Self:
         """Mutator"""
         if self._elem_input.value != value:
             self._elem_input.value = value
@@ -96,11 +98,11 @@ class PInputWidget(PFocussableWidget):
         """Renderer"""
         self._elem_input.setAttribute("type", self._input_type)
 
-    def get_input_type(self):
+    def get_input_type(self) -> str:
         """Accessor"""
         return self._input_type
 
-    def set_input_type(self, input_type):
+    def set_input_type(self, input_type: str) -> Self:
         """Mutator"""
         if self._input_type != input_type:
             self._input_type = input_type
@@ -127,11 +129,11 @@ class PInputWidget(PFocussableWidget):
         else:
             self._elem_input.removeAttribute("required")
 
-    def is_required(self):
+    def is_required(self) -> bool:
         """Accessor"""
         return self._required
 
-    def set_required(self, required):
+    def set_required(self, required: bool) -> Self:
         """Mutator"""
         if self._required != required:
             self._required = required
@@ -146,11 +148,11 @@ class PInputWidget(PFocussableWidget):
         else:
             self._elem_input.removeAttribute("readonly")
 
-    def is_readonly(self):
+    def is_readonly(self) -> bool:
         """Accessor"""
         return self._readonly
 
-    def set_readonly(self, readonly):
+    def set_readonly(self, readonly: bool) -> Self:
         """Mutator"""
         if self._readonly != readonly:
             self._readonly = readonly
@@ -163,7 +165,7 @@ class PInputWidget(PFocussableWidget):
         if self._change is not None:
             add_event_listener(self._elem, "change", self._change)
 
-    def on_change(self, change):
+    def on_change(self, change: Callable | None) -> Self:
         """Mutator"""
         if id(self._change) != id(change):  # Object reference/id comparison
             if self._change is not None:

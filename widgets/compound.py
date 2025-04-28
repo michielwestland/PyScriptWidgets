@@ -6,13 +6,15 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 """
 
 
+from typing import Self
+
 from widgets.base import PBaseWidget
 
 
 class PCompoundWidget(PBaseWidget):
     """Abstract compound widget base class, that can have children"""
 
-    def __init__(self, tag):
+    def __init__(self, tag: str):
         """Constructor, define tag and class attributes"""
         super().__init__(tag)
         # Children
@@ -33,7 +35,7 @@ class PCompoundWidget(PBaseWidget):
         self._column_gap = 0
         self._render_column_gap()
 
-    def find_id(self, widget_id):
+    def find_id(self, widget_id: str) -> PBaseWidget | None:
         """Find a reference to the widget with this id, also search in children"""
         if self._widget_id == widget_id:
             return self
@@ -44,18 +46,18 @@ class PCompoundWidget(PBaseWidget):
         return None
 
     # Children
-    def get_children(self):
+    def get_children(self) -> list[PBaseWidget]:
         """Get the list of children"""
         return self._children
 
-    def remove_child(self, child):
+    def remove_child(self, child: PBaseWidget) -> Self:
         """Remove a single child"""
         child._parent = None  # pylint: disable=protected-access
         self._elem.removeChild(child._elem)  # pylint: disable=protected-access
         self._children.remove(child)
         return self
 
-    def remove_all_children(self):
+    def remove_all_children(self) -> Self:
         """Remove all children"""
         self._elem.replaceChildren()
         for c in self._children:
@@ -63,7 +65,7 @@ class PCompoundWidget(PBaseWidget):
         self._children.clear()
         return self
 
-    def add_child(self, child):
+    def add_child(self, child: PBaseWidget) -> Self:
         """Add a single child"""
         child._parent = self  # pylint: disable=protected-access
         child.set_dark_mode(
@@ -73,7 +75,7 @@ class PCompoundWidget(PBaseWidget):
         self._children.append(child)
         return self
 
-    def add_children(self, children):
+    def add_children(self, children: list[PBaseWidget]) -> Self:
         """Add a list of children"""
         for c in children:
             self.add_child(c)
@@ -108,7 +110,7 @@ class PCompoundWidget(PBaseWidget):
             c.after_page_load()
 
     # Property: dark_mode (overridden)
-    def set_dark_mode(self, dark_mode):
+    def set_dark_mode(self, dark_mode: bool):
         """Mutator"""
         super().set_dark_mode(dark_mode)
         for c in self._children:
@@ -124,11 +126,11 @@ class PCompoundWidget(PBaseWidget):
             except ValueError:
                 self._elem.style.margin = str(self._margin)  # It was not an integer value
 
-    def get_margin(self):
+    def get_margin(self) -> int | str | None:
         """Accessor"""
         return self._margin
 
-    def set_margin(self, margin):
+    def set_margin(self, margin: int | str | None) -> Self:
         """Mutator"""
         if self._margin != margin:
             self._margin = margin
@@ -145,11 +147,11 @@ class PCompoundWidget(PBaseWidget):
             except ValueError:
                 self._elem.style.borderWidth = str(self._border_width)  # It was not an integer value
 
-    def get_border_width(self):
+    def get_border_width(self) -> int | str | None:
         """Accessor"""
         return self._border_width
 
-    def set_border_width(self, border_width):
+    def set_border_width(self, border_width: int | str | None) -> Self:
         """Mutator"""
         if self._border_width != border_width:
             self._border_width = border_width
@@ -161,11 +163,11 @@ class PCompoundWidget(PBaseWidget):
         """Renderer"""
         self._elem.style.borderStyle = self._border_style if self._border_style != "" else None
 
-    def get_border_style(self):
+    def get_border_style(self) -> str:
         """Accessor"""
         return self._border_style
 
-    def set_border_style(self, border_style):
+    def set_border_style(self, border_style: str) -> Self:
         """Mutator"""
         # Valid styles, see: https://www.w3schools.com/css/css_border.asp
         if self._border_style != border_style:
@@ -178,11 +180,11 @@ class PCompoundWidget(PBaseWidget):
         """Renderer"""
         self._elem.style.borderColor = self._border_color if self._border_color != "" else None
 
-    def get_border_color(self):
+    def get_border_color(self) -> str:
         """Accessor"""
         return self._border_color
 
-    def set_border_color(self, border_color):
+    def set_border_color(self, border_color: str) -> Self:
         """Mutator"""
         if self._border_color != border_color:
             self._border_color = border_color
@@ -199,11 +201,11 @@ class PCompoundWidget(PBaseWidget):
             except ValueError:
                 self._elem.style.padding = str(self._padding)  # It was not an integer value
 
-    def get_padding(self):
+    def get_padding(self) -> int | str | None:
         """Accessor"""
         return self._padding
 
-    def set_padding(self, padding):
+    def set_padding(self, padding: int | str | None) -> Self:
         """Mutator"""
         if self._padding != padding:
             self._padding = padding
@@ -215,11 +217,11 @@ class PCompoundWidget(PBaseWidget):
         """Renderer"""
         self._elem.style.rowGap = str(self._row_gap) + "px"
 
-    def get_row_gap(self):
+    def get_row_gap(self) -> int:
         """Accessor"""
         return self._row_gap
 
-    def set_row_gap(self, row_gap):
+    def set_row_gap(self, row_gap: int):
         """Mutator"""
         if self._row_gap != row_gap:
             self._row_gap = row_gap
@@ -231,11 +233,11 @@ class PCompoundWidget(PBaseWidget):
         """Renderer"""
         self._elem.style.columnGap = str(self._column_gap) + "px"
 
-    def get_column_gap(self):
+    def get_column_gap(self) -> int:
         """Accessor"""
         return self._column_gap
 
-    def set_column_gap(self, column_gap):
+    def set_column_gap(self, column_gap: int):
         """Mutator"""
         if self._column_gap != column_gap:
             self._column_gap = column_gap

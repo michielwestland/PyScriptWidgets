@@ -10,30 +10,31 @@ import base64
 import pickle
 import zlib
 
+from typing import Any
+
 from js import console, sessionStorage  # type: ignore # pylint: disable=import-error
 # Prefer pyscript import over more basic js import for the document and window objects
 from pyscript import document, window  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener  # type: ignore # pylint: disable=import-error
 
-from widgets.base import PBaseWidget
 
 # Constants
-_STATE_KEY = "widget_state"
-_ID_PREFIX = "e"
-_ID_SUPPLEMENT = "_"
-_UTF_8 = "utf-8"
+_STATE_KEY: str = "widget_state"
+_ID_PREFIX: str = "e"
+_ID_SUPPLEMENT: str = "_"
+_UTF_8: str = "utf-8"
 
 
 # Private global reference to the root widget
-_main_widget: PBaseWidget  # pylint: disable=invalid-name
+_main_widget: Any  # pylint: disable=invalid-name
 
 
 # Private global counter for unique element ID's
-_last_unique_id = 0  # pylint: disable=invalid-name
+_last_unique_id: int = 0  # pylint: disable=invalid-name
 
 
 # Debug utiliies
-def debug_object(obj):
+def debug_object(obj: Any):
     """Print object attributes to the debug console"""
     console.debug(repr(obj))
     for attr in dir(obj):
@@ -42,14 +43,14 @@ def debug_object(obj):
 
 
 # Global subroutines for (de)serializing the widget tree, when the page (un)loads
-def _serialize_to_base64(root_widget):
+def _serialize_to_base64(root_widget) -> bytes:
     """Pickle the widget tree and encode binary data as base64"""
     root_widget.backup_state()
     # See: https://oren-sifri.medium.com/serializing-a-python-object-into-a-plain-text-string-7411b45d099e
     return base64.b64encode(zlib.compress(pickle.dumps(root_widget))).decode(_UTF_8)
 
 
-def _deserialize_from_base64(state_data):
+def _deserialize_from_base64(state_data: bytes) -> Any:
     """Decode binary data from base64 and unpickle the widget tree"""
     root_widget = pickle.loads(zlib.decompress(base64.b64decode(state_data.encode(_UTF_8))))
     root_widget.restore_state()
@@ -57,7 +58,7 @@ def _deserialize_from_base64(state_data):
 
 
 # Global functions to get references to widgets in event handlers
-def find_event_target(event):
+def find_event_target(event: Any) -> Any | None:
     """Find the target widget for this event in the widget tree"""
     widget_id = event.target.id
     i = widget_id.find(_ID_SUPPLEMENT)
@@ -66,7 +67,7 @@ def find_event_target(event):
     return _main_widget.find_id(widget_id)
 
 
-def find_main_widget():
+def find_main_widget() -> Any:
     """Find the main widget, the root of the widget tree"""
     return _main_widget
 
@@ -82,14 +83,14 @@ def _detect_dark_mode():
 
 
 # Store the widget state
-def _window_beforeunload(event):  # pylint: disable=unused-argument
+def _window_beforeunload(event: Any):  # pylint: disable=unused-argument
     """Save widget tree state in browser session storage, before unloading the page"""
     state = _serialize_to_base64(_main_widget)
     sessionStorage.setItem(_STATE_KEY, state)
 
 
 # Create or load the widget state and bind to the browser DOM
-def bind_to_dom(MainWidgetClass, root_element_id, debug=False):  # pylint: disable=invalid-name
+def bind_to_dom(MainWidgetClass, root_element_id: str, debug: bool = False):  # pylint: disable=invalid-name
     """Bind the main widget to the dom, or load the widget tree state from browser session storage if available"""
     # What is the impact of: https://developer.chrome.com/blog/enabling-shared-array-buffer/?utm_source=devtools
     global _main_widget  # pylint: disable=global-statement
@@ -115,7 +116,7 @@ def bind_to_dom(MainWidgetClass, root_element_id, debug=False):  # pylint: disab
 
 
 # Get the base url of the page
-def base_url():
+def base_url() -> str:
     """Get the base url of the web page, trim an optional slash from the end"""
     url = str(window.location.href)
     if len(url) > 0 and url[-1] == "/":
@@ -124,7 +125,7 @@ def base_url():
 
 
 # Generate a new unique widget id
-def _generate_unique_id():
+def _generate_unique_id() -> str:
     """Generate a new unique widget id, a sequential number"""
     global _last_unique_id  # pylint: disable=global-statement
     _last_unique_id = _last_unique_id + 1
@@ -132,7 +133,7 @@ def _generate_unique_id():
 
 
 # Ensure new unique widget id's after unpickling from session state
-def _ensure_unique_id_beyond(widget_id):
+def _ensure_unique_id_beyond(widget_id: str):
     """Ensure any new unique widget id, is beyond the given number of the last unpickled widget"""
     global _last_unique_id  # pylint: disable=global-statement
     i = int(widget_id[len(_ID_PREFIX) :])

@@ -6,6 +6,9 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 """
 
 
+from typing import Self
+
+from widgets.base import PBaseWidget
 from widgets.compound import PCompoundWidget
 from widgets.panel import PPanel
 
@@ -65,11 +68,11 @@ class PGrid(PCompoundWidget):
         else:
             self._elem.style.gridTemplateColumns = " ".join(self._columns)
 
-    def get_columns(self):
+    def get_columns(self) -> list[int | str]:
         """Accessor"""
         return self._columns
 
-    def set_columns(self, columns):
+    def set_columns(self, columns: list[int | str]) -> Self:
         """Mutator"""
         for index, value in enumerate(columns):
             try:
@@ -105,11 +108,11 @@ class PGrid(PCompoundWidget):
         else:
             self._elem.style.gridTemplateRows = " ".join(self._rows)
 
-    def get_rows(self):
+    def get_rows(self) -> list[int | str]:
         """Accessor"""
         return self._rows
 
-    def set_rows(self, rows):
+    def set_rows(self, rows: list[int | str]) -> Self:
         """Mutator"""
         for index, value in enumerate(rows):
             try:
@@ -128,7 +131,7 @@ class PGrid(PCompoundWidget):
         """Renderer"""
         self._elem.style.gridTemplateAreas = self._areas
 
-    def set_areas(self, areas):
+    def set_areas(self, areas: list[list[PBaseWidget | None]]) -> Self:
         """Mutator"""
         # See: https://www.w3schools.com/css/css_grid.asp
         # See: https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas
@@ -153,8 +156,9 @@ class PGrid(PCompoundWidget):
         if len(self._areas) > 0:
             self._areas = self._areas[1:]
         self._render_areas()
+        return self
 
-    def add_child(self, child):
+    def add_child(self, child: PBaseWidget) -> Self:
         """Add a single child"""
         if isinstance(child, (PPanel, PGrid)):
             child._elem.style.overflow = "auto"  # pylint: disable=protected-access

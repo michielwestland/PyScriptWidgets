@@ -6,13 +6,15 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 """
 
 
+from typing import Self
+
 from widgets.base import PBaseWidget
 
 
 class PFocussableWidget(PBaseWidget):
     """Abstract focussable widget class"""
 
-    def __init__(self, tag):
+    def __init__(self, tag: str):
         """Constructor, define tag and class attributes"""
         super().__init__(tag)
         # Properties
@@ -38,11 +40,11 @@ class PFocussableWidget(PBaseWidget):
         else:
             self._elem.setAttribute("disabled", "")
 
-    def is_enabled(self):
+    def is_enabled(self) -> bool:
         """Accessor"""
         return self._enabled
 
-    def set_enabled(self, enabled):
+    def set_enabled(self, enabled: bool) -> Self:
         """Mutator"""
         if self._enabled != enabled:
             self._enabled = enabled
