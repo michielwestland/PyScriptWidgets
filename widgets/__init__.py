@@ -6,17 +6,19 @@ PyScriptWidgets - A client side GUI class (widget) library for building web appl
 """
 
 
-from widgets.base import *
-from widgets.button import *
-from widgets.compound import *
-from widgets.focussable import *
-from widgets.globals import *
-from widgets.grid import *
-from widgets.input import *
-from widgets.label import *
-from widgets.panel import *
-from widgets.text import *
+from widgets.base import *  # pylint: disable=unused-import
+from widgets.button import *  # pylint: disable=unused-import
+from widgets.compound import *  # pylint: disable=unused-import
+from widgets.focussable import *  # pylint: disable=unused-import
+from widgets.globals import *  # pylint: disable=unused-import
+from widgets.grid import *  # pylint: disable=unused-import
+from widgets.input import *  # pylint: disable=unused-import
+from widgets.label import *  # pylint: disable=unused-import
+from widgets.panel import *  # pylint: disable=unused-import
+from widgets.text import *  # pylint: disable=unused-import
 
+
+# TODO Add type hints
 
 # TODO Add a resize listener to the browser window object. Onresize eventhandler on main widget.
 # See: https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event

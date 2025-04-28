@@ -12,7 +12,7 @@ from pyscript import document  # type: ignore # pylint: disable=import-error
 
 from widgets.focussable import PFocussableWidget
 from widgets.globals import _ID_SUPPLEMENT
-from widgets.input import PInputWidget
+from widgets.input import PInputWidget, _ID_INPUT
 
 
 class PLabel(PFocussableWidget):
@@ -60,7 +60,7 @@ class PLabel(PFocussableWidget):
                 self._elem.htmlFor = (
                     self._for._widget_id  # pylint: disable=protected-access
                     + _ID_SUPPLEMENT
-                    + "input"
+                    + _ID_INPUT
                 )
             else:
                 self._elem.htmlFor = self._for._widget_id  # pylint: disable=protected-access

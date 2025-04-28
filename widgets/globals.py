@@ -15,6 +15,7 @@ from js import console, sessionStorage  # type: ignore # pylint: disable=import-
 from pyscript import document, window  # type: ignore # pylint: disable=import-error
 from pyodide.ffi.wrappers import add_event_listener  # type: ignore # pylint: disable=import-error
 
+from widgets.base import PBaseWidget
 
 # Constants
 _STATE_KEY = "widget_state"
@@ -24,7 +25,7 @@ _UTF_8 = "utf-8"
 
 
 # Private global reference to the root widget
-_main_widget = None  # pylint: disable=invalid-name
+_main_widget: PBaseWidget  # pylint: disable=invalid-name
 
 
 # Private global counter for unique element ID's
@@ -62,7 +63,7 @@ def find_event_target(event):
     i = widget_id.find(_ID_SUPPLEMENT)
     if i >= 0:  # Remove id supplement
         widget_id = widget_id[:i]
-    return _main_widget.findId(widget_id)
+    return _main_widget.find_id(widget_id)
 
 
 def find_main_widget():
@@ -136,3 +137,6 @@ def _ensure_unique_id_beyond(widget_id):
     global _last_unique_id  # pylint: disable=global-statement
     i = int(widget_id[len(_ID_PREFIX) :])
     _last_unique_id = max(_last_unique_id, i)
+
+
+#TODO Global function def _str_or_px for common logic inside width/height/etc. properties

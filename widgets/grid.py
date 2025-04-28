@@ -142,7 +142,7 @@ class PGrid(PCompoundWidget):
                 if c is None:
                     area_row += " ."
                 else:
-                    if not c in self.get_children():
+                    if c not in self.get_children():
                         self.add_child(c)
                     area_row += " " + c._widget_id  # pylint: disable=protected-access
 

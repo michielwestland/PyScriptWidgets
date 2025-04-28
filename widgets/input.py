@@ -15,6 +15,9 @@ from widgets.focussable import PFocussableWidget
 from widgets.globals import _ID_SUPPLEMENT
 
 
+_ID_INPUT = "input"
+
+
 class PInputWidget(PFocussableWidget):
     """Abstract input widget class with value and shared functionality"""
 
@@ -52,7 +55,7 @@ class PInputWidget(PFocussableWidget):
         # Non need to replace existing children, this method is only called from initialization or deserialization
         self._elem_input = document.createElement("input")
         self._elem_input.setAttribute("type", "text")
-        self._elem_input.id = self._widget_id + _ID_SUPPLEMENT + "input"
+        self._elem_input.id = self._widget_id + _ID_SUPPLEMENT + _ID_INPUT
         self._elem_input.classList.add(self.__class__.__name__)
         self._elem.appendChild(self._elem_input)
 
