@@ -54,7 +54,8 @@ class PInputWidget(PFocussableWidget):
         del state["_elem_input"]
 
     def _insert_input(self):
-        # Non need to replace existing children, this method is only called from initialization or deserialization
+        """Insert the inner input element into the DOM tree"""
+        # No need to replace existing children, this method is only called from initialization or deserialization
         self._elem_input = document.createElement("input")
         self._elem_input.setAttribute("type", "text")
         self._elem_input.id = self._widget_id + _ID_SUPPLEMENT + _ID_INPUT
@@ -79,6 +80,7 @@ class PInputWidget(PFocussableWidget):
         self._render_change()
 
     def request_focus(self):
+        """Request the input focus and scroll in view"""
         self._elem_input.scrollIntoView()
         self._elem_input.focus()
 

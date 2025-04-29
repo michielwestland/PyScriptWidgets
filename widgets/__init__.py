@@ -15,6 +15,7 @@ from widgets.grid import *  # pylint: disable=unused-import
 from widgets.input import *  # pylint: disable=unused-import
 from widgets.label import *  # pylint: disable=unused-import
 from widgets.panel import *  # pylint: disable=unused-import
+from widgets.tab import *  # pylint: disable=unused-import
 from widgets.text import *  # pylint: disable=unused-import
 
 
@@ -69,7 +70,7 @@ from widgets.text import *  # pylint: disable=unused-import
 # TODO Implement table, see: https://fomantic-ui.com/collections/table.html
 #class PTable(PCompoundWidget): """Table widget class"""
 
-# TODO Implement tab pane, see: https://fomantic-ui.com/modules/tab.html
+# TODO _BUSY Implement tab pane, see: https://fomantic-ui.com/modules/tab.html
 #class PTabPane(PCompoundWidget): """Tab pane widget class"""
 
 # TODO Implement modal widget, see: https://fomantic-ui.com/modules/modal.html
