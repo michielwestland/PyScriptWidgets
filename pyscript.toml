@@ -28,5 +28,5 @@ packages = [
 "{BASE_URL}/widgets/panel.py" = "./widgets/panel.py"
 "{BASE_URL}/widgets/text.py" = "./widgets/text.py"
 
-"{BASE_URL}/main.py" = "./main.py"
+"{BASE_URL}/kitchensink.py" = "./kitchensink.py"
 "{BASE_URL}/todo.py" = "./todo.py"

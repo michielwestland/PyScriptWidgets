@@ -31,6 +31,8 @@ from widgets.text import *  # pylint: disable=unused-import
 
 # TODO Add a SVG widget and widgets for basic shapes using the DOM tree.
 
+# TODO Implement canvas widget.
+
 # TODO Implement image widget.
 #class PImage(PBaseWidget): """Image widget class"""
 

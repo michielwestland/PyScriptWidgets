@@ -50,6 +50,10 @@ def _serialize_to_base64(root_widget) -> bytes:
     return base64.b64encode(zlib.compress(pickle.dumps(root_widget))).decode(_UTF_8)
 
 
+# TODO Encrypt session storage with timestamp rounded to 10 seconds.
+# Decrypt with current and previous timestamp rounded to 10 seconds, for 2 try's in a time window of 10 seconds.
+# Check with hash or original if decryption is valid.
+
 def _deserialize_from_base64(state_data: bytes) -> Any:
     """Decode binary data from base64 and unpickle the widget tree"""
     root_widget = pickle.loads(zlib.decompress(base64.b64decode(state_data.encode(_UTF_8))))

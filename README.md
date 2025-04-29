@@ -135,7 +135,7 @@ With these files:
 - widgets/*.*
 - pyscript.toml
 - index.html
-- main.py
+- kitchensink.py
 - todo.py
 - assets/data.json
 - favicon.ico
