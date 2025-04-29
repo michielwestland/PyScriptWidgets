@@ -6,9 +6,9 @@ Main file
 """
 
 from datetime import datetime
-from js import fetch, JSON  # type: ignore # pylint: disable=import-error
+from js import fetch, JSON, ptab_init  # type: ignore # pylint: disable=import-error
 
-from widgets import PGrid, PTextInput, PButton, PLabel, bind_to_dom, base_url
+from widgets import PGrid, PTextInput, PButton, PLabel, PTab, PPanel, bind_to_dom, base_url
 from todo import TodoPanel
 
 
@@ -46,6 +46,7 @@ class Main(PGrid):
 
         # Second demo panel
         self.todo = TodoPanel()
+        # self.todo = PTab()
 
         hdr = PLabel("Header").set_color("blue")
         ftr = PLabel("Footer").set_color("green")
@@ -62,6 +63,28 @@ class Main(PGrid):
             ]
         )
 
+        # self.todo.add_tab("First")
+        # tab_first = PPanel(False)
+        # tab_first.add_child(PLabel("111"))
+        # tab_first._elem.classList.add("bottom")
+        # tab_first._elem.classList.add("attached")
+        # tab_first._elem.classList.add("tab")
+        # tab_first._elem.classList.add("segment")
+        # tab_first._elem.dataset.tab = 0
+        # self.todo.add_child(tab_first)
+
+        # self.todo.add_tab("Second")
+        # tab_second = PPanel(False)
+        # tab_second.add_child(PLabel("222"))
+        # tab_second._elem.classList.add("bottom")
+        # tab_second._elem.classList.add("attached")
+        # tab_second._elem.classList.add("tab")
+        # tab_second._elem.classList.add("segment")
+        # tab_second._elem.dataset.tab = 0
+        # self.todo.add_child(tab_second)
+
+        # self.todo.set_active(0)
+
     async def btn_click(self, event):  # pylint: disable=unused-argument
         """Button click event handler"""
         self.btn.set_color("red")
@@ -71,6 +94,9 @@ class Main(PGrid):
 
     def after_page_load(self):  # pylint: disable=useless-parent-delegation
         super().after_page_load()
+
+        # ptab_init()
+
         # Here, try out code after a page refresh with Live Server/Live Preview
         #self.btn.set_color("green")
 

@@ -26,6 +26,7 @@ packages = [
 "{BASE_URL}/widgets/input.py" = "./widgets/input.py"
 "{BASE_URL}/widgets/label.py" = "./widgets/label.py"
 "{BASE_URL}/widgets/panel.py" = "./widgets/panel.py"
+"{BASE_URL}/widgets/tab.py" = "./widgets/tab.py"
 "{BASE_URL}/widgets/text.py" = "./widgets/text.py"
 
 "{BASE_URL}/kitchensink.py" = "./kitchensink.py"
