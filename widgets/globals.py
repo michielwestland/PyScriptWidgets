@@ -79,7 +79,8 @@ def find_main_widget() -> Any:
 def _detect_dark_mode():
     """Detect dark mode in the browser"""
     if window.matchMedia and window.matchMedia("(prefers-color-scheme: dark)").matches:
-        _main_widget.set_dark_mode(True)
+        # TODO Zet light mode weer uit na het testen van het tab component
+        _main_widget.set_dark_mode(False)
 
     top_left = "rgb(25, 25, 25)" if _main_widget.is_dark_mode() else "white"
     bottom_right = "rgb(55, 55, 55)" if _main_widget.is_dark_mode() else "rgb(240, 240, 240)"

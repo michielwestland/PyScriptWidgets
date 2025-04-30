@@ -5,13 +5,11 @@ This software is distributed under the terms of the MIT license. See LICENSE.txt
 Main file
 """
 
-from datetime import datetime
-from js import fetch, JSON  # type: ignore # pylint: disable=import-error
+import js  # pylint: disable=import-error
 
-from pyscript.js_modules.JQuery import default as jq  # type: ignore # pylint: disable=import-error
+# from pyscript.js_modules.JQuery import default as jq  # type: ignore # pylint: disable=import-error
 
-from widgets import PGrid, PTextInput, PButton, PLabel, PTab, PPanel, bind_to_dom, base_url
-from todo import TodoPanel
+from widgets import PGrid, PLabel, PTab, PPanel, bind_to_dom
 
 
 class Test(PGrid):
@@ -29,19 +27,19 @@ class Test(PGrid):
 
         self.set_areas(
             [
-                [None, None, None],
+                [PLabel(""), PLabel(""), PLabel("")],
                 [
-                    None,
+                    PLabel(""),
                     self.tab,
-                    None,
+                    PLabel(""),
                 ],
-                [None, None, None],
+                [PLabel(""), PLabel(""), PLabel("")],
             ]
         )
 
         self.tab.add_tab("First")
         tab_first = PPanel(False)
-        tab_first.add_child(PLabel("111"))
+        tab_first.add_child(PLabel("Contents 1"))
         tab_first._elem.classList.add("ui")
         tab_first._elem.classList.add("bottom")
         tab_first._elem.classList.add("attached")
@@ -52,7 +50,7 @@ class Test(PGrid):
 
         self.tab.add_tab("Second")
         tab_second = PPanel(False)
-        tab_second.add_child(PLabel("222"))
+        tab_second.add_child(PLabel("Contents 2"))
         tab_second._elem.classList.add("ui")
         tab_second._elem.classList.add("bottom")
         tab_second._elem.classList.add("attached")
@@ -66,7 +64,8 @@ class Test(PGrid):
     def after_page_load(self):  # pylint: disable=useless-parent-delegation
         super().after_page_load()
 
-        jq(".menu .item").tab()
+        # jq(".menu .item").tab()
+        js.ptab_init()
 
 
 if __name__ == "__main__":

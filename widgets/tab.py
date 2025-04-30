@@ -110,14 +110,19 @@ class PTab(PCompoundWidget):
             if self.is_dark_mode():
                 self._elem_div.classList.remove("inverted")
         # TODO ...en ook de tabs.
-        # TODO Probeer light mode om de tab component te testen
+
+    # Property: visible (overridden)
+    def _render_visible(self):
+        """Renderer"""
+        super()._render_visible()
+        # TODO This does not work... how delete visibility: inherit; ? self._elem.style.pop("visibility")
 
     # Property: active
     def _render_active(self):
         """Renderer"""
         for e in self._elem_tabs:
             e.classList.remove("active")
-        if self._active > 0 and self._active < len(self._elem_tabs):
+        if self._active is not None and self._active > 0 and self._active < len(self._elem_tabs):
             self._elem_tabs[self._active].classList.add("active")
 
     def get_active(self) -> int | None:
