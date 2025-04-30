@@ -29,13 +29,14 @@ class PTab(PCompoundWidget):
         self._elem_tabs = []
         self._tabs = []
         # Properties
-        self._active = -1  # no tab selected
+        self._active = None
         self._render_active()
 
     def _delete_state(self, state):
         """Override this method to delete state keys that cannot be pickled"""
         super()._delete_state(state)
         del state["_elem_div"]
+        # TODO del state _elem_tabs
 
     def _insert_div(self):
         """Insert the inner div element into the DOM tree"""
@@ -44,6 +45,7 @@ class PTab(PCompoundWidget):
         self._elem_div = document.createElement("div")
         self._elem_div.id = self._widget_id + _ID_SUPPLEMENT + _ID_DIV
         #self._elem_div.classList.add(self.__class__.__name__)
+        self._elem_div.classList.add("ui")
         self._elem_div.classList.add("top")
         self._elem_div.classList.add("attached")
         self._elem_div.classList.add("tabular")
@@ -53,6 +55,7 @@ class PTab(PCompoundWidget):
     def _insert_state(self):
         """Override this method to insert state, for keys that could not be pickled"""
         super()._insert_state()
+        # TODO Make in _insert_tab call in a loop over _tabs
         self._insert_div()
 
     # Tabs
@@ -95,6 +98,20 @@ class PTab(PCompoundWidget):
         # Properties
         self._render_active()
 
+    # Property: dark_mode (overridden)
+    def set_dark_mode(self, dark_mode: bool):
+        """Mutator"""
+        super().set_dark_mode(dark_mode)
+
+        if dark_mode:
+            if not self.is_dark_mode():
+                self._elem_div.classList.add("inverted")
+        else:
+            if self.is_dark_mode():
+                self._elem_div.classList.remove("inverted")
+        # TODO ...en ook de tabs.
+        # TODO Probeer light mode om de tab component te testen
+
     # Property: active
     def _render_active(self):
         """Renderer"""
@@ -103,7 +120,7 @@ class PTab(PCompoundWidget):
         if self._active > 0 and self._active < len(self._elem_tabs):
             self._elem_tabs[self._active].classList.add("active")
 
-    def get_active(self) -> int:
+    def get_active(self) -> int | None:
         """Accessor"""
         return self._active
 

@@ -30,9 +30,9 @@ class PCompoundWidget(PBaseWidget):
         self._render_border_color()
         self._padding = None
         self._render_padding()
-        self._row_gap = 0
+        self._row_gap = None
         self._render_row_gap()
-        self._column_gap = 0
+        self._column_gap = None
         self._render_column_gap()
 
     def find_id(self, widget_id: str) -> PBaseWidget | None:
@@ -215,7 +215,8 @@ class PCompoundWidget(PBaseWidget):
     # Property: row_gap
     def _render_row_gap(self):
         """Renderer"""
-        self._elem.style.rowGap = str(self._row_gap) + "px"
+        if self._row_gap is not None:
+            self._elem.style.rowGap = str(self._row_gap) + "px"
 
     def get_row_gap(self) -> int:
         """Accessor"""
@@ -231,7 +232,8 @@ class PCompoundWidget(PBaseWidget):
     # Property: column_gap
     def _render_column_gap(self):
         """Renderer"""
-        self._elem.style.columnGap = str(self._column_gap) + "px"
+        if self._column_gap is not None:
+            self._elem.style.columnGap = str(self._column_gap) + "px"
 
     def get_column_gap(self) -> int:
         """Accessor"""

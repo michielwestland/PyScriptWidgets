@@ -9,6 +9,9 @@ packages = [
     "asyncio",
 ]
 
+[js_modules.main]
+"https://esm.run/jquery" = "JQuery"
+
 [files]
 # Set the BASE_URL when deploying to: https://michielwestland.github.io/PyScriptWidgets
 # Make sure the url does not end with a forward slash!
@@ -31,3 +34,4 @@ packages = [
 
 "{BASE_URL}/kitchensink.py" = "./kitchensink.py"
 "{BASE_URL}/todo.py" = "./todo.py"
+"{BASE_URL}/test.py" = "./test.py"
