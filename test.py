@@ -12,6 +12,9 @@ import js  # pylint: disable=import-error
 from widgets import PGrid, PLabel, PTab, PPanel, bind_to_dom
 
 
+# TODO Also set dark mode off: globals.py; _main_widget.set_dark_mode(False)
+
+
 class Test(PGrid):
     """Main class"""
 

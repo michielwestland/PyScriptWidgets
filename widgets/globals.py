@@ -54,6 +54,7 @@ def _serialize_to_base64(root_widget) -> bytes:
 # Decrypt with current and previous timestamp rounded to 10 seconds, for 2 try's in a time window of 10 seconds.
 # Check with hash or original if decryption is valid.
 
+
 def _deserialize_from_base64(state_data: bytes) -> Any:
     """Decode binary data from base64 and unpickle the widget tree"""
     root_widget = pickle.loads(zlib.decompress(base64.b64decode(state_data.encode(_UTF_8))))
@@ -79,8 +80,7 @@ def find_main_widget() -> Any:
 def _detect_dark_mode():
     """Detect dark mode in the browser"""
     if window.matchMedia and window.matchMedia("(prefers-color-scheme: dark)").matches:
-        # TODO Zet light mode weer uit na het testen van het tab component
-        _main_widget.set_dark_mode(False)
+        _main_widget.set_dark_mode(True)
 
     top_left = "rgb(25, 25, 25)" if _main_widget.is_dark_mode() else "white"
     bottom_right = "rgb(55, 55, 55)" if _main_widget.is_dark_mode() else "rgb(240, 240, 240)"
